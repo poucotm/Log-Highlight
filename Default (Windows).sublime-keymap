@@ -1,0 +1,3 @@
+[
+	{ "keys": ["ctrl+f11"], "command": "verilog_gadget_log_panel" }
+]

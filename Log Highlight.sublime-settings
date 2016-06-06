@@ -1,0 +1,23 @@
+{
+	//
+	"error_pattern": [
+		[ "abc", "abc" ],
+		[ "def", "def" ],
+	],
+
+	// theme color set
+	"theme_color": [
+		"#000000", // background
+		"#111111", // foreground
+		"#222222", // caret
+		"#333333", // selection
+		"#444444", // selectionBorder
+		"#555555", // lineHighlight
+		"#666666", // error message
+		"#777777", // link in error message
+		"#888888", // quote in error message
+		"#999999", // warning message
+		"#aaaaaa", // link in warning message
+		"#bbbbbb"  // quote in warning message
+	]
+}
