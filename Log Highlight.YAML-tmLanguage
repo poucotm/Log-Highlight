@@ -1,15 +1,18 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 ---
-name: Verilog Log
-scopeName: source.verilog_log
+name: Log Highlight
+scopeName: source.log_highlight
 fileTypes: []
 uuid: 0da65be4-5aac-4b6f-8071-1aadb970b8d9
 patterns:
-# SYNOPSYS VCS
+- comment: ...
+  name: summary.title
+  begin: 'Log Highlight'
+  end: '[\r\n]'
 - comment: ...
   name: msg.error
-  begin: ^Error-
-  end: ^\s*[\n]
+  begin: '.+?(?i)error'
+  end: '[\r\n]'
   patterns:
   - include: $self
   - name: msg.error.link
@@ -18,78 +21,12 @@ patterns:
     match: (?<=\')[^\']+(?=\')
 - comment: ...
   name: msg.warning
-  begin: ^Warning-
-  end: ^\s*[\n]
+  begin: '.+?(?i)warning'
+  end: '[\r\n]'
   patterns:
   - include: $self
   - name: msg.warning.link
     match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
   - name: msg.warning.quote
     match: (?<=\')[^\']+(?=\')
-# SYNOPSYS DC
-- comment: ...
-  name: msg.error
-  begin: '^Error:'
-  end: ^\s*[\n]|(?=^[^\s])
-  patterns:
-  - include: $self
-  - name: msg.error.link
-    match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
-  - name: msg.error.quote
-    match: (?<=\')[^\']+(?=\')
-- comment: ...
-  name: msg.warning
-  begin: '^Warning:'
-  end: ^\s*[\n]|(?=^[^\s])
-  patterns:
-  - include: $self
-  - name: msg.warning.link
-    match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
-  - name: msg.warning.quote
-    match: (?<=\')[^\']+(?=\')
-# SYNOPSYS VERDI
-- comment: ...
-  name: msg.error
-  begin: ^\*Error\*
-  end: ^\s*[\n]
-  patterns:
-  - include: $self
-  - name: msg.error.link
-    match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
-  - name: msg.error.quote
-    match: (?<=\')[^\']+(?=\')
-- comment: ...
-  name: msg.warning
-  begin: ^\*Warning\*
-  end: ^\s*[\n]
-  patterns:
-  - include: $self
-  - name: msg.warning.link
-    match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
-  - name: msg.warning.quote
-    match: (?<=\')[^\']+(?=\')
-# CADENCE IES / XILINX VIVADO / ALTERA QUARTUS
-- comment: ...
-  name: msg.error
-  begin: '^\w+:\s*\*E|^ERROR:|^Error\s*\(\d+\):'
-  end: \n$
-  patterns:
-  - include: $self
-  - name: msg.error.link
-    match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
-  - name: msg.error.quote
-    match: (?<=\')[^\']+(?=\')
-- comment: ...
-  name: msg.warning
-  begin: '^\w+:\s*\*W|^WARNING:|^Warning\s*\(\d+\):'
-  end: \n$
-  patterns:
-  - include: $self
-  - name: msg.warning.link
-    match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+
-  - name: msg.warning.quote
-    match: (?<=\')[^\']+(?=\')
-- comment: ...
-  name: msg.error.link
-  match: \"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*line\s*\d+
 ...

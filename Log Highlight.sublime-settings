@@ -1,23 +1,40 @@
 {
-	//
+	// enable context menu
+	"context_menu": true,
+
+	// log file extension
+	"log_ext": [ ".log" ],
+
+	// error pattern set (regular expression)
+	// [ "begin regex", "end regex" ]
 	"error_pattern": [
-		[ "abc", "abc" ],
-		[ "def", "def" ],
+		[ "^[^\\r\\n]+?(?i)error", "[\\r\\n]" ] // lines including 'error' with ignore case
+	],
+
+	// warning pattern set (regular expression)
+	// [ "begin regex", "end regex" ]
+	"warning_pattern": [
+		[ "^[^\\r\\n]+?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case
 	],
 
 	// theme color set
 	"theme_color": [
-		"#000000", // background
-		"#111111", // foreground
-		"#222222", // caret
-		"#333333", // selection
-		"#444444", // selectionBorder
-		"#555555", // lineHighlight
-		"#666666", // error message
-		"#777777", // link in error message
-		"#888888", // quote in error message
-		"#999999", // warning message
-		"#aaaaaa", // link in warning message
-		"#bbbbbb"  // quote in warning message
-	]
+		"#272822", // background
+		"#ffffff", // foreground
+		"#ffffff", // caret
+		"#555555", // selection
+		"#555555", // selectionBorder
+		"#272822", // lineHighlight
+		"#F92672", // error message
+		"#ffff00", // link in error message
+		"#66D9EF", // quote in error message
+		"#A6E22E", // warning message
+		"#FD971F", // link in warning message
+		"#66D9EF", // quote in warning message
+		"#FFFFFF"  // summary title
+	],
+
+	// summary panel
+	"log_panel": true,	// show summary panel
+	"error_only": false	// display only errors in the summary panel
 }

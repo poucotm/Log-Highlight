@@ -1,3 +1,10 @@
 [
-
+    {
+        "caption": "Log Hightlight: Hightlight Log",
+        "command": "log_highlight"
+    },
+    {
+        "caption": "Log Hightlight: Generate Custom Syntax & Theme",
+        "command": "log_highlight_gen_custom_syntax_theme"
+    }
 ]

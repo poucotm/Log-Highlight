@@ -5,16 +5,26 @@
 	<key>fileTypes</key>
 	<array/>
 	<key>name</key>
-	<string>Verilog Log</string>
+	<string>Log Highlight</string>
 	<key>patterns</key>
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^Error-</string>
+			<string>Log Highlight</string>
 			<key>comment</key>
 			<string>...</string>
 			<key>end</key>
-			<string>^\s*[\n]</string>
+			<string>[\r\n]</string>
+			<key>name</key>
+			<string>summary.title</string>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>.+?(?i)error</string>
+			<key>comment</key>
+			<string>...</string>
+			<key>end</key>
+			<string>[\r\n]</string>
 			<key>name</key>
 			<string>msg.error</string>
 			<key>patterns</key>
@@ -39,11 +49,11 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^Warning-</string>
+			<string>.+?(?i)warning</string>
 			<key>comment</key>
 			<string>...</string>
 			<key>end</key>
-			<string>^\s*[\n]</string>
+			<string>[\r\n]</string>
 			<key>name</key>
 			<string>msg.warning</string>
 			<key>patterns</key>
@@ -65,192 +75,10 @@
 					<string>msg.warning.quote</string>
 				</dict>
 			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^Error:</string>
-			<key>comment</key>
-			<string>...</string>
-			<key>end</key>
-			<string>^\s*[\n]|(?=^[^\s])</string>
-			<key>name</key>
-			<string>msg.error</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
-					<key>name</key>
-					<string>msg.error.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
-					<key>name</key>
-					<string>msg.error.quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^Warning:</string>
-			<key>comment</key>
-			<string>...</string>
-			<key>end</key>
-			<string>^\s*[\n]|(?=^[^\s])</string>
-			<key>name</key>
-			<string>msg.warning</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
-					<key>name</key>
-					<string>msg.warning.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
-					<key>name</key>
-					<string>msg.warning.quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^\*Error\*</string>
-			<key>comment</key>
-			<string>...</string>
-			<key>end</key>
-			<string>^\s*[\n]</string>
-			<key>name</key>
-			<string>msg.error</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
-					<key>name</key>
-					<string>msg.error.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
-					<key>name</key>
-					<string>msg.error.quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^\*Warning\*</string>
-			<key>comment</key>
-			<string>...</string>
-			<key>end</key>
-			<string>^\s*[\n]</string>
-			<key>name</key>
-			<string>msg.warning</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
-					<key>name</key>
-					<string>msg.warning.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
-					<key>name</key>
-					<string>msg.warning.quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^\w+:\s*\*E|^ERROR:|^Error\s*\(\d+\):</string>
-			<key>comment</key>
-			<string>...</string>
-			<key>end</key>
-			<string>\n$</string>
-			<key>name</key>
-			<string>msg.error</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
-					<key>name</key>
-					<string>msg.error.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
-					<key>name</key>
-					<string>msg.error.quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^\w+:\s*\*W|^WARNING:|^Warning\s*\(\d+\):</string>
-			<key>comment</key>
-			<string>...</string>
-			<key>end</key>
-			<string>\n$</string>
-			<key>name</key>
-			<string>msg.warning</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
-					<key>name</key>
-					<string>msg.warning.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
-					<key>name</key>
-					<string>msg.warning.quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>comment</key>
-			<string>...</string>
-			<key>match</key>
-			<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*line\s*\d+</string>
-			<key>name</key>
-			<string>msg.error.link</string>
 		</dict>
 	</array>
 	<key>scopeName</key>
-	<string>source.verilog_log</string>
+	<string>source.log_highlight</string>
 	<key>uuid</key>
 	<string>0da65be4-5aac-4b6f-8071-1aadb970b8d9</string>
 </dict>

@@ -12,23 +12,23 @@
 				"children":
 				[
 					{
-						"caption": "Verilog Gadget",
+						"caption": "Log Highlight",
 						"children":
 						[
 							{
 								"command": "open_file",
-								"args": {"file": "${packages}/Verilog Gadget/README.md"},
+								"args": {"file": "${packages}/Log Highlight/README.md"},
 								"caption": "README"
 							},
 							{ "caption": "-" },
 							{
 								"command": "open_file",
-								"args": {"file": "${packages}/Verilog Gadget/Verilog Gadget.sublime-settings"},
+								"args": {"file": "${packages}/Log Highlight/Log Highlight.sublime-settings"},
 								"caption": "Settings – Default"
 							},
 							{
 								"command": "open_file",
-								"args": {"file": "${packages}/User/Verilog Gadget.sublime-settings"},
+								"args": {"file": "${packages}/User/Log Highlight.sublime-settings"},
 								"caption": "Settings – User"
 							}
 						]

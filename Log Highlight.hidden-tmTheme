@@ -77,6 +77,16 @@
 				<!-- <string>bold</string> -->
 			</dict>
 		</dict>
+		<dict>
+			<key>scope</key>
+			<string>summary.title</string>
+			<key>settings</key>
+			<dict>
+				<!-- #12 summary.title --><key>foreground</key><string>#FFFFFF</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
 	</array>
 	<key>uuid</key>
 	<string>403e2150-aad4-41ff-86d0-36d87510918e</string>
