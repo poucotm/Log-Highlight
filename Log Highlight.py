@@ -372,7 +372,12 @@ class  LogHighlightThread(threading.Thread):
 		if self.base_dir != "":
 			g_summary_view.settings().set('result_base_dir', self.base_dir)
 		self.set_syntax_theme(g_summary_view)
-		g_summary_view.run_command("append", {"characters": summary})
+		if ST3:
+			g_summary_view.run_command("append", {"characters": summary})
+		else:
+			edit = g_summary_view.begin_edit()
+			g_summary_view.insert(edit, g_summary_view.size(), summary)
+			g_summary_view.end_edit(edit)
 		g_summary_view.set_read_only(True)
 		# add bookmarks
 		self.add_bookmarks(g_summary_view)
