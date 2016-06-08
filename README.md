@@ -14,7 +14,7 @@ The context menu only can be seen for `.log` file.
 (the file extension can be added or changed in settings)
 
 Settings :
-```json
+```java
 {
 	// enable context menu
 	"context_menu": true,
