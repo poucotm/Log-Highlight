@@ -1,12 +1,33 @@
 # Log Highlight for Sublime Text
 ==================================
 
-Log Highlight helps to view log with customizable error/warning syntax & color scheme. It is possible to go to positions of files in a log by double-click. Summary panel will be seen by default. It automatically generates bookmarks to navigate errors/warnings easily with new key bindings (`alt+pagedown/up`).
+Log Highlight helps to view log with customizable error/warning syntax & color scheme.
+Open `.log` file and run `Log Highlight` in context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
 
-There's two commands `Log Highlight: Highlight Error/Warning`, `Log Hightlight: Generate Custom Syntax & Theme`. You can change syntax, color scheme by changing settings and running latter command. After changing color scheme, you may have to restart sublime text once.
+## Features
+***********
 
-The context menu only can be seen for `.log` file.
-(file extensions can be added or changed in settings)
+ * Customizable Syntax & Color Scheme
+ * Add Bookmarks Automatically for Navigating Errors/Warnings
+ * Support Go To Position in a Log by `result_file_regex`
+ * Search a Base Directory Automatically for Relative Path Link
+ * Summary Output Panel
+
+#### Customizable Syntax & Color Scheme
+
+After changing syntax and color scheme in settings, run `Log Hightlight: Generate Custom Syntax & Theme` command. You may have to restart sublime text once.
+
+#### Bookmarks
+
+When errors/warnings found, it will add bookmarks for them. You can navigate easily with new key binding (`alt+pagedown / up`)
+
+#### Go To Position
+
+By double-click, you can go to positions of links like `"../../abc.cpp", 32` or `./abc.v line 234` in a log. For relative path, it may automatically searche a base directory near the log file
+
+#### Summary Output Panel
+
+By default, it summarizes error/warning list in a new output panel at the bottom of window
 
 Settings :
 ```java
@@ -20,15 +41,15 @@ Settings :
 	// error pattern set (regular expression)
 	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"error_pattern": [
-		[ "^Error-\\[", "^\\s*[\\n]" ],				// Error-[ ~
-		[ "^[^\\r\\n]*?(?i)error", "[\\r\\n]" ]	// lines including 'error' with ignore case
+		[ "^Error-\\[", "^\\s*[\\n]" ],           // Error-[ ~
+		[ "^[^\\r\\n]*?(?i)error", "[\\r\\n]" ]   // lines including 'error' with ignore case
 	],
 
 	// warning pattern set (regular expression)
 	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"warning_pattern": [
-		[ "^Warning-\\[", "^\\s*[\\n]" ],			// Warning-[ ~
-		[ "^[^\\r\\n]*?(?i)warning", "[\\r\\n]" ]	// lines including 'warning' with ignore case
+		[ "^Warning-\\[", "^\\s*[\\n]" ],         // Warning-[ ~
+		[ "^[^\\r\\n]*?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case
 	],
 
 	// theme color set
