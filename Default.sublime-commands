@@ -1,6 +1,6 @@
 [
     {
-        "caption": "Log Hightlight: Hightlight Log",
+        "caption": "Log Hightlight: Hightlight Error/Warning",
         "command": "log_highlight"
     },
     {

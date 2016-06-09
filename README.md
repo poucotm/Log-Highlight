@@ -2,16 +2,15 @@
 ==================================
 
 Log Highlight helps to view log with customizable error/warning syntax & color scheme.  
-It is possible to go to positions of files in a log by double-click  
-Summary panel will be seen by default.  
+It is possible to go to positions of files in a log by double-click. Summary panel will be seen by default.  
 It automatically generates bookmarks to navigate errors/warnings easily with new key bindings (`alt+pagedown/up`).  
 
-There's two commands `Log Highlight: Highlight Log`, `Log Hightlight: Generate Custom Syntax & Theme`.  
+There's two commands `Log Highlight: Highlight Error/Warning`, `Log Hightlight: Generate Custom Syntax & Theme`.  
 You can change syntax, color scheme by changing settings and running latter command.  
-After changing color scheme, you may have to restart sublime text.
+After changing color scheme, you may have to restart sublime text once.
 
 The context menu only can be seen for `.log` file.  
-(the file extension can be added or changed in settings)
+(file extensions can be added or changed in settings)
 
 Settings :
 ```java
@@ -52,9 +51,10 @@ Settings :
 	],
 
 	// summary panel
-	"log_panel": true,	// show summary panel
-	"error_only": false	// display only errors in the summary panel
+	"summary_panel": true,	// show summary panel
+	"error_only": false		// display only errors in the summary panel
 }
+
 ```
 
 ![Image of Verilog Gadget](https://raw.githubusercontent.com/poucotm/Links/master/image/view_log.png)

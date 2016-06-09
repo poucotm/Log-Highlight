@@ -6,15 +6,17 @@
 	"log_ext": [ ".log" ],
 
 	// error pattern set (regular expression)
-	// [ "begin regex", "end regex" ]
+	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"error_pattern": [
-		[ "^[^\\r\\n]+?(?i)error", "[\\r\\n]" ] // lines including 'error' with ignore case
+		[ "^Error-\\[", "^\\s*[\\n]" ],				// Error-[ ~
+		[ "^[^\\r\\n]*?(?i)error", "[\\r\\n]" ]	// lines including 'error' with ignore case
 	],
 
 	// warning pattern set (regular expression)
-	// [ "begin regex", "end regex" ]
+	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"warning_pattern": [
-		[ "^[^\\r\\n]+?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case
+		[ "^Warning-\\[", "^\\s*[\\n]" ],			// Warning-[ ~
+		[ "^[^\\r\\n]*?(?i)warning", "[\\r\\n]" ]	// lines including 'warning' with ignore case
 	],
 
 	// theme color set
@@ -35,6 +37,6 @@
 	],
 
 	// summary panel
-	"log_panel": true,	// show summary panel
-	"error_only": false	// display only errors in the summary panel
+	"summary_panel": true,	// show summary panel
+	"error_only": false		// display only errors in the summary panel
 }

@@ -71,12 +71,19 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		for _str in error_pattern:
 			_str[0] = self.conv_for_plist(_str[0])
 			_str[1] = self.conv_for_plist(_str[1])
-			_tmlang = _tmlang + """
+			if _str[1] != "":
+				_tmlang = _tmlang + """
 		<dict>
 			<key>begin</key>
 			<string>""" + _str[0] + """</string>
 			<key>end</key>
-			<string>""" + _str[1] + """</string>
+			<string>""" + _str[1] + """</string>"""
+			else:
+				_tmlang = _tmlang + """
+		<dict>
+			<key>match</key>
+			<string>""" + _str[0] + """</string>"""
+			_tmlang = _tmlang + """
 			<key>name</key>
 			<string>msg.error</string>
 			<key>patterns</key>
@@ -102,12 +109,19 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		for _str in warning_pattern:
 			_str[0] = self.conv_for_plist(_str[0])
 			_str[1] = self.conv_for_plist(_str[1])
-			_tmlang = _tmlang + """
+			if _str[1] != "":
+				_tmlang = _tmlang + """
 		<dict>
 			<key>begin</key>
 			<string>""" + _str[0] + """</string>
 			<key>end</key>
-			<string>""" + _str[1] + """</string>
+			<string>""" + _str[1] + """</string>"""
+			else:
+				_tmlang = _tmlang + """
+		<dict>
+			<key>match</key>
+			<string>""" + _str[0] + """</string>"""
+			_tmlang = _tmlang + """
 			<key>name</key>
 			<string>msg.warning</string>
 			<key>patterns</key>
@@ -186,8 +200,13 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 ############################################################################
 # LogHighlightCommand
 
+is_working = False
+
 class LogHighlightCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
+		global is_working
+		if is_working:
+			return
 		if ST3:
 			LogHighlightThread().start()
 		else:
@@ -198,16 +217,18 @@ class  LogHighlightThread(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def run(self):
+		is_working = True
 		window    = sublime.active_window()
 		self.view = window.active_view()
 		log_name  = self.view.file_name()
 		if not log_name or not os.path.isfile(log_name):
 			sublime.status_message("Log Highlight : Unknown name for current view")
+			is_working = False
 			return
 
 		# set syntax for coloring / set read only
 		self.set_syntax_theme(self.view)
-		self.view.set_read_only(True)
+		# self.view.set_read_only(True)
 
 		# to set base directory
 		rel_path_file = self.get_rel_path_file()
@@ -221,13 +242,34 @@ class  LogHighlightThread(threading.Thread):
 		self.view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,4}\s*(\d+)')
 		if ST3: # this is for ST3 bug related with 'result_file_regex' which I suspect
 			self.view.run_command('revert')
+			self.timeout = 0
+			sublime.status_message("Log Highlight : Waiting for loading ...")
+			self.wait_for_loading()
+		else:
+			self.do_next()
 
+		is_working = False
+		return
+
+	def wait_for_loading(self):
+		if self.view.is_loading():
+			self.timeout = self.timeout + 1
+			if self.timeout > 200:
+				sublime.status_message("Log Highlight : Timed out waiting for loading")
+				is_working = False
+				return
+			sublime.set_timeout(self.wait_for_loading, 50)
+		else:
+			self.do_next()
+
+		is_working = False
+		return
+
+	def do_next(self):
 		# add bookmarks
 		self.add_bookmarks(self.view)
-
 		# summary
 		self.do_summary(self.view)
-
 		return
 
 	def set_syntax_theme(self, view):
@@ -247,7 +289,6 @@ class  LogHighlightThread(threading.Thread):
 	def get_rel_path_file(self):
 		text     = self.view.substr(sublime.Region(0, self.view.size()))
 		files_l  = re.compile(r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,4}\s*\d+').findall(text)
-		print (files_l)
 		rel_path = False
 		if len(files_l) > 0:
 			for file_name in files_l:
@@ -266,7 +307,7 @@ class  LogHighlightThread(threading.Thread):
 	def search_base(self, log_name, file_name):
 		sublime.status_message("Log Highlight : Searching base directory ...")
 		old_path  = ["", 0]
-		_path     = os.path.dirname(os.path.dirname(log_name))
+		_path     = os.path.dirname(log_name)
 		_depth    = _path.count(os.path.sep)
 		new_path  = [_path, _depth]
 		scan_path = 0
@@ -313,26 +354,26 @@ class  LogHighlightThread(threading.Thread):
 		err_head = ""
 		for i, _pat in enumerate(error_pattern):
 			if i == len(error_pattern) - 1:
-				err_head = err_head + _pat[0] + '.+'
+				err_head = err_head + _pat[0] + '.*'
 			else:
-				err_head = err_head + _pat[0] + '.+|'
+				err_head = err_head + _pat[0] + '.*|'
 		warn_head = ""
 		for i, _pat in enumerate(warning_pattern):
 			if i == len(warning_pattern) - 1:
-				warn_head = warn_head + _pat[0] + '.+'
+				warn_head = warn_head + _pat[0] + '.*'
 			else:
-				warn_head = warn_head + _pat[0] + '.+|'
+				warn_head = warn_head + _pat[0] + '.*|'
 		filt_head = err_head + '|' + warn_head
-		sublime.active_window().focus_view(view)
 		regions   = view.find_all(filt_head)
 		view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+		sublime.status_message("Log Highlight : ( "+str(len(regions))+" ) error/warnings are found")
 		return
 
 	def do_summary(self, view):
 		llh_settings    = get_settings()
-		log_panel       = llh_settings.get("log_panel", True)
+		summary_panel   = llh_settings.get("summary_panel", True)
 		error_only      = llh_settings.get("error_only", False)
-		if not log_panel:
+		if not summary_panel:
 			return
 
 		error_pattern   = llh_settings.get('error_pattern')
@@ -340,15 +381,15 @@ class  LogHighlightThread(threading.Thread):
 		err_msg = ""
 		for i, _pat in enumerate(error_pattern):
 			if i == len(error_pattern) - 1:
-				err_msg = err_msg + _pat[0] + '.+?' + _pat[1]
+				err_msg = err_msg + _pat[0] + '.*?' + _pat[1]
 			else:
-				err_msg = err_msg + _pat[0] + '.+?' + _pat[1] + '|'
+				err_msg = err_msg + _pat[0] + '.*?' + _pat[1] + '|'
 		warn_msg = ""
 		for i, _pat in enumerate(warning_pattern):
 			if i == len(warning_pattern) - 1:
-				warn_msg = warn_msg + _pat[0] + '.+?' + _pat[1]
+				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1]
 			else:
-				warn_msg = warn_msg + _pat[0] + '.+?' + _pat[1] + '|'
+				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1] + '|'
 
 		if error_only:
 			filt_msg  = err_msg
@@ -357,12 +398,11 @@ class  LogHighlightThread(threading.Thread):
 			filt_msg  = err_msg + '|' + warn_msg
 			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default))\n" + "-" * 100 + "\n\n"
 
-		sublime.active_window().focus_view(view)
 		text      = view.substr(sublime.Region(0, view.size()))
 		ewtext_l  = re.compile(filt_msg, re.MULTILINE|re.DOTALL).findall(text)
 
 		for _str in ewtext_l:
-			summary = summary + _str + '\n'
+			summary = summary + _str  + ('\n\n' if _str[-1] != '\n' else '\n')
 
 		global g_summary_view
 		g_summary_view = view.window().get_output_panel('loghighlight')

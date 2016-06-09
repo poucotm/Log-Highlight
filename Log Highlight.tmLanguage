@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -20,9 +21,34 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>.+?(?i)error</string>
-			<key>comment</key>
-			<string>...</string>
+			<string>^Error-\[</string>
+			<key>end</key>
+			<string>^\s*[\n]</string>
+			<key>name</key>
+			<string>msg.error</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
+					<key>name</key>
+					<string>msg.error.link</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=')[^']+(?=')</string>
+					<key>name</key>
+					<string>msg.error.quote</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^[^\r\n]*?(?i)error</string>
 			<key>end</key>
 			<string>[\r\n]</string>
 			<key>name</key>
@@ -35,13 +61,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
+					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
 					<key>name</key>
 					<string>msg.error.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
+					<string>(?&lt;=')[^']+(?=')</string>
 					<key>name</key>
 					<string>msg.error.quote</string>
 				</dict>
@@ -49,9 +75,34 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>.+?(?i)warning</string>
-			<key>comment</key>
-			<string>...</string>
+			<string>^Warning-\[</string>
+			<key>end</key>
+			<string>^\s*[\n]</string>
+			<key>name</key>
+			<string>msg.warning</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
+					<key>name</key>
+					<string>msg.warning.link</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=')[^']+(?=')</string>
+					<key>name</key>
+					<string>msg.warning.quote</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^[^\r\n]*?(?i)warning</string>
 			<key>end</key>
 			<string>[\r\n]</string>
 			<key>name</key>
@@ -64,13 +115,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
+					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
 					<key>name</key>
 					<string>msg.warning.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
+					<string>(?&lt;=')[^']+(?=')</string>
 					<key>name</key>
 					<string>msg.warning.quote</string>
 				</dict>
@@ -78,8 +129,8 @@
 		</dict>
 	</array>
 	<key>scopeName</key>
-	<string>source.log_highlight</string>
+	<string>source.loghighlight</string>
 	<key>uuid</key>
-	<string>0da65be4-5aac-4b6f-8071-1aadb970b8d9</string>
+	<string>0ed2482c-a94a-49dc-9aae-b1401bcff2e0</string>
 </dict>
 </plist>
