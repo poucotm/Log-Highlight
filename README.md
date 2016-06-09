@@ -1,15 +1,11 @@
 # Log Highlight for Sublime Text
 ==================================
 
-Log Highlight helps to view log with customizable error/warning syntax & color scheme.  
-It is possible to go to positions of files in a log by double-click. Summary panel will be seen by default.  
-It automatically generates bookmarks to navigate errors/warnings easily with new key bindings (`alt+pagedown/up`).  
+Log Highlight helps to view log with customizable error/warning syntax & color scheme. It is possible to go to positions of files in a log by double-click. Summary panel will be seen by default. It automatically generates bookmarks to navigate errors/warnings easily with new key bindings (`alt+pagedown/up`).
 
-There's two commands `Log Highlight: Highlight Error/Warning`, `Log Hightlight: Generate Custom Syntax & Theme`.  
-You can change syntax, color scheme by changing settings and running latter command.  
-After changing color scheme, you may have to restart sublime text once.
+There's two commands `Log Highlight: Highlight Error/Warning`, `Log Hightlight: Generate Custom Syntax & Theme`. You can change syntax, color scheme by changing settings and running latter command. After changing color scheme, you may have to restart sublime text once.
 
-The context menu only can be seen for `.log` file.  
+The context menu only can be seen for `.log` file.
 (file extensions can be added or changed in settings)
 
 Settings :
@@ -22,15 +18,17 @@ Settings :
 	"log_ext": [ ".log" ],
 
 	// error pattern set (regular expression)
-	// [ "begin regex", "end regex" ]
+	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"error_pattern": [
-		[ "^[^\\r\\n]+?(?i)error", "[\\r\\n]" ] // lines including 'error' with ignore case
+		[ "^Error-\\[", "^\\s*[\\n]" ],				// Error-[ ~
+		[ "^[^\\r\\n]*?(?i)error", "[\\r\\n]" ]	// lines including 'error' with ignore case
 	],
 
 	// warning pattern set (regular expression)
-	// [ "begin regex", "end regex" ]
+	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"warning_pattern": [
-		[ "^[^\\r\\n]+?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case
+		[ "^Warning-\\[", "^\\s*[\\n]" ],			// Warning-[ ~
+		[ "^[^\\r\\n]*?(?i)warning", "[\\r\\n]" ]	// lines including 'warning' with ignore case
 	],
 
 	// theme color set
@@ -54,7 +52,6 @@ Settings :
 	"summary_panel": true,	// show summary panel
 	"error_only": false		// display only errors in the summary panel
 }
-
 ```
 
 ![Image of Verilog Gadget](https://raw.githubusercontent.com/poucotm/Links/master/image/view_log.png)
