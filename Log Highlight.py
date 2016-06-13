@@ -20,11 +20,11 @@ MAX_STAIR_UP_PATH = 10
 def plugin_loaded():
 	global lh_settings
 	lh_settings = sublime.load_settings('Log Highlight.sublime-settings')
-	lh_settings.clear_on_change('reload')
-	lh_settings.add_on_change('reload', plugin_loaded)
+	# lh_settings.clear_on_change('reload')
+	# lh_settings.add_on_change('reload', plugin_loaded)
 
 # def plugin_unloaded():
-	# print ("unloaded : Verilog Gadget Log.py")
+	# print ("unloaded : Log Highlight.py")
 
 def get_settings():
 	if ST3:
