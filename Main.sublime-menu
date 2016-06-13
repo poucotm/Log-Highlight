@@ -35,7 +35,7 @@
 							{
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/Verilog Gadget/Default (Windows).sublime-keymap",
+									"file": "${packages}/Log Highlight/Default (Windows).sublime-keymap",
 									"platform": "Windows"
 								},
 								"caption": "Key Bindings – Default"
@@ -43,7 +43,7 @@
 							{
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/Verilog Gadget/Default (OSX).sublime-keymap",
+									"file": "${packages}/Log Highlight/Default (OSX).sublime-keymap",
 									"platform": "OSX"
 								},
 								"caption": "Key Bindings – Default"
@@ -51,7 +51,7 @@
 							{
 								"command": "open_file",
 								"args": {
-									"file": "${packages}/Verilog Gadget/Default (Linux).sublime-keymap",
+									"file": "${packages}/Log Highlight/Default (Linux).sublime-keymap",
 									"platform": "Linux"
 								},
 								"caption": "Key Bindings – Default"
