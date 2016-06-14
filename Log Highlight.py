@@ -94,13 +94,13 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
+					<string>\\"?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*\\"?\s*[,:line]{1,5}\s*\d+</string>
 					<key>name</key>
 					<string>msg.error.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
+					<string>(?&lt;=[\\'\\"])[^[\\'\\"]]+(?=[\\'\\"])</string>
 					<key>name</key>
 					<string>msg.error.quote</string>
 				</dict>
@@ -132,13 +132,13 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?[,:]\s*\d+</string>
+					<string>\\"?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*\\"?\s*[,:line]{1,5}\s*\d+</string>
 					<key>name</key>
 					<string>msg.warning.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=\')[^\']+(?=\')</string>
+					<string>(?&lt;=[\\'\\"])[^[\\'\\"]]+(?=[\\'\\"])</string>
 					<key>name</key>
 					<string>msg.warning.quote</string>
 				</dict>
@@ -239,7 +239,7 @@ class  LogHighlightThread(threading.Thread):
 		# set base dir & apply 'result_file_regex'
 		if self.base_dir != "":
 			self.view.settings().set('result_base_dir', self.base_dir)
-		self.view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,4}\s*(\d+)')
+		self.view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,5}\s*(\d+)')
 		if ST3: # this is for ST3 bug related with 'result_file_regex' which I suspect
 			self.view.run_command('revert')
 			self.timeout = 0
@@ -288,7 +288,7 @@ class  LogHighlightThread(threading.Thread):
 
 	def get_rel_path_file(self):
 		text     = self.view.substr(sublime.Region(0, self.view.size()))
-		files_l  = re.compile(r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,4}\s*\d+').findall(text)
+		files_l  = re.compile(r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,5}\s*\d+').findall(text)
 		rel_path = False
 		if len(files_l) > 0:
 			for file_name in files_l:
@@ -408,7 +408,7 @@ class  LogHighlightThread(threading.Thread):
 		g_summary_view = view.window().get_output_panel('loghighlight')
 		g_summary_view.set_read_only(False)
 		view.window().run_command("show_panel", {"panel": "output.loghighlight"})
-		g_summary_view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,4}\s*(\d+)')
+		g_summary_view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,5}\s*(\d+)')
 		if self.base_dir != "":
 			g_summary_view.settings().set('result_base_dir', self.base_dir)
 		self.set_syntax_theme(g_summary_view)

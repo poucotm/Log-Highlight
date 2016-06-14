@@ -34,13 +34,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
+					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
 					<key>name</key>
 					<string>msg.error.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=')[^']+(?=')</string>
+					<string>(?&lt;=[\'\"])[^[\'\"]]+(?=[\'\"])</string>
 					<key>name</key>
 					<string>msg.error.quote</string>
 				</dict>
@@ -61,13 +61,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
+					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
 					<key>name</key>
 					<string>msg.error.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=')[^']+(?=')</string>
+					<string>(?&lt;=[\'\"])[^[\'\"]]+(?=[\'\"])</string>
 					<key>name</key>
 					<string>msg.error.quote</string>
 				</dict>
@@ -88,13 +88,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
+					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
 					<key>name</key>
 					<string>msg.warning.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=')[^']+(?=')</string>
+					<string>(?&lt;=[\'\"])[^[\'\"]]+(?=[\'\"])</string>
 					<key>name</key>
 					<string>msg.warning.quote</string>
 				</dict>
@@ -115,13 +115,13 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>"?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*"?[,:]\s*\d+</string>
+					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
 					<key>name</key>
 					<string>msg.warning.link</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=')[^']+(?=')</string>
+					<string>(?&lt;=[\'\"])[^[\'\"]]+(?=[\'\"])</string>
 					<key>name</key>
 					<string>msg.warning.quote</string>
 				</dict>

@@ -23,7 +23,7 @@ When errors/warnings found, it will add bookmarks for them. You can navigate eas
 
 #### Go To Position
 
-By double-click, you can go to positions of links like `"../../abc.cpp", 32` or `./abc.v line 234` in a log. For relative path, it may automatically searches a base directory near the log file
+By double-click, you can go to positions of links like `"../../abc.cpp", 32` or `./abc.v line 234` in a log. For relative path, it may automatically search a base directory near the log file
 
 #### Summary Output Panel
 
