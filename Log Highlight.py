@@ -393,10 +393,10 @@ class  LogHighlightThread(threading.Thread):
 
 		if error_only:
 			filt_msg  = err_msg
-			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default))\n" + "-" * 100 + "\n\n"
+			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default), hide : ESC)\n" + "-" * 100 + "\n\n"
 		else:
 			filt_msg  = err_msg + '|' + warn_msg
-			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default))\n" + "-" * 100 + "\n\n"
+			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default), hide : ESC)\n" + "-" * 100 + "\n\n"
 
 		text      = view.substr(sublime.Region(0, view.size()))
 		ewtext_l  = re.compile(filt_msg, re.MULTILINE|re.DOTALL).findall(text)

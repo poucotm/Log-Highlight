@@ -1,7 +1,7 @@
 # Log Highlight for Sublime Text
 ==================================
 
-Log Highlight helps to view log with customizable error/warning syntax & color scheme.
+Log Highlight helps to view log with customizable error/warning syntax & color scheme.  
 Open `.log` file and run `Log Highlight` in context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
 
 ## Features
@@ -15,21 +15,22 @@ Open `.log` file and run `Log Highlight` in context menu or `Log Highlight : Hig
 
 #### Customizable Syntax & Color Scheme
 
-After changing syntax and color scheme in settings, run `Log Hightlight: Generate Custom Syntax & Theme` command. You may have to restart sublime text once.
+After changing syntax and color scheme in **settings**, run `Log Hightlight: Generate Custom Syntax & Theme` command. You may have to restart sublime text once.
 
 #### Bookmarks
 
-When errors/warnings found, it will add bookmarks for them. You can navigate easily with new key binding (`alt+pagedown / up`)
+When errors/warnings found, it will add bookmarks for them. You can navigate easily with new key binding (`alt+pagedown/up`)
 
 #### Go To Position
 
-By double-click, you can go to positions of links like `"../../abc.cpp", 32` or `./abc.v line 234` in a log. For relative path, it may automatically searche a base directory near the log file
+By double-click, you can go to positions of links like `"../../abc.cpp", 32` or `./abc.v line 234` in a log. For relative path, it may automatically searches a base directory near the log file
 
 #### Summary Output Panel
 
 By default, it summarizes error/warning list in a new output panel at the bottom of window
 
-Settings :
+#### Settings :
+
 ```java
 {
 	// enable context menu
@@ -70,12 +71,12 @@ Settings :
 	],
 
 	// summary panel
-	"summary_panel": true,	// show summary panel
-	"error_only": false		// display only errors in the summary panel
+	"summary_panel": true,  // show summary panel
+	"error_only": false     // display only errors in the summary panel
 }
 ```
 
-![Image of Verilog Gadget](https://raw.githubusercontent.com/poucotm/Links/master/image/view_log.png)
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/log_highlight.png)
 
 ## issues
 
