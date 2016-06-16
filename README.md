@@ -42,14 +42,14 @@ By default, it summarizes error/warning list in a new output panel at the bottom
 	// error pattern set (regular expression)
 	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"error_pattern": [
-		[ "^Error-\\[", "^\\s*[\\n]" ],           // Error-[ ~
+		[ "^Error-\\[", "^\\s*[\\n]" ],           // Error-[ ~ next empty line
 		[ "^[^\\r\\n]*?(?i)error", "[\\r\\n]" ]   // lines including 'error' with ignore case
 	],
 
 	// warning pattern set (regular expression)
 	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 	"warning_pattern": [
-		[ "^Warning-\\[", "^\\s*[\\n]" ],         // Warning-[ ~
+		[ "^Warning-\\[", "^\\s*[\\n]" ],         // Warning-[ ~ next empty line
 		[ "^[^\\r\\n]*?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case
 	],
 
@@ -76,7 +76,7 @@ By default, it summarizes error/warning list in a new output panel at the bottom
 }
 ```
 
-![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/log_highlight.png)
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/log_highlight.gif)
 
 ## issues
 
