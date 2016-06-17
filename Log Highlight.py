@@ -100,7 +100,7 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=[\\'\\"])[^[\\'\\"]]+(?=[\\'\\"])</string>
+					<string>(["'])(?:(?=(\\\?))\\2.)*?\\1</string>
 					<key>name</key>
 					<string>msg.error.quote</string>
 				</dict>
@@ -138,7 +138,7 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=[\\'\\"])[^[\\'\\"]]+(?=[\\'\\"])</string>
+					<string>(["'])(?:(?=(\\\?))\\2.)*?\\1</string>
 					<key>name</key>
 					<string>msg.warning.quote</string>
 				</dict>

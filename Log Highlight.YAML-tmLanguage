@@ -1,32 +1,48 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 ---
 name: Log Highlight
-scopeName: source.log_highlight
+scopeName: source.loghighlight
 fileTypes: []
-uuid: 0da65be4-5aac-4b6f-8071-1aadb970b8d9
+uuid: 0ed2482c-a94a-49dc-9aae-b1401bcff2e0
 patterns:
 - comment: ...
   name: summary.title
   begin: 'Log Highlight'
   end: '[\r\n]'
-- comment: ...
-  name: msg.error
-  begin: '.+?(?i)error'
+- name: msg.error
+  begin: '^Error-\['
+  end: '^\s*[\n]'
+  patterns:
+  - include: $self
+  - name: msg.error.link
+    match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
+  - name: msg.error.quote
+    match: (["'])(?:(?=(\\?))\2.)*?\1
+- name: msg.error
+  begin: '^[^\r\n]*?(?i)error'
   end: '[\r\n]'
   patterns:
   - include: $self
   - name: msg.error.link
     match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
   - name: msg.error.quote
-    match: (?<=\')[^\']+(?=\')
-- comment: ...
-  name: msg.warning
-  begin: '.+?(?i)warning'
+    match: (["'])(?:(?=(\\?))\2.)*?\1
+- name: msg.warning
+  begin: '^Warning-\['
+  end: '^\s*[\n]'
+  patterns:
+  - include: $self
+  - name: msg.warning.link
+    match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
+  - name: msg.warning.quote
+    match: (["'])(?:(?=(\\?))\2.)*?\1
+- name: msg.warning
+  begin: '^[^\r\n]*?(?i)warning'
   end: '[\r\n]'
   patterns:
   - include: $self
   - name: msg.warning.link
     match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
   - name: msg.warning.quote
-    match: (?<=\')[^\']+(?=\')
+    match: (["'])(?:(?=(\\?))\2.)*?\1
 ...
