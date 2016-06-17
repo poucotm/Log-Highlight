@@ -13,36 +13,42 @@ patterns:
   begin: '^Error-\['
   end: '^\s*[\n]'
   patterns:
-  - include: $self
-  - name: msg.error.link
-    match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
-  - name: msg.error.quote
-    match: (["'])(?:(?=(\\?))\2.)*?\1
+  - include: '#error_link'
+  - include: '#error_quote'
 - name: msg.error
-  begin: '^[^\r\n]*?(?i)error'
+  begin: '^(\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+)*.*?(?i)error'
+  beginCaptures:
+    '1': {name: msg.error.link}
   end: '[\r\n]'
   patterns:
-  - include: $self
-  - name: msg.error.link
-    match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
-  - name: msg.error.quote
-    match: (["'])(?:(?=(\\?))\2.)*?\1
+  - include: '#error_link'
+  - include: '#error_quote'
 - name: msg.warning
   begin: '^Warning-\['
   end: '^\s*[\n]'
   patterns:
-  - include: $self
-  - name: msg.warning.link
-    match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
-  - name: msg.warning.quote
-    match: (["'])(?:(?=(\\?))\2.)*?\1
+  - include: '#warning_link'
+  - include: '#warning_quote'
 - name: msg.warning
-  begin: '^[^\r\n]*?(?i)warning'
+  begin: '^(\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+)*.*?(?i)warning'
+  beginCaptures:
+    '1': {name: msg.warning.link}
   end: '[\r\n]'
   patterns:
-  - include: $self
-  - name: msg.warning.link
+  - include: '#warning_link'
+  - include: '#warning_quote'
+
+repository:
+  error_link:
+    name: msg.error.link
     match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
-  - name: msg.warning.quote
+  error_quote:
+    name: msg.error.quote
+    match: (["'])(?:(?=(\\?))\2.)*?\1
+  warning_link:
+    name: msg.warning.link
+    match: '\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+'
+  warning_quote:
+    name: msg.warning.quote
     match: (["'])(?:(?=(\\?))\2.)*?\1
 ...

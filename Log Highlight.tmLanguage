@@ -29,25 +29,25 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#error_link</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
-					<key>name</key>
-					<string>msg.error.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-					<key>name</key>
-					<string>msg.error.quote</string>
+					<key>include</key>
+					<string>#error_quote</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[^\r\n]*?(?i)error</string>
+			<string>^(\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+)*.*?(?i)error</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>msg.error.link</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>[\r\n]</string>
 			<key>name</key>
@@ -56,19 +56,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#error_link</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
-					<key>name</key>
-					<string>msg.error.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-					<key>name</key>
-					<string>msg.error.quote</string>
+					<key>include</key>
+					<string>#error_quote</string>
 				</dict>
 			</array>
 		</dict>
@@ -83,25 +75,25 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#warning_link</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
-					<key>name</key>
-					<string>msg.warning.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-					<key>name</key>
-					<string>msg.warning.quote</string>
+					<key>include</key>
+					<string>#warning_quote</string>
 				</dict>
 			</array>
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^[^\r\n]*?(?i)warning</string>
+			<string>^(\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+)*.*?(?i)warning</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>msg.warning.link</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>[\r\n]</string>
 			<key>name</key>
@@ -110,23 +102,46 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>$self</string>
+					<string>#warning_link</string>
 				</dict>
 				<dict>
-					<key>match</key>
-					<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
-					<key>name</key>
-					<string>msg.warning.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-					<key>name</key>
-					<string>msg.warning.quote</string>
+					<key>include</key>
+					<string>#warning_quote</string>
 				</dict>
 			</array>
 		</dict>
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>error_link</key>
+		<dict>
+			<key>match</key>
+			<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
+			<key>name</key>
+			<string>msg.error.link</string>
+		</dict>
+		<key>error_quote</key>
+		<dict>
+			<key>match</key>
+			<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
+			<key>name</key>
+			<string>msg.error.quote</string>
+		</dict>
+		<key>warning_link</key>
+		<dict>
+			<key>match</key>
+			<string>\"?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*\"?\s*[,:line]{1,5}\s*\d+</string>
+			<key>name</key>
+			<string>msg.warning.link</string>
+		</dict>
+		<key>warning_quote</key>
+		<dict>
+			<key>match</key>
+			<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
+			<key>name</key>
+			<string>msg.warning.quote</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.loghighlight</string>
 	<key>uuid</key>
