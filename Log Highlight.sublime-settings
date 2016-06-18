@@ -15,18 +15,22 @@
 	//      - You don't need to use {{{LINK}}} to highlight second `../src/foo.cpp` link, because it is inside of begin ~ end
 	//      - [ "^[\\r\\n].*?(?i)error", "[\\r\\n]" ] is enough for 2nd link
 	//      - For 1st link, the former setting can't, because it is outside of begin ~ end
-	//      - You have to put {{{LINK}}} like [ "^{{{LINK}}}*.*?(?i)error", "[\\r\\n]" ]
+	//      - You have to put {{{LINK}}} like [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 
 	"error_pattern": [
-		[ "^Error-\\[", "^\\s*[\\n]" ],              // Error-[ ~ next empty line
-		[ "^{{{LINK}}}*.*?(?i)error", "[\\r\\n]" ]   // lines including 'error' with ignore case with a link in front of 'error'
+		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line
+		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]   // lines including 'error' with ignore case with a link in front of 'error'
 	],
 
 	// warning pattern set (regular expression)
 	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
+	//
+	// non-regex special word (sensitive case) : {{{LINK}}}, {{{QUOTE}}}
+	//  -> see error pattern description
+
 	"warning_pattern": [
-		[ "^Warning-\\[", "^\\s*[\\n]" ],            // Warning-[ ~ next empty line
-		[ "^{{{LINK}}}*.*?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case with a link in front of 'warning'
+		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line
+		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case with a link in front of 'warning'
 	],
 
 	// theme color set
@@ -47,6 +51,7 @@
 	],
 
 	// summary panel
-	"summary_panel": true,	// show summary panel
-	"error_only": false		// display only errors in the summary panel
+	"summary_panel": true,  // show summary panel
+	"error_only": false,    // display only errors in the summary panel
+	"show_keymap": true     // display summary panel key map information
 }

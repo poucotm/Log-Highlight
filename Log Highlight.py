@@ -35,6 +35,16 @@ def get_settings():
 ############################################################################
 # LogHighlightGenCustomSyntaxThemeCommand
 
+LINK_REGX_PLIST    = r"""["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+"""
+LINK_REGX_SETTING  = r"""(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+)"""
+LINK_REGX_RESULT   = r"""["']?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line]{1,5}\s*(\d+)"""
+LINK_REGX_RELPATH  = r"""["']?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line]{1,5}\s*\d+"""
+LINK_REGX_SUMMARY  = r"""(?:["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+)"""
+
+QUOTE_REGX_PLIST   = r"""(["'])(?:(?=(\\?))\2.)*?\1"""
+QUOTE_REGX_SETTING = r"""(["'].+?["'])"""
+QUOTE_REGX_SUMMARY = r"""(?:["'].+?["'])"""
+
 class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		self.gen_syntax()
@@ -43,12 +53,8 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		return
 
 	def gen_syntax(self):
-		llh_settings    = get_settings()
-		error_pattern   = llh_settings.get('error_pattern')
-		warning_pattern = llh_settings.get('warning_pattern')
 
-		_tmlang = """
-<?xml version="1.0" encoding="UTF-8"?>
+		_tmlang = """<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -68,84 +74,43 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 			<key>name</key>
 			<string>summary.title</string>
 		</dict>"""
-		for _str in error_pattern:
-			_str[0] = self.conv_for_plist(_str[0])
-			_str[1] = self.conv_for_plist(_str[1])
-			if _str[1] != "":
-				_tmlang = _tmlang + """
-		<dict>
-			<key>begin</key>
-			<string>""" + _str[0] + """</string>
-			<key>end</key>
-			<string>""" + _str[1] + """</string>"""
-			else:
-				_tmlang = _tmlang + """
-		<dict>
-			<key>match</key>
-			<string>""" + _str[0] + """</string>"""
-			_tmlang = _tmlang + """
-			<key>name</key>
-			<string>msg.error</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\\"?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*\\"?\s*[,:line]{1,5}\s*\d+</string>
-					<key>name</key>
-					<string>msg.error.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(["'])(?:(?=(\\\?))\\2.)*?\\1</string>
-					<key>name</key>
-					<string>msg.error.quote</string>
-				</dict>
-			</array>
-		</dict>"""
-		for _str in warning_pattern:
-			_str[0] = self.conv_for_plist(_str[0])
-			_str[1] = self.conv_for_plist(_str[1])
-			if _str[1] != "":
-				_tmlang = _tmlang + """
-		<dict>
-			<key>begin</key>
-			<string>""" + _str[0] + """</string>
-			<key>end</key>
-			<string>""" + _str[1] + """</string>"""
-			else:
-				_tmlang = _tmlang + """
-		<dict>
-			<key>match</key>
-			<string>""" + _str[0] + """</string>"""
-			_tmlang = _tmlang + """
-			<key>name</key>
-			<string>msg.warning</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>\\"?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*\\"?\s*[,:line]{1,5}\s*\d+</string>
-					<key>name</key>
-					<string>msg.warning.link</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(["'])(?:(?=(\\\?))\\2.)*?\\1</string>
-					<key>name</key>
-					<string>msg.warning.quote</string>
-				</dict>
-			</array>
-		</dict>"""
+		# error
+		_tmlang = _tmlang + self.gen_syntax_sub_pattern(0)
+		# warning
+		_tmlang = _tmlang + self.gen_syntax_sub_pattern(1)
 		_tmlang = _tmlang + """
 	</array>
+	<key>repository</key>
+	<dict>
+		<key>error_link</key>
+		<dict>
+			<key>match</key>
+			<string>""" + LINK_REGX_PLIST + """</string>
+			<key>name</key>
+			<string>msg.error.link</string>
+		</dict>
+		<key>error_quote</key>
+		<dict>
+			<key>match</key>
+			<string>""" + QUOTE_REGX_PLIST + """</string>
+			<key>name</key>
+			<string>msg.error.quote</string>
+		</dict>
+		<key>warning_link</key>
+		<dict>
+			<key>match</key>
+			<string>""" + LINK_REGX_PLIST + """</string>
+			<key>name</key>
+			<string>msg.warning.link</string>
+		</dict>
+		<key>warning_quote</key>
+		<dict>
+			<key>match</key>
+			<string>""" + QUOTE_REGX_PLIST + """</string>
+			<key>name</key>
+			<string>msg.warning.quote</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>source.loghighlight</string>
 	<key>uuid</key>
@@ -161,6 +126,92 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		f.write(_tmlang)
 		f.close()
 		return
+
+	def gen_syntax_sub_pattern(self, sel):
+		llh_settings    = get_settings()
+		if sel == 0:
+			pattern = llh_settings.get('error_pattern')
+			word    = "error"
+		else:
+			pattern = llh_settings.get('warning_pattern')
+			word    = "warning"
+
+		pattern_tmlang = ""
+		for _str in pattern:
+			_str[0] = self.conv_for_plist(_str[0])
+			_str[1] = self.conv_for_plist(_str[1])
+			if _str[1] != "":
+				pattern_tmlang = pattern_tmlang + """
+		<dict>
+			<key>begin</key>
+			<string>""" + self.conv_for_regx(_str[0]) + """</string>""" + self.gen_syntax_sub_capture(_str[0], sel, 0) + """
+			<key>end</key>
+			<string>""" + self.conv_for_regx(_str[1]) + """</string>""" + self.gen_syntax_sub_capture(_str[1], sel, 1)
+			else:
+				pattern_tmlang = pattern_tmlang + """
+		<dict>
+			<key>match</key>
+			<string>""" + self.conv_for_regx(_str[0]) + """</string>""" + self.gen_syntax_sub_capture(_str[0], sel, 2)
+			pattern_tmlang = pattern_tmlang + """
+			<key>name</key>
+			<string>msg.""" + word + """</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#""" + word + """_link</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#""" + word + """_quote</string>
+				</dict>
+			</array>
+		</dict>"""
+		return pattern_tmlang
+
+	def gen_syntax_sub_capture(self, regx, sel0, sel1):
+		spw  = re.compile(r'\{\{\{LINK\}\}\}|\{\{\{QUOTE\}\}\}').findall(regx)
+		if len(spw) == 0:
+			return ""
+
+		word = "error" if sel0 == 0 else "warning"
+		if sel1 == 0:
+			ret = """
+			<key>beginCaptures</key>
+			<dict>"""
+		elif sel1 == 1:
+			ret = """
+			<key>endCaptures</key>
+			<dict>"""
+		else:
+			ret = """
+			<key>captures</key>
+			<dict>"""
+		lqs = ""
+		for i, _str in enumerate(spw):
+			if _str == r'{{{LINK}}}':
+				lqs = "link"
+			elif _str == r'{{{QUOTE}}}':
+				lqs = "quote"
+			ret = ret + """
+				<key>""" + str(i+1) + """</key>
+				<dict>
+					<key>name</key>
+					<string>msg.""" + word + """.""" + lqs + """</string>
+				</dict>"""
+		ret = ret + """
+			</dict>"""
+		return ret
+
+	def conv_for_plist(self, _str):
+		_str = re.sub('\<', '&lt;', _str)
+		_str = re.sub('\>', '&gt;', _str)
+		return _str
+
+	def conv_for_regx(self, _str):
+		_str = re.sub(r'\{\{\{LINK\}\}\}', LINK_REGX_SETTING, _str)
+		_str = re.sub(r'\{\{\{QUOTE\}\}\}', QUOTE_REGX_SETTING, _str)
+		return _str
 
 	def gen_theme(self):
 		llh_settings = get_settings()
@@ -191,11 +242,6 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		f.write(_tmtheme)
 		f.close()
 		return
-
-	def conv_for_plist(self, _str):
-		_str = re.sub('\<', '&lt;', _str)
-		_str = re.sub('\>', '&gt;', _str)
-		return _str
 
 ############################################################################
 # LogHighlightCommand
@@ -239,7 +285,7 @@ class  LogHighlightThread(threading.Thread):
 		# set base dir & apply 'result_file_regex'
 		if self.base_dir != "":
 			self.view.settings().set('result_base_dir', self.base_dir)
-		self.view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,5}\s*(\d+)')
+		self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
 		if ST3: # this is for ST3 bug related with 'result_file_regex' which I suspect
 			self.view.run_command('revert')
 			self.timeout = 0
@@ -267,7 +313,7 @@ class  LogHighlightThread(threading.Thread):
 
 	def do_next(self):
 		# add bookmarks
-		self.add_bookmarks(self.view)
+		self.add_bookmarks(self.view, 0)
 		# summary
 		self.do_summary(self.view)
 		return
@@ -288,7 +334,7 @@ class  LogHighlightThread(threading.Thread):
 
 	def get_rel_path_file(self):
 		text     = self.view.substr(sublime.Region(0, self.view.size()))
-		files_l  = re.compile(r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,5}\s*\d+').findall(text)
+		files_l  = re.compile(LINK_REGX_RELPATH).findall(text)
 		rel_path = False
 		if len(files_l) > 0:
 			for file_name in files_l:
@@ -347,18 +393,20 @@ class  LogHighlightThread(threading.Thread):
 
 		return found
 
-	def add_bookmarks(self, view):
+	def add_bookmarks(self, view, sel):
 		llh_settings    = get_settings()
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
 		err_head = ""
 		for i, _pat in enumerate(error_pattern):
+			_pat[0]  = self.conv_for_regx(_pat[0])
 			if i == len(error_pattern) - 1:
 				err_head = err_head + _pat[0] + '.*'
 			else:
 				err_head = err_head + _pat[0] + '.*|'
 		warn_head = ""
 		for i, _pat in enumerate(warning_pattern):
+			_pat[0]  = self.conv_for_regx(_pat[0])
 			if i == len(warning_pattern) - 1:
 				warn_head = warn_head + _pat[0] + '.*'
 			else:
@@ -367,6 +415,11 @@ class  LogHighlightThread(threading.Thread):
 		regions   = view.find_all(filt_head)
 		view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
 		sublime.status_message("Log Highlight : ( "+str(len(regions))+" ) error/warnings are found")
+		# # of errors / # of warnings
+		if sel == 0:
+			self.n_errors = str(len(view.find_all(err_head)));
+			self.n_warns  = str(len(view.find_all(warn_head)));
+
 		return
 
 	def do_summary(self, view):
@@ -378,14 +431,20 @@ class  LogHighlightThread(threading.Thread):
 
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
+		show_keymap     = llh_settings.get("show_keymap", True)
+
 		err_msg = ""
 		for i, _pat in enumerate(error_pattern):
+			_pat[0]  = self.conv_for_regx(_pat[0])
+			_pat[1]  = self.conv_for_regx(_pat[1])
 			if i == len(error_pattern) - 1:
 				err_msg = err_msg + _pat[0] + '.*?' + _pat[1]
 			else:
 				err_msg = err_msg + _pat[0] + '.*?' + _pat[1] + '|'
 		warn_msg = ""
 		for i, _pat in enumerate(warning_pattern):
+			_pat[0]  = self.conv_for_regx(_pat[0])
+			_pat[1]  = self.conv_for_regx(_pat[1])
 			if i == len(warning_pattern) - 1:
 				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1]
 			else:
@@ -393,22 +452,30 @@ class  LogHighlightThread(threading.Thread):
 
 		if error_only:
 			filt_msg  = err_msg
-			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default), hide : ESC)\n" + "-" * 100 + "\n\n"
+			if show_keymap:
+				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors   (toggle : alt+f12, hide : ESC)\n" + "-" * 100 + "\n"
+			else:
+				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors\n" + "-" * 100 + "\n"
 		else:
 			filt_msg  = err_msg + '|' + warn_msg
-			summary   = "\n" + "Log Highlight Summary (toggle : alt+f12 (default), hide : ESC)\n" + "-" * 100 + "\n\n"
+			if show_keymap:
+				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings   (toggle : alt+f12, hide : ESC)\n" + "-" * 100 + "\n"
+			else:
+				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings\n" + "-" * 100 + "\n"
+
 
 		text      = view.substr(sublime.Region(0, view.size()))
 		ewtext_l  = re.compile(filt_msg, re.MULTILINE|re.DOTALL).findall(text)
 
 		for _str in ewtext_l:
-			summary = summary + _str  + ('\n\n' if _str[-1] != '\n' else '\n')
+			_str    = re.sub(re.compile(r'[\r\n]+$'), '', _str);
+			summary = summary + _str + '\n\n'
 
 		global g_summary_view
 		g_summary_view = view.window().get_output_panel('loghighlight')
 		g_summary_view.set_read_only(False)
 		view.window().run_command("show_panel", {"panel": "output.loghighlight"})
-		g_summary_view.settings().set('result_file_regex', r'\"?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)\"?\s*[,:line]{1,5}\s*(\d+)')
+		g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
 		if self.base_dir != "":
 			g_summary_view.settings().set('result_base_dir', self.base_dir)
 		self.set_syntax_theme(g_summary_view)
@@ -420,8 +487,13 @@ class  LogHighlightThread(threading.Thread):
 			g_summary_view.end_edit(edit)
 		g_summary_view.set_read_only(True)
 		# add bookmarks
-		self.add_bookmarks(g_summary_view)
+		self.add_bookmarks(g_summary_view, 1)
 		return
+
+	def conv_for_regx(self, _str):
+		_str = re.sub(r'\{\{\{LINK\}\}\}', LINK_REGX_SUMMARY, _str)
+		_str = re.sub(r'\{\{\{QUOTE\}\}\}', QUOTE_REGX_SUMMARY, _str)
+		return _str
 
 ############################################################################
 # for context menu
