@@ -29,7 +29,7 @@ By double-click, you can go to positions of links like `"../../abc.cpp", 32` or 
 
 By default, it summarizes error/warning list in a new output panel at the bottom of window
 
-#### etc
+#### More Flexible Style Syntax
 
 From v0.4.0, you can highlight links and quotes inside of begin regex, end regex and match regex. by using special words `{{{LINK}}}`, `{{{QUOTE}}}`
 It can be used like gcc style error message : `./src/abc.cpp:40:2 error ...`
@@ -58,7 +58,8 @@ It can be used like gcc style error message : `./src/abc.cpp:40:2 error ...`
 
 	"error_pattern": [
 		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line
-		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]   // lines including 'error' with ignore case with a link in front of 'error'
+		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // lines including 'error' with ignore case with a link in front of 'error'
+		[ "^\\w+:\\s*\\*E", "\\n$" ]                         // ...: *E ...
 	],
 
 	// warning pattern set (regular expression)
@@ -69,7 +70,8 @@ It can be used like gcc style error message : `./src/abc.cpp:40:2 error ...`
 
 	"warning_pattern": [
 		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line
-		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ] // lines including 'warning' with ignore case with a link in front of 'warning'
+		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// lines including 'warning' with ignore case with a link in front of 'warning'
+		[ "^\\w+:\\s*\\*W", "\\n$" ]                         // ...: *W ...
 	],
 
 	// theme color set

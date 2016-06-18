@@ -278,9 +278,10 @@ class  LogHighlightThread(threading.Thread):
 
 		# to set base directory
 		rel_path_file = self.get_rel_path_file()
+		self.search_base_success = True
 		self.base_dir = ""
 		if rel_path_file != "":
-			self.search_base(log_name, rel_path_file)
+			self.search_base_success = self.search_base(log_name, rel_path_file)
 
 		# set base dir & apply 'result_file_regex'
 		if self.base_dir != "":
@@ -316,6 +317,11 @@ class  LogHighlightThread(threading.Thread):
 		self.add_bookmarks(self.view, 0)
 		# summary
 		self.do_summary(self.view)
+
+		if self.search_base_success:
+			sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
+		else:
+			sublime.status_message("Log Highlight : Unable to Find Base Directory !")
 		return
 
 	def set_syntax_theme(self, view):
@@ -414,7 +420,6 @@ class  LogHighlightThread(threading.Thread):
 		filt_head = err_head + '|' + warn_head
 		regions   = view.find_all(filt_head)
 		view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
-		sublime.status_message("Log Highlight : ( "+str(len(regions))+" ) error/warnings are found")
 		# # of errors / # of warnings
 		if sel == 0:
 			self.n_errors = str(len(view.find_all(err_head)));
