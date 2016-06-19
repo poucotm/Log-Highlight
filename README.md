@@ -1,8 +1,8 @@
 # Log Highlight for Sublime Text
 ==================================
 
-Log Highlight helps to view log with customizable error/warning syntax & color scheme.  
-Open `.log` file and run `Log Highlight` in context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
+Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme.  
+Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
 
 ## Features
 ***********
@@ -31,8 +31,7 @@ By default, it summarizes error/warning list in a new output panel at the bottom
 
 #### More Flexible Style Syntax
 
-From v0.4.0, you can highlight links and quotes inside of begin regex, end regex and match regex. by using special words `{{{LINK}}}`, `{{{QUOTE}}}`
-It can be used like gcc style error message : `./src/abc.cpp:40:2 error ...`
+From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex" and "match regex" by using special words `{{{LINK}}}`, `{{{QUOTE}}}`. It can be used for the following gcc style error/warning message : `./src/abc.cpp:40:2 error: unknown escape seque ...`
 
 #### Settings :
 
@@ -51,15 +50,16 @@ It can be used like gcc style error message : `./src/abc.cpp:40:2 error ...`
 	//  -> They will be replaced with regex capturing groups in "begin regex", "end regex" or "match regex" for LINK regex, QUOTE regex
 	//
 	//  e.g.) ../src/foo.cpp:40 error: ../src/foo.cpp:40
-	//      - You don't need to use {{{LINK}}} to highlight second `../src/foo.cpp` link, because it is inside of begin ~ end
+	//      - You don't need to use {{{LINK}}} to highlight second `../src/foo.cpp` link, because it is inside begin ~ end
 	//      - [ "^[\\r\\n].*?(?i)error", "[\\r\\n]" ] is enough for 2nd link
-	//      - For 1st link, the former setting can't, because it is outside of begin ~ end
+	//      - For 1st link, the former setting can't, because it is outside begin ~ end
 	//      - You have to put {{{LINK}}} like [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 
 	"error_pattern": [
 		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // lines including 'error' with ignore case with a link in front of 'error'
 		[ "^\\w+:\\s*\\*E", "\\n$" ]                         // ...: *E ...
+		// <-- Add More Patterns Here -->
 	],
 
 	// warning pattern set (regular expression)
@@ -72,6 +72,7 @@ It can be used like gcc style error message : `./src/abc.cpp:40:2 error ...`
 		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// lines including 'warning' with ignore case with a link in front of 'warning'
 		[ "^\\w+:\\s*\\*W", "\\n$" ]                         // ...: *W ...
+		// <-- Add More Patterns Here -->
 	],
 
 	// theme color set
