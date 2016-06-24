@@ -419,6 +419,11 @@ class  LogHighlightThread(threading.Thread):
 				warn_head = warn_head + _pat[0] + '.*|'
 		filt_head = err_head + '|' + warn_head
 		regions   = view.find_all(filt_head)
+
+		if sel == 1 and len(regions) > 0: # except for summary title
+			if regions[0].begin() == 1 and regions[0].end() == 84:
+				del regions[0]
+
 		view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
 		# # of errors / # of warnings
 		if sel == 0:
@@ -467,7 +472,6 @@ class  LogHighlightThread(threading.Thread):
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings   (toggle : alt+f12, hide : ESC)\n" + "-" * 100 + "\n"
 			else:
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings\n" + "-" * 100 + "\n"
-
 
 		text      = view.substr(sublime.Region(0, view.size()))
 		ewtext_l  = re.compile(filt_msg, re.MULTILINE|re.DOTALL).findall(text)
