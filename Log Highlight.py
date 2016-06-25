@@ -314,11 +314,21 @@ class  LogHighlightThread(threading.Thread):
 		return
 
 	def do_next(self):
+		llh_settings = get_settings()
+		goto_error   = llh_settings.get('goto_error', True)
+
 		# add bookmarks
+		self.goto_line = None
 		self.add_bookmarks(self.view, 0)
+
+		# go to 1st error line
+		if goto_error and self.goto_line != None:
+			self.view.show(self.goto_line)
+
 		# summary
 		self.do_summary(self.view)
 
+		# update status message
 		if self.search_base_success:
 			sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
 		else:
@@ -404,6 +414,8 @@ class  LogHighlightThread(threading.Thread):
 		llh_settings    = get_settings()
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
+		bmark_error_only= llh_settings.get('bookmark_error_only', False)
+
 		err_head = ""
 		for i, _pat in enumerate(error_pattern):
 			_pat[0]  = self.conv_for_regx(_pat[0])
@@ -418,18 +430,28 @@ class  LogHighlightThread(threading.Thread):
 				warn_head = warn_head + _pat[0] + '.*'
 			else:
 				warn_head = warn_head + _pat[0] + '.*|'
-		filt_head = err_head + '|' + warn_head
-		regions   = view.find_all(filt_head)
+
+		regions = []
+		region_err  = view.find_all(err_head)
+		region_warn = view.find_all(warn_head)
+		regions.extend(region_err)
+		if not bmark_error_only:
+			regions.extend(region_warn)
 
 		if sel == 1 and len(regions) > 0: # except for summary title
-			if regions[0].begin() == 1 and regions[0].end() == 84:
-				del regions[0]
+			for i, _reg in enumerate(regions):
+				if view.rowcol(_reg.begin()) == (1,0):
+					del regions[i]
+
+		if sel == 0 and len(region_err) > 0: # 1st error line
+			self.goto_line = region_err[0]
 
 		view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+
 		# # of errors / # of warnings
 		if sel == 0:
-			self.n_errors = str(len(view.find_all(err_head)));
-			self.n_warns  = str(len(view.find_all(warn_head)));
+			self.n_errors = str(len(region_err));
+			self.n_warns  = str(len(region_warn));
 
 		return
 
