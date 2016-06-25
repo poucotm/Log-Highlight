@@ -275,6 +275,7 @@ class  LogHighlightThread(threading.Thread):
 		# set syntax for coloring / set read only
 		self.set_syntax_theme(self.view)
 		# self.view.set_read_only(True)
+		self.view.settings().set("always_prompt_for_file_reload", False)
 
 		# to set base directory
 		rel_path_file = self.get_rel_path_file()
