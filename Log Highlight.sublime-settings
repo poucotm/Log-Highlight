@@ -60,6 +60,6 @@
 	"show_keymap": true,    // display summary panel key map information
 
 	// bookmark
-	"bookmark_error_only": false, // add bookmark only for errors
+	"bookmark_error_only": false, // add bookmarks only for errors
 	"goto_error": true            // go to 1st error line after all
 }

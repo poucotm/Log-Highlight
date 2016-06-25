@@ -37,6 +37,7 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 
 ```java
 {
+{
 	// enable context menu
 	"context_menu": true,
 
@@ -95,7 +96,11 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 	// summary panel
 	"summary_panel": true,  // show summary panel
 	"error_only": false,    // display only errors in the summary panel
-	"show_keymap": true     // display summary panel key map information
+	"show_keymap": true,    // display summary panel key map information
+
+	// bookmark
+	"bookmark_error_only": false, // add bookmarks only for errors
+	"goto_error": true            // go to 1st error line after all
 }
 ```
 
