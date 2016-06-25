@@ -314,16 +314,9 @@ class  LogHighlightThread(threading.Thread):
 		return
 
 	def do_next(self):
-		llh_settings = get_settings()
-		goto_error   = llh_settings.get('goto_error', True)
-
 		# add bookmarks
 		self.goto_line = None
 		self.add_bookmarks(self.view, 0)
-
-		# go to 1st error line
-		if goto_error and self.goto_line != None:
-			self.view.show(self.goto_line)
 
 		# summary
 		self.do_summary(self.view)
@@ -333,7 +326,16 @@ class  LogHighlightThread(threading.Thread):
 			sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
 		else:
 			sublime.status_message("Log Highlight : Unable to Find Base Directory !")
+
+		sublime.set_timeout(self.go_to_line, 500)
 		return
+
+	def go_to_line(self):
+		llh_settings = get_settings()
+		goto_error   = llh_settings.get('goto_error', True)
+		# go to 1st error line
+		if goto_error and self.goto_line != None:
+			self.view.show(self.goto_line)
 
 	def set_syntax_theme(self, view):
 		usr_syntax = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmLanguage')
