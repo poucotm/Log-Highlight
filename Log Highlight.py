@@ -327,7 +327,7 @@ class  LogHighlightThread(threading.Thread):
 		else:
 			sublime.status_message("Log Highlight : Unable to Find Base Directory !")
 
-		sublime.set_timeout(self.go_to_line, 500)
+		sublime.set_timeout(self.go_to_line, 50)
 		return
 
 	def go_to_line(self):
