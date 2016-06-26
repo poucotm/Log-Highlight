@@ -37,7 +37,6 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 
 ```java
 {
-{
 	// enable context menu
 	"context_menu": true,
 
@@ -57,22 +56,19 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 	//      - You have to put {{{LINK}}} like [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 
 	"error_pattern": [
-		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line
-		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // lines including 'error' with ignore case with a link in front of 'error'
-		[ "^\\w+:\\s*\\*E", "\\n$" ]                         // ...: *E ...
+		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
+		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including 'error' with ignore case with a link in front of 'error'
+		[ "^\\w+:\\s*\\*E", "\\n$" ]                         // ...: *E ... (single line)
 		// <-- Add More Patterns Here -->
 	],
 
 	// warning pattern set (regular expression)
-	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
-	//
-	// non-regex special word (sensitive case) : {{{LINK}}}, {{{QUOTE}}}
 	//  -> see error pattern description
 
 	"warning_pattern": [
-		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line
-		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// lines including 'warning' with ignore case with a link in front of 'warning'
-		[ "^\\w+:\\s*\\*W", "\\n$" ]                         // ...: *W ...
+		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
+		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including 'warning' with ignore case with a link in front of 'warning'
+		[ "^\\w+:\\s*\\*W", "\\n$" ]                         // ...: *W ... (single line)
 		// <-- Add More Patterns Here -->
 	],
 
@@ -94,13 +90,13 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 	],
 
 	// summary panel
-	"summary_panel": true,  // show summary panel
-	"error_only": false,    // display only errors in the summary panel
-	"show_keymap": true,    // display summary panel key map information
+	"summary_panel": true,        // show summary panel
+	"summary_error_only": false,  // display only errors in the summary panel
+	"summary_show_keymap": true,  // display summary panel key map information
 
 	// bookmark
 	"bookmark_error_only": false, // add bookmarks only for errors
-	"goto_error": true            // go to 1st error line after all
+	"bookmark_goto_error": true   // automatically go to 1st error line at the last
 }
 ```
 

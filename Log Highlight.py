@@ -332,7 +332,7 @@ class  LogHighlightThread(threading.Thread):
 
 	def go_to_line(self):
 		llh_settings = get_settings()
-		goto_error   = llh_settings.get('goto_error', True)
+		goto_error   = llh_settings.get('bookmark_goto_error', True)
 		# go to 1st error line
 		if goto_error and self.goto_line != None:
 			self.view.show(self.goto_line)
@@ -460,13 +460,13 @@ class  LogHighlightThread(threading.Thread):
 	def do_summary(self, view):
 		llh_settings    = get_settings()
 		summary_panel   = llh_settings.get("summary_panel", True)
-		error_only      = llh_settings.get("error_only", False)
+		error_only      = llh_settings.get("summary_error_only", False)
 		if not summary_panel:
 			return
 
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
-		show_keymap     = llh_settings.get("show_keymap", True)
+		show_keymap     = llh_settings.get("summary_show_keymap", True)
 
 		err_msg = ""
 		for i, _pat in enumerate(error_pattern):
