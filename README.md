@@ -96,7 +96,7 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 
 	// bookmark
 	"bookmark_error_only": false, // add bookmarks only for errors
-	"bookmark_goto_error": true   // automatically go to 1st error line at the last
+	"bookmark_goto_error": true   // automatically go to 1st error line
 }
 ```
 
