@@ -258,6 +258,27 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 		else:
 			LogHighlightThread().run()
 
+	# for context menu
+
+	def is_visible(self):
+		return self.log_check_visible(self.view.file_name(), self.view.name())
+
+	def log_check_visible(self, file_name, view_name):
+		llh_settings = get_settings()
+		if not llh_settings.get("context_menu", True):
+			return False
+		try:
+			_name = file_name if view_name == "" else view_name
+			ext   = os.path.splitext(_name)[1]
+			ext   = ext.lower()
+			ext_l = llh_settings.get("log_ext") # [".log"]
+			if any(ext == s for s in ext_l):
+				return True
+			else:
+				return False
+		except:
+			return False
+
 class  LogHighlightThread(threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -529,25 +550,6 @@ class  LogHighlightThread(threading.Thread):
 		_str = re.sub(r'\{\{\{QUOTE\}\}\}', QUOTE_REGX_SUMMARY, _str)
 		return _str
 
-############################################################################
-# for context menu
-
-def log_check_visible(file_name, view_name):
-	llh_settings = get_settings()
-	if not llh_settings.get("context_menu", True):
-		return False
-	try:
-		_name = file_name if view_name == "" else view_name
-		ext   = os.path.splitext(_name)[1]
-		ext   = ext.lower()
-		ext_l = llh_settings.get("log_ext") # [".log"]
-		if any(ext == s for s in ext_l):
-			return True
-		else:
-			return False
-	except:
-		return False
-
 class LogHighlightPanelCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		try:
@@ -558,10 +560,4 @@ class LogHighlightPanelCommand(sublime_plugin.TextCommand):
 					self.view.window().run_command("show_panel", {"panel": "output.loghighlight"})
 		except:
 			pass
-
-class LogHighlightCtxCommand(sublime_plugin.TextCommand):
-	def run(self, edit):
-		self.view.run_command('log_highlight')
-	def is_visible(self):
-		return log_check_visible(self.view.file_name(), self.view.name())
 
