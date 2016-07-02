@@ -520,6 +520,7 @@ class  LogHighlightThread(threading.Thread):
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings\n" + "-" * 100 + "\n"
 
 		text      = view.substr(sublime.Region(0, view.size()))
+		text      = text + '\n' # workaround when there is no '\n' at last
 		ewtext_l  = re.compile(filt_msg, re.MULTILINE|re.DOTALL).findall(text)
 
 		for _str in ewtext_l:
