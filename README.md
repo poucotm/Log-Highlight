@@ -58,7 +58,7 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 	"error_pattern": [
 		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with a link in front of 'error'
-		[ "^\\w+:\\s*\\*E", "\\n$" ]                         // ...: *E ... (single line)
+		[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
 		// <-- Add More Patterns Here -->
 	],
 
@@ -68,7 +68,7 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 	"warning_pattern": [
 		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with a link in front of 'warning'
-		[ "^\\w+:\\s*\\*W", "\\n$" ]                         // ...: *W ... (single line)
+		[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
 		// <-- Add More Patterns Here -->
 	],
 

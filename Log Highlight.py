@@ -1,3 +1,5 @@
+# -*- coding: utf8 -*-
+
 ## -----------------------------------------------------------------------------
 ## Author : yongchan jeon (Kris) poucotm@gmail.com
 ## File   : Log Highlight.py
@@ -284,6 +286,7 @@ class  LogHighlightThread(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def run(self):
+		global is_working
 		is_working = True
 		window    = sublime.active_window()
 		self.view = window.active_view()
