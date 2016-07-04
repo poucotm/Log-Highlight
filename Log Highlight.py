@@ -9,7 +9,7 @@
 
 import sublime, sublime_plugin
 import re
-import threading
+import threading, time
 import os
 
 ############################################################################
@@ -18,6 +18,7 @@ import os
 ST3 = int(sublime.version()) >= 3000
 MAX_SCAN_PATH     = 1000
 MAX_STAIR_UP_PATH = 10
+REFRESH_WAIT      = 1000 # 1s
 
 def plugin_loaded():
 	global lh_settings
@@ -248,17 +249,22 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 ############################################################################
 # LogHighlightCommand
 
-is_working = False
+is_working  = False
+is_waiting  = False
+req_refresh = []
+logh_view   = []
+logh_lastv  = -1
 
 class LogHighlightCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		global is_working
 		if is_working:
 			return
+		lh_thread = LogHighlightThread(self.view, True)
 		if ST3:
-			LogHighlightThread().start()
+			lh_thread.start()
 		else:
-			LogHighlightThread().run()
+			lh_thread.run()
 
 	# for context menu
 
@@ -281,24 +287,118 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 		except:
 			return False
 
-class  LogHighlightThread(threading.Thread):
-	def __init__(self):
+class LogHighlightEvent(sublime_plugin.EventListener):
+
+	# for ST2
+	def on_modified(self, view):
+		if ST3:
+			return
+		global logh_view
+		for i, vid in enumerate(logh_view):
+			if view.id() == vid[0] or view.is_loading():
+				logh_view[i][1] = logh_view[i][1] + 1
+				global is_waiting
+				if not is_waiting:
+					thread = LogHighlightRefreshThread(view)
+					thread.run()
+				break
+
+	# for ST3
+	def on_modified_async(self, view):
+		global logh_view
+		for i, vid in enumerate(logh_view):
+			if view.id() == vid[0] or view.is_loading():
+				logh_view[i][1] = logh_view[i][1] + 1
+				global is_waiting
+				if not is_waiting:
+					thread = LogHighlightRefreshThread(view)
+					thread.start()
+				break
+		return
+
+	def on_close(self, view):
+		for vid in logh_view:
+			if view.id() == vid[0]:
+				logh_view.remove(vid);
+			break
+		global logh_lastv
+		if view.id() == logh_lastv:
+			if len(logh_view) > 0:
+				logh_lastv = logh_view[-1]
+			else:
+				logh_lastv = -1
+		return
+
+class LogHighlightRefreshThread(threading.Thread):
+	def __init__(self, view):
 		threading.Thread.__init__(self)
+		self.view = view
+
+	def run(self):
+		global is_waiting
+		is_waiting = True
+		global logh_view
+		for vid in logh_view:
+			if self.view.id() == vid[0]:
+				self.last_req = vid[1]
+				sublime.set_timeout(self.wait, REFRESH_WAIT) # milliseconds
+				break
+		return
+
+	def wait(self):
+		global logh_view
+		for i, vid in enumerate(logh_view):
+			if self.view.id() == vid[0]:
+				if self.last_req != vid[1]: # more requests are comming
+					self.last_req = vid[1]
+					sublime.set_timeout(self.wait, REFRESH_WAIT) # milliseconds
+				else:
+					global is_working
+					if is_working or self.view.is_loading():
+						logh_view[i][1] = logh_view[i][1] + 1
+						sublime.set_timeout(self.wait, REFRESH_WAIT) # milliseconds
+						break
+					else:
+						lh_thread = LogHighlightThread(self.view, False)
+						if ST3:
+							lh_thread.start()
+						else:
+							lh_thread.run()
+						global is_waiting
+						is_waiting = False
+				break
+		return
+
+class LogHighlightThread(threading.Thread):
+	def __init__(self, view, is_first):
+		threading.Thread.__init__(self)
+		self.view     = view;
+		self.is_first = is_first;
 
 	def run(self):
 		global is_working
 		is_working = True
-		window    = sublime.active_window()
-		self.view = window.active_view()
 		log_name  = self.view.file_name()
 		if not log_name or not os.path.isfile(log_name):
 			sublime.status_message("Log Highlight : Unknown name for current view")
 			is_working = False
 			return
 
+		if not self.is_first:
+			self.do_next()
+			is_working = False
+			return
+
+		global logh_view
+		if not any(self.view.id() == vid[0] for vid in logh_view):
+			logh_view.append([self.view.id(), 0])
+
+		global logh_lastv
+		logh_lastv = self.view.id()
+
 		# set syntax for coloring / set read only
 		self.set_syntax_theme(self.view)
-		# self.view.set_read_only(True)
+		# self.view.set_read_only(True) # cannot call on_modified
 		self.view.settings().set("always_prompt_for_file_reload", False)
 
 		# to set base directory
@@ -343,13 +443,15 @@ class  LogHighlightThread(threading.Thread):
 		self.add_bookmarks(self.view, 0)
 
 		# summary
-		self.do_summary(self.view)
+		if logh_lastv == self.view.id():
+			self.do_summary(self.view)
 
 		# update status message
-		if self.search_base_success:
-			sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
-		else:
-			sublime.status_message("Log Highlight : Unable to Find Base Directory !")
+		if self.is_first:
+			if self.search_base_success:
+				sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
+			else:
+				sublime.status_message("Log Highlight : Unable to Find Base Directory !")
 
 		sublime.set_timeout(self.go_to_line, 50)
 		return
@@ -534,17 +636,20 @@ class  LogHighlightThread(threading.Thread):
 		g_summary_view = view.window().get_output_panel('loghighlight')
 		g_summary_view.set_read_only(False)
 		view.window().run_command("show_panel", {"panel": "output.loghighlight"})
-		g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
-		if self.base_dir != "":
-			g_summary_view.settings().set('result_base_dir', self.base_dir)
-		self.set_syntax_theme(g_summary_view)
+		if self.is_first:
+			g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
+			if self.base_dir != "":
+				g_summary_view.settings().set('result_base_dir', self.base_dir)
+			self.set_syntax_theme(g_summary_view)
 		if ST3:
 			g_summary_view.run_command("append", {"characters": summary})
 		else:
 			edit = g_summary_view.begin_edit()
+			g_summary_view.erase(edit, sublime.Region(0, g_summary_view.size()))
 			g_summary_view.insert(edit, g_summary_view.size(), summary)
 			g_summary_view.end_edit(edit)
-		g_summary_view.set_read_only(True)
+			g_summary_view.set_read_only(True)
+
 		# add bookmarks
 		self.add_bookmarks(g_summary_view, 1)
 		return
