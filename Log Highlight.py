@@ -384,29 +384,33 @@ class LogHighlightThread(threading.Thread):
 			is_working = False
 			return
 
-		if not self.is_first:
+		self.try_search_base = False
+
+		if self.is_first:
+			global logh_view
+			if not any(self.view.id() == vid[0] for vid in logh_view):
+				logh_view.append([self.view.id(), 0])
+
+			global logh_lastv
+			logh_lastv = self.view.id()
+
+			# set syntax for coloring / set read only
+			self.set_syntax_theme(self.view)
+			# self.view.set_read_only(True) # cannot call on_modified
+			self.view.settings().set("always_prompt_for_file_reload", False)
+		else:
+			if self.view.settings().get('result_base_dir') == None:
+				self.try_search_base = True
+				self.search_base(log_name)
+				if self.base_dir != "":
+					self.view.settings().set('result_base_dir', self.base_dir)
 			self.do_next()
 			is_working = False
 			return
 
-		global logh_view
-		if not any(self.view.id() == vid[0] for vid in logh_view):
-			logh_view.append([self.view.id(), 0])
-
-		global logh_lastv
-		logh_lastv = self.view.id()
-
-		# set syntax for coloring / set read only
-		self.set_syntax_theme(self.view)
-		# self.view.set_read_only(True) # cannot call on_modified
-		self.view.settings().set("always_prompt_for_file_reload", False)
-
 		# to set base directory
-		rel_path_file = self.get_rel_path_file()
-		self.search_base_success = True
-		self.base_dir = ""
-		if rel_path_file != "":
-			self.search_base_success = self.search_base(log_name, rel_path_file)
+		self.try_search_base = True
+		self.search_base(log_name)
 
 		# set base dir & apply 'result_file_regex'
 		if self.base_dir != "":
@@ -447,7 +451,7 @@ class LogHighlightThread(threading.Thread):
 			self.do_summary(self.view)
 
 		# update status message
-		if self.is_first:
+		if self.try_search_base:
 			if self.search_base_success:
 				sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
 			else:
@@ -495,7 +499,13 @@ class LogHighlightThread(threading.Thread):
 			sublime.status_message("Log Highlight : There is no openable file path")
 			return ""
 
-	def search_base(self, log_name, file_name):
+	def search_base(self, log_name):
+		file_name = self.get_rel_path_file()
+		self.search_base_success = True
+		self.base_dir = ""
+		if file_name == "":
+			return
+
 		sublime.status_message("Log Highlight : Searching base directory ...")
 		old_path  = ["", 0]
 		_path     = os.path.dirname(log_name)
@@ -536,7 +546,8 @@ class LogHighlightThread(threading.Thread):
 		else:
 			sublime.status_message("Log Highlight : Fail to find (" + str(scan_path) + ") - " + file_name)
 
-		return found
+		self.search_base_success = found
+		return
 
 	def add_bookmarks(self, view, sel):
 		llh_settings    = get_settings()

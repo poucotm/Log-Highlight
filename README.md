@@ -33,6 +33,10 @@ By default, it summarizes error/warning list in a new output panel at the bottom
 
 From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex" and "match regex" by using special words `{{{LINK}}}`, `{{{QUOTE}}}`. It can be used for the following gcc style error/warning message : `./src/abc.cpp:40:2 error: unknown escape seque ...`
 
+#### Auto Refresh
+
+From v0.5.0, when the log files are updated, it automatically refreshes the bookmarks, summary output panel. There's some inertial delays for smooth action.
+
 #### Settings :
 
 ```java
