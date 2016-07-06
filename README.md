@@ -12,6 +12,8 @@ Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight :
  * Support Go To Position in a Log by `result_file_regex`
  * Search a Base Directory Automatically for Relative Path Link
  * Summary Output Panel
+ * Auto Refresh
+ * Continuous Tracking
 
 #### Customizable Syntax & Color Scheme
 
@@ -36,6 +38,10 @@ From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex
 #### Auto Refresh
 
 From v0.5.0, when the log files are updated, it automatically refreshes the bookmarks, summary output panel. There's some inertial delays for smooth action.
+
+#### Continuous Tracking
+
+From v0.5.2, if there are open files which already log-highlighted when sublime text restart, it will track all again. (ST3 only)
 
 #### Settings :
 

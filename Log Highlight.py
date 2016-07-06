@@ -25,6 +25,11 @@ def plugin_loaded():
 	lh_settings = sublime.load_settings('Log Highlight.sublime-settings')
 	# lh_settings.clear_on_change('reload')
 	# lh_settings.add_on_change('reload', plugin_loaded)
+	view_l = sublime.active_window().views()
+	global logh_view
+	for v in view_l:
+		if v.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+			logh_view.append([v.id(), 0])
 
 # def plugin_unloaded():
 	# print ("unloaded : Log Highlight.py")
