@@ -18,7 +18,7 @@ import os
 ST3 = int(sublime.version()) >= 3000
 MAX_SCAN_PATH     = 1000
 MAX_STAIR_UP_PATH = 10
-REFRESH_WAIT      = 1000 # 1s
+REFRESH_WAIT      = 500 # 0.5s
 
 def plugin_loaded():
 	global lh_settings
@@ -30,6 +30,9 @@ def plugin_loaded():
 	for v in view_l:
 		if v.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
 			logh_view.append([v.id(), 0])
+		if v.settings().get('logh_lastv') == True:
+			global logh_lastv
+			logh_lastv = v.id()
 
 # def plugin_unloaded():
 	# print ("unloaded : Log Highlight.py")
@@ -346,22 +349,22 @@ class LogHighlightRefreshThread(threading.Thread):
 		for vid in logh_view:
 			if self.view.id() == vid[0]:
 				self.last_req = vid[1]
-				sublime.set_timeout(self.wait, REFRESH_WAIT) # milliseconds
+				sublime.set_timeout(self.refresh_wait, REFRESH_WAIT) # milliseconds
 				break
 		return
 
-	def wait(self):
+	def refresh_wait(self):
 		global logh_view
 		for i, vid in enumerate(logh_view):
 			if self.view.id() == vid[0]:
 				if self.last_req != vid[1]: # more requests are comming
 					self.last_req = vid[1]
-					sublime.set_timeout(self.wait, REFRESH_WAIT) # milliseconds
+					sublime.set_timeout(self.refresh_wait, REFRESH_WAIT) # milliseconds
 				else:
 					global is_working
 					if is_working or self.view.is_loading():
 						logh_view[i][1] = logh_view[i][1] + 1
-						sublime.set_timeout(self.wait, REFRESH_WAIT) # milliseconds
+						sublime.set_timeout(self.refresh_wait, REFRESH_WAIT) # milliseconds
 						break
 					else:
 						lh_thread = LogHighlightThread(self.view, False)
@@ -396,8 +399,14 @@ class LogHighlightThread(threading.Thread):
 			if not any(self.view.id() == vid[0] for vid in logh_view):
 				logh_view.append([self.view.id(), 0])
 
+			view_l = sublime.active_window().views()
+			for v in view_l:
+				if v.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+					v.settings().set('logh_lastv', False)
+
 			global logh_lastv
 			logh_lastv = self.view.id()
+			self.view.settings().set('logh_lastv', True)
 
 			# set syntax for coloring / set read only
 			self.set_syntax_theme(self.view)
@@ -590,7 +599,10 @@ class LogHighlightThread(threading.Thread):
 		if sel == 0 and len(region_err) > 0: # 1st error line
 			self.goto_line = region_err[0]
 
-		view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+		if sel == 0:
+			view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+		else:
+			view.add_regions("bookmarks", regions, "bookmarks", "", sublime.HIDDEN | sublime.PERSISTENT)
 
 		# # of errors / # of warnings
 		if sel == 0:
@@ -650,13 +662,14 @@ class LogHighlightThread(threading.Thread):
 
 		global g_summary_view
 		g_summary_view = view.window().get_output_panel('loghighlight')
+		g_summary_view.settings().set('gutter', True);
+		g_summary_view.settings().set('line_numbers', False);
 		g_summary_view.set_read_only(False)
 		view.window().run_command("show_panel", {"panel": "output.loghighlight"})
-		if self.is_first:
-			g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
-			if self.base_dir != "":
-				g_summary_view.settings().set('result_base_dir', self.base_dir)
-			self.set_syntax_theme(g_summary_view)
+		g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
+		if self.base_dir != "":
+			g_summary_view.settings().set('result_base_dir', self.base_dir)
+		self.set_syntax_theme(g_summary_view)
 		if ST3:
 			g_summary_view.run_command("append", {"characters": summary})
 		else:
@@ -664,7 +677,7 @@ class LogHighlightThread(threading.Thread):
 			g_summary_view.erase(edit, sublime.Region(0, g_summary_view.size()))
 			g_summary_view.insert(edit, g_summary_view.size(), summary)
 			g_summary_view.end_edit(edit)
-			g_summary_view.set_read_only(True)
+		g_summary_view.set_read_only(True)
 
 		# add bookmarks
 		self.add_bookmarks(g_summary_view, 1)

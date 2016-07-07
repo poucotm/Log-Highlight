@@ -29,7 +29,7 @@ By double-click, you can go to positions of links like `"../../abc.cpp", 32` or 
 
 #### Summary Output Panel
 
-By default, it summarizes error/warning list in a new output panel at the bottom of window
+By default, it summarizes error/warning list in a new output panel at the bottom of window. It is useful to debug without monitoring the log file directly. It works only for lastly log-highlighted view.
 
 #### More Flexible Style Syntax
 
