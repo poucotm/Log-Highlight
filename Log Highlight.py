@@ -392,6 +392,7 @@ class LogHighlightThread(threading.Thread):
 			is_working = False
 			return
 
+		self.base_dir = ""
 		self.try_search_base = False
 
 		if self.is_first:
@@ -413,11 +414,14 @@ class LogHighlightThread(threading.Thread):
 			# self.view.set_read_only(True) # cannot call on_modified
 			self.view.settings().set("always_prompt_for_file_reload", False)
 		else:
-			if self.view.settings().get('result_base_dir') == None:
+			get_base_dir = self.view.settings().get('result_base_dir')
+			if get_base_dir == None or get_base_dir == "":
 				self.try_search_base = True
 				self.search_base(log_name)
 				if self.base_dir != "":
 					self.view.settings().set('result_base_dir', self.base_dir)
+			else:
+				self.base_dir = get_base_dir
 			self.do_next()
 			is_working = False
 			return
