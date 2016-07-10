@@ -36,19 +36,19 @@
 
 	// theme color set
 	"theme_color": [
-		"#272822", // background
-		"#ffffff", // foreground
-		"#ffffff", // caret
+		"#0D1011", // background
+		"#CDCDCD", // foreground
+		"#FF8801", // caret
 		"#555555", // selection
 		"#555555", // selectionBorder
 		"#272822", // lineHighlight
 		"#F92672", // error message
-		"#ffff00", // link in error message
+		"#E6DB74", // link in error message
 		"#66D9EF", // quote in error message
 		"#A6E22E", // warning message
 		"#FD971F", // link in warning message
 		"#66D9EF", // quote in warning message
-		"#FFFFFF"  // summary title
+		"#CDCDCD"  // summary title
 	],
 
 	// summary panel

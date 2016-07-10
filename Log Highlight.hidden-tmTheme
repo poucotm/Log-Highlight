@@ -9,9 +9,9 @@
 		<dict>
 			<key>settings</key>
 			<dict>
-				<!-- #0 background --><key>background</key><string>#272822</string>
-				<!-- #1 foreground --><key>foreground</key><string>#ffffff</string>
-				<!-- #2 caret --><key>caret</key><string>#ffffff</string>
+				<!-- #0 background --><key>background</key><string>#0D1011</string>
+				<!-- #1 foreground --><key>foreground</key><string>#CDCDCD</string>
+				<!-- #2 caret --><key>caret</key><string>#FF8801</string>
 				<!-- #3 selection --><key>selection</key><string>#555555</string>
 				<!-- #4 selectionBorder --><key>selectionBorder</key><string>#555555</string>
 				<!-- #5 lineHighlight --><key>lineHighlight</key><string>#272822</string>
@@ -32,7 +32,7 @@
 			<string>msg.error.link</string>
 			<key>settings</key>
 			<dict>
-				<!-- #7 msg.error.link --><key>foreground</key><string>#ffff00</string>
+				<!-- #7 msg.error.link --><key>foreground</key><string>#E6DB74</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
@@ -82,7 +82,7 @@
 			<string>summary.title</string>
 			<key>settings</key>
 			<dict>
-				<!-- #12 summary.title --><key>foreground</key><string>#FFFFFF</string>
+				<!-- #12 summary.title --><key>foreground</key><string>#CDCDCD</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
