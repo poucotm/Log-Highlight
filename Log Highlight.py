@@ -46,11 +46,11 @@ def get_settings():
 ############################################################################
 # LogHighlightGenCustomSyntaxThemeCommand
 
-LINK_REGX_PLIST    = r"""["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+"""
-LINK_REGX_SETTING  = r"""(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+)"""
-LINK_REGX_RESULT   = r"""["']?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line]{1,5}\s*(\d+)"""
-LINK_REGX_RELPATH  = r"""["']?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line]{1,5}\s*\d+"""
-LINK_REGX_SUMMARY  = r"""(?:["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+)"""
+LINK_REGX_PLIST    = r"""["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?"""
+LINK_REGX_SETTING  = r"""(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)"""
+LINK_REGX_RESULT   = r"""["']?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line\(]{1,5}\s*(\d+)\)?"""
+LINK_REGX_RELPATH  = r"""["']?([\w\d\:\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line\(]{1,5}\s*\d+\)?"""
+LINK_REGX_SUMMARY  = r"""(?:["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)"""
 
 QUOTE_REGX_PLIST   = r"""(["'])(?:(?=(\\?))\2.)*?\1"""
 QUOTE_REGX_SETTING = r"""(["'].+?["'])"""

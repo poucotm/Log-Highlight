@@ -39,7 +39,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^(["']?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+)?[^\r\n]*?(?i)error</string>
+			<string>^(["']?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)error</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -68,7 +68,7 @@
 			<key>begin</key>
 			<string>^\w+:\s*\*E</string>
 			<key>end</key>
-			<string>\n$</string>
+			<string>[\r\n]</string>
 			<key>name</key>
 			<string>msg.error</string>
 			<key>patterns</key>
@@ -104,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>begin</key>
-			<string>^(["']?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+)?[^\r\n]*?(?i)warning</string>
+			<string>^(["']?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)warning</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -133,7 +133,7 @@
 			<key>begin</key>
 			<string>^\w+:\s*\*W</string>
 			<key>end</key>
-			<string>\n$</string>
+			<string>[\r\n]</string>
 			<key>name</key>
 			<string>msg.warning</string>
 			<key>patterns</key>
@@ -154,7 +154,7 @@
 		<key>error_link</key>
 		<dict>
 			<key>match</key>
-			<string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+</string>
+			<string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
 			<key>name</key>
 			<string>msg.error.link</string>
 		</dict>
@@ -168,7 +168,7 @@
 		<key>warning_link</key>
 		<dict>
 			<key>match</key>
-			<string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line]{1,5}\s*\d+</string>
+			<string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
 			<key>name</key>
 			<string>msg.warning.link</string>
 		</dict>
