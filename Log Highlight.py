@@ -604,7 +604,7 @@ class LogHighlightThread(threading.Thread):
 			self.goto_line = region_err[0]
 
 		if sel == 0:
-			view.add_regions("bookmarks", regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+			view.add_regions("bookmarks", regions, "bookmarks", "Packages/Log Highlight/icons/apple.png", sublime.HIDDEN | sublime.PERSISTENT)
 		else:
 			view.add_regions("bookmarks", regions, "bookmarks", "", sublime.HIDDEN | sublime.PERSISTENT)
 

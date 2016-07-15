@@ -43,6 +43,10 @@ From v0.5.0, when the log files are updated, it automatically refreshes the book
 
 From v0.5.2, if there are open files which already log-highlighted when sublime text restart, it will track all again. (ST3 only)
 
+#### Restore Settings :
+
+Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTheme`
+
 #### Settings :
 
 ```java
@@ -84,19 +88,19 @@ From v0.5.2, if there are open files which already log-highlighted when sublime 
 
 	// theme color set
 	"theme_color": [
-		"#272822", // background
-		"#ffffff", // foreground
-		"#ffffff", // caret
+		"#0D1011", // background
+		"#CDCDCD", // foreground
+		"#FF8801", // caret
 		"#555555", // selection
 		"#555555", // selectionBorder
 		"#272822", // lineHighlight
 		"#F92672", // error message
-		"#ffff00", // link in error message
+		"#E6DB74", // link in error message
 		"#66D9EF", // quote in error message
 		"#A6E22E", // warning message
 		"#FD971F", // link in warning message
 		"#66D9EF", // quote in warning message
-		"#FFFFFF"  // summary title
+		"#CDCDCD"  // summary title
 	],
 
 	// summary panel
