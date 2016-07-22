@@ -29,7 +29,7 @@ By double-click, you can go to positions of links like `"../../abc.cpp", 32` or 
 
 #### Summary Output Panel
 
-By default, it summarizes error/warning list in a new output panel at the bottom of window. It is useful to debug without monitoring the log file directly(but do not close the log file, it is need to get the event). It works only for lastly log-highlighted view.
+By default, it summarizes error/warning list in a new output panel at the bottom of window. It is useful to debug without monitoring the log file directly. But do not close the log file, it is need to get the event. (default keymap - toggle : alt+f12, hide : ESC)
 
 #### More Flexible Style Syntax
 
@@ -73,7 +73,7 @@ Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTh
 		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
 		[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
-		// <-- Add More Patterns Here -->
+		// <-- Remove, Change, Add More Patterns Here -->
 	],
 
 	// warning pattern set (regular expression)
@@ -83,13 +83,13 @@ Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTh
 		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with or without a link in front of 'warning'
 		[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
-		// <-- Add More Patterns Here -->
+		// <-- Remove, Change, Add More Patterns Here -->
 	],
 
 	// theme color set
 	"theme_color": [
 		"#0D1011", // background
-		"#CDCDCD", // foreground
+		"#D7D7D7", // foreground
 		"#FF8801", // caret
 		"#555555", // selection
 		"#555555", // selectionBorder
@@ -100,17 +100,18 @@ Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTh
 		"#A6E22E", // warning message
 		"#FD971F", // link in warning message
 		"#66D9EF", // quote in warning message
-		"#CDCDCD"  // summary title
+		"#D7D7D7"  // summary title
 	],
 
 	// summary panel
-	"summary_panel": true,        // show summary panel
-	"summary_error_only": false,  // display only errors in the summary panel
-	"summary_show_keymap": true,  // display summary panel key map information
+	"summary_panel": true,                 // show summary panel
+	"summary_error_only": false,           // display only errors in the summary panel
+	"summary_show_log_name": true,         // display log name
+	"summary_update_for_last_log": false,  // update summary panel only for lastly log-highlighted log
 
 	// bookmark
-	"bookmark_error_only": false, // add bookmarks only for errors
-	"bookmark_goto_error": true   // automatically go to 1st error line
+	"bookmark_error_only": false,  // add bookmarks only for errors
+	"bookmark_goto_error": true    // automatically go to 1st error line
 }
 ```
 

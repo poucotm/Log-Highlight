@@ -10,7 +10,7 @@
 			<key>settings</key>
 			<dict>
 				<!-- #0 background --><key>background</key><string>#0D1011</string>
-				<!-- #1 foreground --><key>foreground</key><string>#CDCDCD</string>
+				<!-- #1 foreground --><key>foreground</key><string>#D7D7D7</string>
 				<!-- #2 caret --><key>caret</key><string>#FF8801</string>
 				<!-- #3 selection --><key>selection</key><string>#555555</string>
 				<!-- #4 selectionBorder --><key>selectionBorder</key><string>#555555</string>
@@ -82,7 +82,7 @@
 			<string>summary.title</string>
 			<key>settings</key>
 			<dict>
-				<!-- #12 summary.title --><key>foreground</key><string>#CDCDCD</string>
+				<!-- #12 summary.title --><key>foreground</key><string>#D7D7D7</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>

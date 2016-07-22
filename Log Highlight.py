@@ -464,8 +464,14 @@ class LogHighlightThread(threading.Thread):
 		self.goto_line = None
 		self.add_bookmarks(self.view, 0)
 
+		llh_settings = get_settings()
+		last_only    = llh_settings.get('summary_update_for_last_log', False)
+
 		# summary
-		if logh_lastv == self.view.id():
+		if last_only:
+			if logh_lastv == self.view.id():
+				self.do_summary(self.view)
+		else:
 			self.do_summary(self.view)
 
 		# update status message
@@ -627,7 +633,7 @@ class LogHighlightThread(threading.Thread):
 
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
-		show_keymap     = llh_settings.get("summary_show_keymap", True)
+		show_log_name   = llh_settings.get("summary_show_log_name", True)
 
 		err_msg = ""
 		for i, _pat in enumerate(error_pattern):
@@ -646,16 +652,18 @@ class LogHighlightThread(threading.Thread):
 			else:
 				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1] + '|'
 
+		log_name = os.path.split(view.file_name())[1];
+
 		if error_only:
 			filt_msg  = err_msg
-			if show_keymap:
-				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors   (toggle : alt+f12, hide : ESC)\n" + "-" * 100 + "\n"
+			if show_log_name:
+				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors   ( " + log_name + " )\n" + "-" * 100 + "\n"
 			else:
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors\n" + "-" * 100 + "\n"
 		else:
 			filt_msg  = err_msg + '|' + warn_msg
-			if show_keymap:
-				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings   (toggle : alt+f12, hide : ESC)\n" + "-" * 100 + "\n"
+			if show_log_name:
+				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings   ( " + log_name + " )\n" + "-" * 100 + "\n"
 			else:
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings\n" + "-" * 100 + "\n"
 
