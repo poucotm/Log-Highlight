@@ -12,8 +12,8 @@ Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight :
  * Support Go To Position in a Log by `result_file_regex`
  * Search a Base Directory Automatically for Relative Path Link
  * Summary Output Panel
- * Auto Refresh
- * Continuous Tracking
+ * Auto Refresh for Multiple Logs
+ * Continuous Tracking for Multiple Logs
 
 #### Customizable Syntax & Color Scheme
 
@@ -29,17 +29,17 @@ By double-click, you can go to positions of links like `"../../abc.cpp", 32` or 
 
 #### Summary Output Panel
 
-By default, it summarizes error/warning list in a new output panel at the bottom of window. It is useful to debug without monitoring the log file directly. But do not close the log file, it is need to get the event. (default keymap - toggle : alt+f12, hide : ESC)
+By default, it summarizes error/warning list in a new output panel at the bottom of window. It is useful to debug without monitoring the log file directly. But do not close the log file, it is needed to get the event. (default keymap - toggle : alt+f12, hide : ESC)
 
 #### More Flexible Style Syntax
 
 From v0.4.0, you can highlight links and quotes inside "begin regex", "end regex" and "match regex" by using special words `{{{LINK}}}`, `{{{QUOTE}}}`. It can be used for the following gcc style error/warning message : `./src/abc.cpp:40:2 error: unknown escape seque ...`
 
-#### Auto Refresh
+#### Auto Refresh for Multiple Logs
 
 From v0.5.0, when the log files are updated, it automatically refreshes the bookmarks, summary output panel. There's some inertial delays for smooth action.
 
-#### Continuous Tracking
+#### Continuous Tracking for Multiple Logs
 
 From v0.5.2, if there are open files which already log-highlighted when sublime text restart, it will track all again. (ST3 only)
 
