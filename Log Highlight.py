@@ -386,7 +386,10 @@ class LogHighlightThread(threading.Thread):
 	def run(self):
 		global is_working
 		is_working = True
-		log_name  = self.view.file_name()
+		log_name   = self.view.file_name()
+		# to support unsaved file (like Tail)
+		if not log_name:
+			log_name   = self.view.settings().get('filepath')
 		if not log_name or not os.path.isfile(log_name):
 			sublime.status_message("Log Highlight : Unknown name for current view")
 			is_working = False
@@ -506,7 +509,15 @@ class LogHighlightThread(threading.Thread):
 		return
 
 	def get_rel_path_file(self):
-		text     = self.view.substr(sublime.Region(0, self.view.size()))
+		# to support unsaved file (like Tail)
+		logn = self.view.file_name()
+		if logn:
+			text = self.view.substr(sublime.Region(0, self.view.size()))
+		else:
+			logn = self.view.settings().get('filepath')
+			f = open(logn, 'r')
+			text = str(f.read())
+			f.close()
 		files_l  = re.compile(LINK_REGX_RELPATH).findall(text)
 		rel_path = False
 		if len(files_l) > 0:
@@ -652,7 +663,11 @@ class LogHighlightThread(threading.Thread):
 			else:
 				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1] + '|'
 
-		log_name = os.path.split(view.file_name())[1];
+		log_name = view.file_name()
+		if log_name:
+			log_name = os.path.split(view.file_name())[1];
+		else:
+			log_name = view.name()
 
 		if error_only:
 			filt_msg  = err_msg
