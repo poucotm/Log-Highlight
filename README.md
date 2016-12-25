@@ -56,7 +56,7 @@ Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTh
 	"context_menu": true,
 
 	// log file extension
-	"log_ext": [ ".log" ],
+	"log_ext": [ ".log" ], // use ".*" for all file extensions
 
 	// error pattern set (regular expression)
 	// [ "begin regex", "end regex" ] or [ "match regex", "" ]

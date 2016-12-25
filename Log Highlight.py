@@ -288,6 +288,10 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 			ext   = os.path.splitext(_name)[1]
 			ext   = ext.lower()
 			ext_l = llh_settings.get("log_ext") # [".log"]
+
+			if any(".*" == s for s in ext_l):
+				return True
+
 			if any(ext == s for s in ext_l):
 				return True
 			else:
