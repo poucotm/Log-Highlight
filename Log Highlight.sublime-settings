@@ -17,6 +17,7 @@
 	//      - For 1st link, the former setting can't, because it is outside begin ~ end
 	//      - You have to put {{{LINK}}} like [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 
+	"error_enable": true,
 	"error_pattern": [
 		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
@@ -27,10 +28,21 @@
 	// warning pattern set (regular expression)
 	//  -> see error pattern description
 
+	"warning_enable": true,
 	"warning_pattern": [
 		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
 		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with or without a link in front of 'warning'
 		[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
+		// <-- Remove, Change, Add More Patterns Here -->
+	],
+
+	// info pattern set (regular expression)
+	//  -> see error pattern description
+
+	"info_enable": false,
+	"info_pattern": [
+		[ "^Information-\\[", "^\\s*[\\n]" ],                // Information-[ ~ next empty line (multi-line)
+		[ "^\\[INFO\\]", "[\\r\\n]" ]                        // [INFO] ... (single line)
 		// <-- Remove, Change, Add More Patterns Here -->
 	],
 
@@ -48,6 +60,9 @@
 		"#A6E22E", // warning message
 		"#FD971F", // link in warning message
 		"#66D9EF", // quote in warning message
+		"#70991f", // info message
+		"#b36915", // link in info message
+		"#428a99", // quote in info message
 		"#D7D7D7"  // summary title
 	],
 
@@ -58,6 +73,7 @@
 	"summary_update_for_last_log": false,  // update summary panel only for lastly log-highlighted log
 
 	// bookmark
+	"bookmark_enable": true,       // enable/disable bookmarks
 	"bookmark_error_only": false,  // add bookmarks only for errors
 	"bookmark_goto_error": true    // automatically go to 1st error line
 }

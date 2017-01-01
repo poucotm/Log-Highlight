@@ -89,38 +89,19 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		_tmlang = _tmlang + self.gen_syntax_sub_pattern(0)
 		# warning
 		_tmlang = _tmlang + self.gen_syntax_sub_pattern(1)
+		# info
+		_tmlang = _tmlang + self.gen_syntax_sub_pattern(2)
 		_tmlang = _tmlang + """
 	</array>
 	<key>repository</key>
-	<dict>
-		<key>error_link</key>
-		<dict>
-			<key>match</key>
-			<string>""" + LINK_REGX_PLIST + """</string>
-			<key>name</key>
-			<string>msg.error.link</string>
-		</dict>
-		<key>error_quote</key>
-		<dict>
-			<key>match</key>
-			<string>""" + QUOTE_REGX_PLIST + """</string>
-			<key>name</key>
-			<string>msg.error.quote</string>
-		</dict>
-		<key>warning_link</key>
-		<dict>
-			<key>match</key>
-			<string>""" + LINK_REGX_PLIST + """</string>
-			<key>name</key>
-			<string>msg.warning.link</string>
-		</dict>
-		<key>warning_quote</key>
-		<dict>
-			<key>match</key>
-			<string>""" + QUOTE_REGX_PLIST + """</string>
-			<key>name</key>
-			<string>msg.warning.quote</string>
-		</dict>
+	<dict>"""
+		# error
+		_tmlang = _tmlang + self.gen_syntax_sub_link_quote(0)
+		# warning
+		_tmlang = _tmlang + self.gen_syntax_sub_link_quote(1)
+		# info
+		_tmlang = _tmlang + self.gen_syntax_sub_link_quote(2)
+		_tmlang = _tmlang + """
 	</dict>
 	<key>scopeName</key>
 	<string>source.loghighlight</string>
@@ -141,11 +122,20 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 	def gen_syntax_sub_pattern(self, sel):
 		llh_settings    = get_settings()
 		if sel == 0:
+			enable  = llh_settings.get('error_enable')
 			pattern = llh_settings.get('error_pattern')
 			word    = "error"
-		else:
+		elif sel == 1:
+			enable  = llh_settings.get('warning_enable')
 			pattern = llh_settings.get('warning_pattern')
 			word    = "warning"
+		else:
+			enable  = llh_settings.get('info_enable')
+			pattern = llh_settings.get('info_pattern')
+			word    = "info"
+
+		if not enable:
+			return ""
 
 		pattern_tmlang = ""
 		for _str in pattern:
@@ -185,7 +175,13 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		if len(spw) == 0:
 			return ""
 
-		word = "error" if sel0 == 0 else "warning"
+		if sel0 == 0:
+			word    = "error"
+		elif sel0 == 1:
+			word    = "warning"
+		else:
+			word    = "info"
+
 		if sel1 == 0:
 			ret = """
 			<key>beginCaptures</key>
@@ -213,6 +209,38 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		ret = ret + """
 			</dict>"""
 		return ret
+
+	def gen_syntax_sub_link_quote(self, sel):
+		llh_settings    = get_settings()
+		if sel == 0:
+			enable  = llh_settings.get('error_enable')
+			word    = "error"
+		elif sel == 1:
+			enable  = llh_settings.get('warning_enable')
+			word    = "warning"
+		else:
+			enable  = llh_settings.get('info_enable')
+			word    = "info"
+
+		if not enable:
+			return ""
+
+		lq_tmlang = """
+		<key>""" + word + """_link</key>
+		<dict>
+			<key>match</key>
+			<string>""" + LINK_REGX_PLIST + """</string>
+			<key>name</key>
+			<string>msg.""" + word + """.link</string>
+		</dict>
+		<key>""" + word + """_quote</key>
+		<dict>
+			<key>match</key>
+			<string>""" + QUOTE_REGX_PLIST + """</string>
+			<key>name</key>
+			<string>msg.""" + word + """.quote</string>
+		</dict>"""
+		return lq_tmlang
 
 	def conv_for_plist(self, _str):
 		_str = re.sub('\<', '&lt;', _str)
@@ -592,6 +620,8 @@ class LogHighlightThread(threading.Thread):
 		llh_settings    = get_settings()
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
+		info_pattern    = llh_settings.get('info_pattern')
+		bmark_enable    = llh_settings.get('bookmark_enable', True)
 		bmark_error_only= llh_settings.get('bookmark_error_only', False)
 
 		err_head = ""
@@ -608,13 +638,31 @@ class LogHighlightThread(threading.Thread):
 				warn_head = warn_head + _pat[0] + '.*'
 			else:
 				warn_head = warn_head + _pat[0] + '.*|'
+		info_head = ""
+		for i, _pat in enumerate(info_pattern):
+			_pat[0]  = self.conv_for_regx(_pat[0])
+			if i == len(info_pattern) - 1:
+				info_head = info_head + _pat[0] + '.*'
+			else:
+				info_head = info_head + _pat[0] + '.*|'
 
 		regions = []
 		region_err  = view.find_all(err_head)
 		region_warn = view.find_all(warn_head)
+		region_info = view.find_all(info_head)
 		regions.extend(region_err)
+
+		# # of errors / # of warnings
+		if sel == 0:
+			self.n_errors = str(len(region_err));
+			self.n_warns  = str(len(region_warn));
+
+		if not bmark_enable:
+			return
+
 		if not bmark_error_only:
 			regions.extend(region_warn)
+			regions.extend(region_info)
 
 		if sel == 1 and len(regions) > 0: # except for summary title
 			for i, _reg in enumerate(regions):
@@ -632,11 +680,6 @@ class LogHighlightThread(threading.Thread):
 		else:
 			view.add_regions("bookmarks", regions, "bookmarks", "", sublime.HIDDEN | sublime.PERSISTENT)
 
-		# # of errors / # of warnings
-		if sel == 0:
-			self.n_errors = str(len(region_err));
-			self.n_warns  = str(len(region_warn));
-
 		return
 
 	def do_summary(self, view):
@@ -648,6 +691,7 @@ class LogHighlightThread(threading.Thread):
 
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
+		info_pattern    = llh_settings.get('info_pattern')
 		show_log_name   = llh_settings.get("summary_show_log_name", True)
 
 		err_msg = ""
@@ -666,6 +710,14 @@ class LogHighlightThread(threading.Thread):
 				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1]
 			else:
 				warn_msg = warn_msg + _pat[0] + '.*?' + _pat[1] + '|'
+		info_msg = ""
+		for i, _pat in enumerate(info_pattern):
+			_pat[0]  = self.conv_for_regx(_pat[0])
+			_pat[1]  = self.conv_for_regx(_pat[1])
+			if i == len(info_pattern) - 1:
+				info_msg = info_msg + _pat[0] + '.*?' + _pat[1]
+			else:
+				info_msg = info_msg + _pat[0] + '.*?' + _pat[1] + '|'
 
 		log_name = view.file_name()
 		if log_name:
@@ -680,7 +732,7 @@ class LogHighlightThread(threading.Thread):
 			else:
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors\n" + "-" * 100 + "\n"
 		else:
-			filt_msg  = err_msg + '|' + warn_msg
+			filt_msg  = err_msg + '|' + warn_msg + '|' + info_msg
 			if show_log_name:
 				summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings   ( " + log_name + " )\n" + "-" * 100 + "\n"
 			else:

@@ -79,10 +79,40 @@
 		</dict>
 		<dict>
 			<key>scope</key>
+			<string>msg.info</string>
+			<key>settings</key>
+			<dict>
+				<!-- #12 msg.info --><key>foreground</key><string>#70991f</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
+			<string>msg.info.link</string>
+			<key>settings</key>
+			<dict>
+				<!-- #13 msg.info.link --><key>foreground</key><string>#b36915</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
+			<string>msg.info.quote</string>
+			<key>settings</key>
+			<dict>
+				<!-- #14 msg.info.quote --><key>foreground</key><string>#428a99</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
 			<string>summary.title</string>
 			<key>settings</key>
 			<dict>
-				<!-- #12 summary.title --><key>foreground</key><string>#D7D7D7</string>
+				<!-- #15 summary.title --><key>foreground</key><string>#D7D7D7</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
