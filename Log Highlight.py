@@ -293,6 +293,16 @@ logh_lastv  = -1
 
 class LogHighlightCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
+		# workaround for ST3 result_file_regex bug
+		if ST3:
+			resfr_wa = self.view.settings().get('resfr_wa', False)
+			if not resfr_wa:
+				self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
+				text = self.view.substr(sublime.Region(0, self.view.size()))
+				self.view.erase(edit, sublime.Region(0, self.view.size()))
+				self.view.insert(edit, 0, text)
+				self.view.settings().set('resfr_wa', True)
+
 		global is_working
 		if is_working:
 			return
@@ -470,30 +480,33 @@ class LogHighlightThread(threading.Thread):
 		if self.base_dir != "":
 			self.view.settings().set('result_base_dir', self.base_dir)
 		self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
-		if ST3: # this is for ST3 bug related with 'result_file_regex' which I suspect
-			self.view.run_command('revert')
-			self.timeout = 0
-			sublime.status_message("Log Highlight : Waiting for loading ...")
-			self.wait_for_loading()
-		else:
-			self.do_next()
+
+		# Old workaround -
+		# if ST3: # this is for ST3 bug related with 'result_file_regex' which I suspect
+		# 	self.view.run_command('revert')
+		# 	self.timeout = 0
+		# 	sublime.status_message("Log Highlight : Waiting for loading ...")
+		# 	self.wait_for_loading()
+		# else:
+		# 	self.do_next()
 
 		is_working = False
 		return
 
-	def wait_for_loading(self):
-		if self.view.is_loading():
-			self.timeout = self.timeout + 1
-			if self.timeout > 200:
-				sublime.status_message("Log Highlight : Timed out waiting for loading")
-				is_working = False
-				return
-			sublime.set_timeout(self.wait_for_loading, 50)
-		else:
-			self.do_next()
+	# Old workaround -
+	# def wait_for_loading(self):
+	# 	if self.view.is_loading():
+	# 		self.timeout = self.timeout + 1
+	# 		if self.timeout > 200:
+	# 			sublime.status_message("Log Highlight : Timed out waiting for loading")
+	# 			is_working = False
+	# 			return
+	# 		sublime.set_timeout(self.wait_for_loading, 50)
+	# 	else:
+	# 		self.do_next()
 
-		is_working = False
-		return
+	# 	is_working = False
+	# 	return
 
 	def do_next(self):
 		# add bookmarks
