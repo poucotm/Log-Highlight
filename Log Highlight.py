@@ -434,9 +434,12 @@ class LogHighlightThread(threading.Thread):
 		if not log_name:
 			log_name   = self.view.settings().get('filepath')
 		if not log_name or not os.path.isfile(log_name):
-			sublime.status_message("Log Highlight : Unknown name for current view")
-			is_working = False
-			return
+			self.view.settings().set('floating', True)
+			sublime.status_message("Log Highlight : This is a floating (or unsaved) view. Can't use the link in general.")
+			# is_working = False
+			# return
+		else:
+			self.view.settings().set('floating', False)
 
 		self.base_dir = ""
 		self.try_search_base = False
@@ -526,18 +529,22 @@ class LogHighlightThread(threading.Thread):
 		# update status message
 		if self.try_search_base:
 			if self.search_base_success:
-				sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
+				floating  = self.view.settings().get('floating', True)
+				if not floating:
+					sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
+				else:
+					sublime.status_message("Log Highlight : Only current directory ('.') can be used as base directory for floating view")
 			else:
 				sublime.status_message("Log Highlight : Unable to Find Base Directory !")
 
-		sublime.set_timeout(self.go_to_line, 50)
+		goto_error   = llh_settings.get('bookmark_goto_error', True)
+		if goto_error:
+			sublime.set_timeout(self.go_to_line, 50)
 		return
 
 	def go_to_line(self):
-		llh_settings = get_settings()
-		goto_error   = llh_settings.get('bookmark_goto_error', True)
 		# go to 1st error line
-		if goto_error and self.goto_line != None:
+		if self.goto_line != None:
 			self.view.show(self.goto_line)
 
 	def set_syntax_theme(self, view):
@@ -581,6 +588,13 @@ class LogHighlightThread(threading.Thread):
 			return ""
 
 	def search_base(self, log_name):
+		floating  = self.view.settings().get('floating', True)
+		if floating:
+			self.search_base_success = True
+			self.base_dir = "."
+			sublime.status_message("Log Highlight : Only current directory ('.') can be used as base directory for floating view")
+			return
+
 		file_name = self.get_rel_path_file()
 		self.search_base_success = True
 		self.base_dir = ""
