@@ -312,13 +312,14 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 		if not llh_settings.get("context_menu", True):
 			return False
 		try:
+			# unknow view also passed (like output window)
+			ext_l = llh_settings.get("log_ext") # [".log"]
+			if any(".*" == s for s in ext_l):
+				return True
+
 			_name = file_name if view_name == "" else view_name
 			ext   = os.path.splitext(_name)[1]
 			ext   = ext.lower()
-			ext_l = llh_settings.get("log_ext") # [".log"]
-
-			if any(".*" == s for s in ext_l):
-				return True
 
 			if any(ext == s for s in ext_l):
 				return True
