@@ -471,6 +471,8 @@ class LogHighlightThread(threading.Thread):
 					self.view.settings().set('result_base_dir', self.base_dir)
 			else:
 				self.base_dir = get_base_dir
+
+			# bookmark & summary
 			self.do_next()
 			is_working = False
 			return
@@ -483,6 +485,9 @@ class LogHighlightThread(threading.Thread):
 		if self.base_dir != "":
 			self.view.settings().set('result_base_dir', self.base_dir)
 		self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
+
+		# bookmark & summary
+		self.do_next()
 
 		# Old workaround -
 		# if ST3: # this is for ST3 bug related with 'result_file_regex' which I suspect
