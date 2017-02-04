@@ -321,6 +321,11 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 		llh_settings = get_settings()
 		if not llh_settings.get("context_menu", True):
 			return False
+
+		is_summary = self.view.settings().get('loghighlight_summary', False);
+		if is_summary:
+			return False
+
 		try:
 			# unknow view also passed (like output window)
 			ext_l = llh_settings.get("log_ext") # [".log"]
@@ -781,6 +786,7 @@ class LogHighlightThread(threading.Thread):
 
 		global g_summary_view
 		g_summary_view = view.window().get_output_panel('loghighlight')
+		g_summary_view.settings().set('loghighlight_summary', True);
 		g_summary_view.settings().set('gutter', True);
 		g_summary_view.settings().set('line_numbers', False);
 		g_summary_view.set_read_only(False)
