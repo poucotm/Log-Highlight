@@ -727,6 +727,13 @@ class LogHighlightThread(threading.Thread):
 		if not summary_panel:
 			return
 
+		# skip summary for unsaved view
+		log_name = view.file_name()
+		if log_name:
+			log_name = os.path.split(view.file_name())[1];
+		else:
+			return
+
 		error_pattern   = llh_settings.get('error_pattern')
 		warning_pattern = llh_settings.get('warning_pattern')
 		info_pattern    = llh_settings.get('info_pattern')
@@ -756,12 +763,6 @@ class LogHighlightThread(threading.Thread):
 				info_msg = info_msg + _pat[0] + '.*?' + _pat[1]
 			else:
 				info_msg = info_msg + _pat[0] + '.*?' + _pat[1] + '|'
-
-		log_name = view.file_name()
-		if log_name:
-			log_name = os.path.split(view.file_name())[1];
-		else:
-			log_name = view.name()
 
 		if error_only:
 			filt_msg  = err_msg

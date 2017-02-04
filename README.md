@@ -2,7 +2,7 @@
 
 [![Package Control](https://packagecontrol.herokuapp.com/downloads/Log%20Highlight.svg?style=flat-square)](https://packagecontrol.io/packages/Log%20Highlight)
 
-Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme.  
+Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme.
 Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
 
 ## Features
@@ -15,6 +15,7 @@ Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight :
  * Summary Output Panel
  * Auto Refresh for Multiple Logs
  * Continuous Tracking for Multiple Logs
+ * Enable Build Window (Output Panel)
 
 #### Customizable Syntax & Color Scheme
 
@@ -43,6 +44,11 @@ From v0.5.0, when the log files are updated, it automatically refreshes the book
 #### Continuous Tracking for Multiple Logs
 
 From v0.5.2, if there are open files which already log-highlighted when sublime text restart, it will track all again. (ST3 only)
+
+#### Enable Build Window (Output Panel)
+
+From v0.8.0, Log Highlight can be used for Build Window or Unsaved View. But relative path link won't be used because the absolute path is unknown. In order to use relative path, you should set like the following:
+`output_view.settings().set('filepath', [PATH])` output_view is the handle of your output panel view.
 
 #### Restore Settings :
 
