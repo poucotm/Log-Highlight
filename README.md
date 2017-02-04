@@ -47,8 +47,7 @@ From v0.5.2, if there are open files which already log-highlighted when sublime 
 
 #### Enable Build Window (Output Panel)
 
-From v0.8.0, Log Highlight can be used for Build Window or Unsaved View. But relative path link won't be used because the absolute path is unknown. In order to use relative path, you should set like the following:
-`output_view.settings().set('filepath', [PATH])` output_view is the handle of your output panel view.
+From v0.8.0, Log Highlight can be used for Build Window or Unsaved View (need to set `"log_ext": [ ".*"]`). But relative path link won't be used because the absolute path is unknown. In order to use relative path, you should set like the following: `output_view.settings().set('filepath', [PATH])` output_view is the handle of your output panel view.
 
 #### Restore Settings :
 
