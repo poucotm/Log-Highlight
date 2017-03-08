@@ -133,7 +133,10 @@ Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTh
 	// bookmark
 	"bookmark_enable": true,       // enable/disable bookmarks
 	"bookmark_error_only": false,  // add bookmarks only for errors
-	"bookmark_goto_error": true    // automatically go to 1st error line
+	"bookmark_goto_error": true,   // automatically go to 1st error line
+
+	// etc
+	"search_base": true  // search base directory automatically
 }
 ```
 

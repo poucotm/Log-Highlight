@@ -540,10 +540,11 @@ class LogHighlightThread(threading.Thread):
 		if self.try_search_base:
 			if self.search_base_success:
 				floating  = self.view.settings().get('floating', True)
-				if not floating:
+				srch_opt  = self.view.settings().get('search_base', True)
+				if (not floating) and srch_opt:
 					sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
 				else:
-					sublime.status_message("Log Highlight : Only current directory ('.') can be used as base directory for floating view")
+					sublime.status_message("Log Highlight : Skipped to search base directory")
 			else:
 				sublime.status_message("Log Highlight : Unable to Find Base Directory !")
 
@@ -598,11 +599,13 @@ class LogHighlightThread(threading.Thread):
 			return ""
 
 	def search_base(self, log_name):
+		srch_opt  = self.view.settings().get('search_base', True)
 		floating  = self.view.settings().get('floating', True)
-		if floating:
+
+		if floating or (not srch_opt) :
 			self.search_base_success = True
 			self.base_dir = "."
-			sublime.status_message("Log Highlight : Only current directory ('.') can be used as base directory for floating view")
+			sublime.status_message("Log Highlight : Skipped to search base directory")
 			return
 
 		file_name = self.get_rel_path_file()
