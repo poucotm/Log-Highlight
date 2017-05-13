@@ -9,12 +9,12 @@
 		<dict>
 			<key>settings</key>
 			<dict>
-				<!-- #0 background --><key>background</key><string>#0D1011</string>
-				<!-- #1 foreground --><key>foreground</key><string>#D7D7D7</string>
-				<!-- #2 caret --><key>caret</key><string>#FF8801</string>
-				<!-- #3 selection --><key>selection</key><string>#555555</string>
-				<!-- #4 selectionBorder --><key>selectionBorder</key><string>#555555</string>
-				<!-- #5 lineHighlight --><key>lineHighlight</key><string>#272822</string>
+				<key>background</key><string>#13181F</string>
+				<key>foreground</key><string>#D7D7D7</string>
+				<key>caret</key><string>#FF8801</string>
+				<key>selection</key><string>#555555</string>
+				<key>selectionBorder</key><string>#555555</string>
+				<key>lineHighlight</key><string>#272822</string>
 			</dict>
 		</dict>
 		<dict>
@@ -22,17 +22,7 @@
 			<string>msg.error</string>
 			<key>settings</key>
 			<dict>
-				<!-- #6 msg.error --><key>foreground</key><string>#F92672</string>
-				<!-- <key>fontStyle</key> -->
-				<!-- <string>bold</string> -->
-			</dict>
-		</dict>
-		<dict>
-			<key>scope</key>
-			<string>msg.error.link</string>
-			<key>settings</key>
-			<dict>
-				<!-- #7 msg.error.link --><key>foreground</key><string>#E6DB74</string>
+				<key>foreground</key><string>#F92672</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
@@ -42,7 +32,17 @@
 			<string>msg.error.quote</string>
 			<key>settings</key>
 			<dict>
-				<!-- #8 msg.error.quote --><key>foreground</key><string>#66D9EF</string>
+				<key>foreground</key><string>#4F99D3</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
+			<string>msg.error.link</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key><string>#E6DB74</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
@@ -52,17 +52,7 @@
 			<string>msg.warning</string>
 			<key>settings</key>
 			<dict>
-				<!-- #9 msg.warning --><key>foreground</key><string>#A6E22E</string>
-				<!-- <key>fontStyle</key> -->
-				<!-- <string>bold</string> -->
-			</dict>
-		</dict>
-		<dict>
-			<key>scope</key>
-			<string>msg.warning.link</string>
-			<key>settings</key>
-			<dict>
-				<!-- #10 msg.warning.link --><key>foreground</key><string>#FD971F</string>
+				<key>foreground</key><string>#A1B347</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
@@ -72,37 +62,17 @@
 			<string>msg.warning.quote</string>
 			<key>settings</key>
 			<dict>
-				<!-- #11 msg.warning.quote --><key>foreground</key><string>#66D9EF</string>
+				<key>foreground</key><string>#4F99D3</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
 		</dict>
 		<dict>
 			<key>scope</key>
-			<string>msg.info</string>
+			<string>msg.warning.link</string>
 			<key>settings</key>
 			<dict>
-				<!-- #12 msg.info --><key>foreground</key><string>#70991f</string>
-				<!-- <key>fontStyle</key> -->
-				<!-- <string>bold</string> -->
-			</dict>
-		</dict>
-		<dict>
-			<key>scope</key>
-			<string>msg.info.link</string>
-			<key>settings</key>
-			<dict>
-				<!-- #13 msg.info.link --><key>foreground</key><string>#b36915</string>
-				<!-- <key>fontStyle</key> -->
-				<!-- <string>bold</string> -->
-			</dict>
-		</dict>
-		<dict>
-			<key>scope</key>
-			<string>msg.info.quote</string>
-			<key>settings</key>
-			<dict>
-				<!-- #14 msg.info.quote --><key>foreground</key><string>#428a99</string>
+				<key>foreground</key><string>#FD971F</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
@@ -112,7 +82,7 @@
 			<string>summary.title</string>
 			<key>settings</key>
 			<dict>
-				<!-- #15 summary.title --><key>foreground</key><string>#D7D7D7</string>
+				<key>foreground</key><string>#D7D7D7</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>

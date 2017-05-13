@@ -148,44 +148,6 @@
 				</dict>
 			</array>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^Information-\[</string>
-			<key>end</key>
-			<string>^\s*[\n]</string>
-			<key>name</key>
-			<string>msg.info</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#info_link</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#info_quote</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^\[INFO\]</string>
-			<key>end</key>
-			<string>[\r\n]</string>
-			<key>name</key>
-			<string>msg.info</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#info_link</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#info_quote</string>
-				</dict>
-			</array>
-		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
@@ -216,20 +178,6 @@
 			<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
 			<key>name</key>
 			<string>msg.warning.quote</string>
-		</dict>
-		<key>info_link</key>
-		<dict>
-			<key>match</key>
-			<string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
-			<key>name</key>
-			<string>msg.info.link</string>
-		</dict>
-		<key>info_quote</key>
-		<dict>
-			<key>match</key>
-			<string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-			<key>name</key>
-			<string>msg.info.quote</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>

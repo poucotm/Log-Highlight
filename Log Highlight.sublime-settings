@@ -5,78 +5,80 @@
 	// log file extension
 	"log_ext": [ ".log" ], // use ".*" for all file extensions
 
-	// error pattern set (regular expression)
-	// [ "begin regex", "end regex" ] or [ "match regex", "" ]
-	//
-	// non-regex special word (sensitive case) : {{{LINK}}}, {{{QUOTE}}}
-	//  -> They will be replaced with regex capturing groups in "begin regex", "end regex" or "match regex" for LINK regex, QUOTE regex
-	//
-	//  e.g.) ../src/foo.cpp:40 error: ../src/foo.cpp:40
-	//      - You don't need to use {{{LINK}}} to highlight second `../src/foo.cpp` link, because it is inside begin ~ end
-	//      - [ "^[\\r\\n].*?(?i)error", "[\\r\\n]" ] is enough for 2nd link
-	//      - For 1st link, the former setting can't, because it is outside begin ~ end
-	//      - You have to put {{{LINK}}} like [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
+	// search base directory automatically for relative path
+	"search_base": true,
 
-	"error_enable": true,
-	"error_pattern": [
-		[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
-		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
-		[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
-		// <-- Remove, Change, Add More Patterns Here -->
-	],
+	// severity level
+	"severity" : {
 
-	// warning pattern set (regular expression)
-	//  -> see error pattern description
+		// error __________________________________________________
+		"error" : {
+			"enable"  : true,
+			"summary" : true,
+			"pattern" : [
+				[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
+				[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
+				[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
+				// <-- Remove, Change, Add More Patterns Here -->
+			],
+			"color" : {
+				"base"  : "#F92672", // error message
+				"link"  : "#E6DB74", // link in error message
+				"quote" : "#4F99D3"  // quote in error message
+			}
+		},
 
-	"warning_enable": true,
-	"warning_pattern": [
-		[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
-		[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with or without a link in front of 'warning'
-		[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
-		// <-- Remove, Change, Add More Patterns Here -->
-	],
+		// warning ________________________________________________
+		"warning" : {
+			"enable"  : true,
+			"summary" : true,
+			"pattern" : [
+				[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
+				[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with or without a link in front of 'warning'
+				[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
+				// <-- Remove, Change, Add More Patterns Here -->
+			],
+			"color" : {
+				"base"  : "#A1B347", // warning message
+				"link"  : "#FD971F", // link in warning message
+				"quote" : "#4F99D3"  // quote in warning message
+			}
+		},
 
-	// info pattern set (regular expression)
-	//  -> see error pattern description
+		// info ___________________________________________________
+		"info" : {
+			"enable"  : false,
+			"summary" : false,
+			"pattern" : [
+				[ "^Information-\\[", "^\\s*[\\n]" ],                // Information-[ ~ next empty line (multi-line)
+				[ "^\\[INFO\\]", "[\\r\\n]" ]                        // [INFO] ... (single line)
+				// <-- Remove, Change, Add More Patterns Here -->
+			],
+			"color" : {
+				"base"  : "#70991f", // info message
+				"link"  : "#b36915", // link in info message
+				"quote" : "#428a99"  // quote in info message
+			}
+		}
 
-	"info_enable": false,
-	"info_pattern": [
-		[ "^Information-\\[", "^\\s*[\\n]" ],                // Information-[ ~ next empty line (multi-line)
-		[ "^\\[INFO\\]", "[\\r\\n]" ]                        // [INFO] ... (single line)
-		// <-- Remove, Change, Add More Patterns Here -->
-	],
+		// <-- Remove, Change, Add More Severity Level Here -->
+	},
 
 	// theme color set
-	"theme_color": [
-		"#0D1011", // background
-		"#D7D7D7", // foreground
-		"#FF8801", // caret
-		"#555555", // selection
-		"#555555", // selectionBorder
-		"#272822", // lineHighlight
-		"#F92672", // error message
-		"#E6DB74", // link in error message
-		"#66D9EF", // quote in error message
-		"#A6E22E", // warning message
-		"#FD971F", // link in warning message
-		"#66D9EF", // quote in warning message
-		"#70991f", // info message
-		"#b36915", // link in info message
-		"#428a99", // quote in info message
-		"#D7D7D7"  // summary title
-	],
+	"theme_color": {
+		"background"      : "#13181F",
+		"foreground"      : "#D7D7D7",
+		"caret"           : "#FF8801",
+		"selection"       : "#555555",
+		"selectionBorder" : "#555555",
+		"lineHighlight"   : "#272822",
+		"summary_title"   : "#D7D7D7"
+	},
 
 	// summary panel
-	"summary_panel": true,                 // show summary panel
-	"summary_error_only": false,           // display only errors in the summary panel
-	"summary_show_log_name": true,         // display log name
-	"summary_update_for_last_log": false,  // update summary panel only for lastly log-highlighted log
+	"summary_panel": true,         // show summary panel
 
 	// bookmark
 	"bookmark_enable": true,       // enable/disable bookmarks
-	"bookmark_error_only": false,  // add bookmarks only for errors
-	"bookmark_goto_error": true,   // automatically go to 1st error line
-
-	// etc
-	"search_base": true  // search base directory automatically
+	"bookmark_goto_error": true    // automatically go to 1st error line
 }
