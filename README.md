@@ -24,7 +24,7 @@ After changing syntax and color scheme in **settings**, run `Log Hightlight: Gen
 
 #### Extensible Severity Levels
 
-You can add, remove, change severity levels in **settings**, run `Log Hightlight: Generate Custom Syntax & Theme` command. You may have to restart sublime text once.
+You can add, remove, change severity levels like debug/notice/emergency in **settings**, run `Log Hightlight: Generate Custom Syntax & Theme` command. You may have to restart sublime text once.
 
 #### Bookmarks
 
@@ -74,6 +74,14 @@ error ../src/foo.cpp:40
 ../src/foo.cpp:40 error:
 --> [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 ```
+
+#### Screen Shot
+
+Build Window
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-build.png)
+
+Log File
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-log.gif)
 
 #### Settings :
 
@@ -169,8 +177,6 @@ error ../src/foo.cpp:40
    "bookmark_goto_error": true    // automatically go to 1st error line
 }
 ```
-
-![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/log_highlight.gif)
 
 ## issues
 
