@@ -26,8 +26,8 @@ def plugin_loaded():
 	global lh_settings
 	lh_settings = sublime.load_settings('Log Highlight.sublime-settings')
 	list_severity()
-	# lh_settings.clear_on_change('reload')
-	# lh_settings.add_on_change('reload', plugin_loaded)
+	lh_settings.clear_on_change('reload')
+	lh_settings.add_on_change('reload', plugin_loaded)
 	view_l = sublime.active_window().views()
 	global logh_view
 	for v in view_l:
