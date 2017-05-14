@@ -654,7 +654,7 @@ class LogHighlightThread(threading.Thread):
 		lhs = get_settings()
 		s   = lhs.get('severity')
 		self.messages = {}
-		self.regions  = []
+		self.regions  = {}
 		self.n_errors = 0
 		self.n_warns  = 0
 		global severity_list
@@ -673,8 +673,8 @@ class LogHighlightThread(threading.Thread):
 					msg  +=  _pat[0] + '.*?' + _pat[1] + '|'
 			region = view.find_all(head)
 			self.messages[k] = msg
+			self.regions[k]  = region
 			if k == 'error':
-				self.regions.extend(region)
 				self.region_err = region
 				self.n_errors   = str(len(region));
 			elif k == 'warning':
@@ -683,6 +683,7 @@ class LogHighlightThread(threading.Thread):
 
 	def add_bookmarks(self, view):
 		lhs = get_settings()
+		s   = lhs.get('severity')
 		bmark_enable = lhs.get('bookmark_enable', True)
 		if not bmark_enable:
 			return
@@ -693,9 +694,19 @@ class LogHighlightThread(threading.Thread):
 
 		# bookmark icon
 		if ST3:
-			view.add_regions("bookmarks", self.regions, "bookmarks", "Packages/Log Highlight/icons/error.png", sublime.HIDDEN | sublime.PERSISTENT)
+			for i, k in enumerate(severity_list):
+				icon = (s.get(k)).get('icon')
+				if icon:
+					if icon == 'dot' or icon == 'circle' or icon == 'bookmark':
+						icon = icon
+					else:
+						icon = "Packages/Log Highlight/icons/" + icon
+					view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
 		else:
-			view.add_regions("bookmarks", self.regions, "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+			for i, k in enumerate(severity_list):
+				icon = (s.get(k)).get('icon')
+				if icon:
+					view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
 		return
 
 	def do_summary(self, view):

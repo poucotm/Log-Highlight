@@ -25,7 +25,8 @@
 				"base"  : "#F92672", // error message
 				"link"  : "#E6DB74", // link in error message
 				"quote" : "#4F99D3"  // quote in error message
-			}
+			},
+			"icon"  : "error.png"   // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
 		},
 
 		// warning ________________________________________________
@@ -42,7 +43,8 @@
 				"base"  : "#A1B347", // warning message
 				"link"  : "#FD971F", // link in warning message
 				"quote" : "#4F99D3"  // quote in warning message
-			}
+			},
+			"icon"  : "warning.png" // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
 		},
 
 		// info ___________________________________________________
@@ -58,7 +60,8 @@
 				"base"  : "#70991f", // info message
 				"link"  : "#b36915", // link in info message
 				"quote" : "#428a99"  // quote in info message
-			}
+			},
+			"icon"  : "info.png"    // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
 		}
 
 		// <-- Remove, Change, Add More Severity Level Here -->

@@ -1,0 +1,7 @@
+Change Log: v1.0.0
+
+	* Update (v1.0.0)
+		- extensible severity level* - you should update your `Log Highlight.sublime-settings`
+		- support build output window (by default)
+		- icons for each severity level
+		- shrink options
