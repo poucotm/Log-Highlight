@@ -75,6 +75,14 @@ error ../src/foo.cpp:40
 --> [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 ```
 
+#### Screen Shot
+
+Build Window
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-build.png)
+
+Log File
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-log.gif)
+
 #### Settings :
 
 ```java
@@ -169,8 +177,6 @@ error ../src/foo.cpp:40
    "bookmark_goto_error": true    // automatically go to 1st error line
 }
 ```
-
-![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/log_highlight.gif)
 
 ## issues
 
