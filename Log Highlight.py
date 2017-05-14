@@ -123,7 +123,10 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		if not os.path.exists(_user_path):
 			os.makedirs(_user_path)
 		_tmlang_path = os.path.join(_user_path, 'Log Highlight.tmLanguage')
-		f = open(_tmlang_path, "w", newline="")
+		if ST3:
+			f = open(_tmlang_path, "w", newline="")
+		else:
+			f = open(_tmlang_path, "w")
 		f.write(_tmlang)
 		f.close()
 		return
@@ -288,7 +291,10 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 		if not os.path.exists(_user_path):
 			os.makedirs(_user_path)
 		_tmtheme_path = os.path.join(_user_path, 'Log Highlight.hidden-tmTheme')
-		f = open(_tmtheme_path, "w", newline="")
+		if ST3:
+			f = open(_tmtheme_path, "w", newline="")
+		else:
+			f = open(_tmtheme_path, "w")
 		f.write(_tmtheme)
 		f.close()
 		return
@@ -670,12 +676,11 @@ class LogHighlightThread(threading.Thread):
 					msg  += _pat[0] + '.*?' + _pat[1]
 				else:
 					head += _pat[0] + '.*|'
-					msg  +=  _pat[0] + '.*?' + _pat[1] + '|'
+					msg  += _pat[0] + '.*?' + _pat[1] + '|'
 			region = view.find_all(head)
 			self.messages[k] = msg
 			self.regions[k]  = region
 			if k == 'error':
-				self.region_err = region
 				self.n_errors   = str(len(region));
 			elif k == 'warning':
 				self.n_warns    = str(len(region));
@@ -688,9 +693,10 @@ class LogHighlightThread(threading.Thread):
 		if not bmark_enable:
 			return
 
- 		# goto 1st error line
-		if len(self.region_err) > 0:
-			self.goto_line = self.region_err[0]
+		# goto 1st error line
+		region = self.regions['error']
+		if len(region) > 0:
+			self.goto_line = region[0]
 
 		# bookmark icon
 		if ST3:
@@ -706,7 +712,10 @@ class LogHighlightThread(threading.Thread):
 			for i, k in enumerate(severity_list):
 				icon = (s.get(k)).get('icon')
 				if icon:
-					view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
+					if icon == 'dot' or icon == 'circle' or icon == 'bookmark':
+						view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
+					else:
+						view.add_regions(k, self.regions[k], "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
 		return
 
 	def do_summary(self, view):

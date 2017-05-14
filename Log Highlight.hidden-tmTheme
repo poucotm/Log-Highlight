@@ -11,38 +11,18 @@
 			<dict>
 				<key>background</key><string>#13181F</string>
 				<key>foreground</key><string>#D7D7D7</string>
-				<key>caret</key><string>#FF8801</string>
-				<key>selection</key><string>#555555</string>
-				<key>selectionBorder</key><string>#555555</string>
-				<key>lineHighlight</key><string>#272822</string>
+				<key>caret</key><string>#F29718</string>
+				<key>selection</key><string>#3A5166</string>
+				<key>selectionBorder</key><string>#181E26</string>
+				<key>lineHighlight</key><string>#283240</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>scope</key>
-			<string>msg.error</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key><string>#F92672</string>
-				<!-- <key>fontStyle</key> -->
-				<!-- <string>bold</string> -->
-			</dict>
-		</dict>
-		<dict>
-			<key>scope</key>
-			<string>msg.error.quote</string>
+			<string>msg.warning.quote</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key><string>#4F99D3</string>
-				<!-- <key>fontStyle</key> -->
-				<!-- <string>bold</string> -->
-			</dict>
-		</dict>
-		<dict>
-			<key>scope</key>
-			<string>msg.error.link</string>
-			<key>settings</key>
-			<dict>
-				<key>foreground</key><string>#E6DB74</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>
@@ -59,7 +39,17 @@
 		</dict>
 		<dict>
 			<key>scope</key>
-			<string>msg.warning.quote</string>
+			<string>msg.warning.link</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key><string>#FD971F</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
+			<string>msg.error.quote</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key><string>#4F99D3</string>
@@ -69,10 +59,20 @@
 		</dict>
 		<dict>
 			<key>scope</key>
-			<string>msg.warning.link</string>
+			<string>msg.error</string>
 			<key>settings</key>
 			<dict>
-				<key>foreground</key><string>#FD971F</string>
+				<key>foreground</key><string>#F92672</string>
+				<!-- <key>fontStyle</key> -->
+				<!-- <string>bold</string> -->
+			</dict>
+		</dict>
+		<dict>
+			<key>scope</key>
+			<string>msg.error.link</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key><string>#E6DB74</string>
 				<!-- <key>fontStyle</key> -->
 				<!-- <string>bold</string> -->
 			</dict>

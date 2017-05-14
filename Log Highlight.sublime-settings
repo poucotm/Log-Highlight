@@ -16,6 +16,7 @@
 			"enable"  : true,
 			"summary" : true,
 			"pattern" : [
+				// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 				[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
 				[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
 				[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
@@ -34,6 +35,7 @@
 			"enable"  : true,
 			"summary" : true,
 			"pattern" : [
+				// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 				[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
 				[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with or without a link in front of 'warning'
 				[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
@@ -52,6 +54,7 @@
 			"enable"  : false,
 			"summary" : false,
 			"pattern" : [
+				// [ "begin regex", "end regex" ] or [ "match regex", "" ]
 				[ "^Information-\\[", "^\\s*[\\n]" ],                // Information-[ ~ next empty line (multi-line)
 				[ "^\\[INFO\\]", "[\\r\\n]" ]                        // [INFO] ... (single line)
 				// <-- Remove, Change, Add More Patterns Here -->
@@ -71,10 +74,10 @@
 	"theme_color": {
 		"background"      : "#13181F",
 		"foreground"      : "#D7D7D7",
-		"caret"           : "#FF8801",
-		"selection"       : "#555555",
-		"selectionBorder" : "#555555",
-		"lineHighlight"   : "#272822",
+		"caret"           : "#F29718",
+		"selection"       : "#3A5166",
+		"selectionBorder" : "#181E26",
+		"lineHighlight"   : "#283240",
 		"summary_title"   : "#D7D7D7"
 	},
 
