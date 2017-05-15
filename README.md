@@ -28,7 +28,7 @@ You can add, remove, change severity levels like debug/notice/emergency in **set
 
 #### Bookmarks
 
-When errors/warnings found, it will add bookmarks for them for each icon. You can navigate easily with new key binding (`alt+pagedown/up`)
+When errors/warnings found, it will add bookmarks for them for each icon.
 
 #### Go To Position
 

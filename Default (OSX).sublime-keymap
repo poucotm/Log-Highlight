@@ -1,5 +1,3 @@
 [
-	{ "keys": ["alt+f12"], "command": "log_highlight_panel" },
-	{ "keys": ["alt+pagedown"], "command": "next_bookmark" },
-	{ "keys": ["alt+pageup"], "command": "prev_bookmark" }
+	{ "keys": ["alt+f12"], "command": "log_highlight_panel" }
 ]
