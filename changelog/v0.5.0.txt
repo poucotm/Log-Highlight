@@ -1,0 +1,4 @@
+Change Log: v0.5.0
+
+	* New function
+		- auto refresh : automatically update bookmarks, summary panel when the log file reloaded

@@ -5,6 +5,12 @@
 Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme & extensible severity levels.
 Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
 
+(Build Window)
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-build.png)
+
+(Log File)
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-log.gif)
+
 ## Features
 ***********
 
@@ -74,14 +80,6 @@ error ../src/foo.cpp:40
 ../src/foo.cpp:40 error:
 --> [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
 ```
-
-#### Screen Shot
-
-Build Window
-![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-build.png)
-
-Log File
-![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-log.gif)
 
 #### Settings :
 
