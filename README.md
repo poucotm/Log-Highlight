@@ -90,8 +90,11 @@ error ../src/foo.cpp:40
    // enable context menu
    "context_menu": true,
 
+   // Auto Highlight for a log file
+   "auto_highlight" : true,
+
    // log file extension
-   "log_ext": [ ".log" ], // use ".*" for all file extensions
+   "log_ext": [ ".log" ], // use ".*" for all file extensions - but can not use `Auto Highlight`
 
    // search base directory automatically for relative path
    "search_base": true,

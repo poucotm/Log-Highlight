@@ -367,6 +367,11 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 class LogHighlightEvent(sublime_plugin.EventListener):
 
 	# for ST2
+	def on_load(self, view):
+		if ST3:
+			return
+		self.auto_highlight(view)
+
 	def on_modified(self, view):
 		if ST3:
 			return
@@ -381,6 +386,9 @@ class LogHighlightEvent(sublime_plugin.EventListener):
 				break
 
 	# for ST3
+	def on_load_async(self, view):
+		self.auto_highlight(view)
+
 	def on_modified_async(self, view):
 		global logh_view
 		for i, vid in enumerate(logh_view):
@@ -391,6 +399,17 @@ class LogHighlightEvent(sublime_plugin.EventListener):
 					thread = LogHighlightRefreshThread(view)
 					thread.start()
 				break
+		return
+
+	def on_post_window_command(self, view, command_name, args):
+		if command_name == 'show_panel' and 'panel' in args.keys() and args['panel'] == 'output.exec':
+			lhs = get_settings()
+			aut_h = lhs.get("auto_highlight", False)
+			if not aut_h:
+				return
+			bwin = view.get_output_panel('exec')
+			if not bwin.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+				bwin.run_command("log_highlight")
 		return
 
 	def on_close(self, view):
@@ -405,6 +424,21 @@ class LogHighlightEvent(sublime_plugin.EventListener):
 			else:
 				logh_lastv = -1
 		return
+
+	def auto_highlight(self, view):
+		lhs = get_settings()
+		aut_h = lhs.get("auto_highlight", False)
+		if not aut_h:
+			return
+		ext_l = lhs.get("log_ext") # [".log"]
+		if any(".*" == s for s in ext_l):
+				return
+		_name = "" if view.file_name() is None else view.file_name()
+		ext   = os.path.splitext(_name)[1]
+		ext   = ext.lower()
+		if any(ext == s for s in ext_l):
+			view.run_command("log_highlight")
+
 
 class LogHighlightRefreshThread(threading.Thread):
 	def __init__(self, view):
