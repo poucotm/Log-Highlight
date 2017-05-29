@@ -85,16 +85,21 @@ error ../src/foo.cpp:40
 
 #### Settings :
 
+icon list : [https://github.com/poucotm/Log-Highlight/tree/master/icons](https://github.com/poucotm/Log-Highlight/tree/master/icons)
+
 ```java
 {
    // enable context menu
    "context_menu": true,
 
-   // Auto Highlight for a log file
+   // Auto Highlight for a log file, build window
    "auto_highlight" : true,
 
    // log file extension
    "log_ext": [ ".log" ], // use ".*" for all file extensions - but can not use `Auto Highlight`
+
+   // use clickable link or not
+   "use_link": true,
 
    // search base directory automatically for relative path
    "search_base": true,
@@ -118,7 +123,7 @@ error ../src/foo.cpp:40
             "link"  : "#E6DB74", // link in error message
             "quote" : "#4F99D3"  // quote in error message
          },
-         "icon"  : "error.png"   // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+         "icon"  : "Danish Royalty/error.png"   // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
       },
 
       // warning ________________________________________________
@@ -137,7 +142,7 @@ error ../src/foo.cpp:40
             "link"  : "#FD971F", // link in warning message
             "quote" : "#4F99D3"  // quote in warning message
          },
-         "icon"  : "warning.png" // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+         "icon"  : "Danish Royalty/warning.png" // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
       },
 
       // info ___________________________________________________
@@ -155,7 +160,7 @@ error ../src/foo.cpp:40
             "link"  : "#b36915", // link in info message
             "quote" : "#428a99"  // quote in info message
          },
-         "icon"  : "info.png"    // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+         "icon"  : "Danish Royalty/info.png"    // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
       }
 
       // <-- Remove, Change, Add More Severity Level Here -->

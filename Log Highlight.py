@@ -311,7 +311,8 @@ logh_lastv  = -1
 class LogHighlightCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		# workaround for ST3 result_file_regex bug
-		if ST3:
+		use_link = get_settings().get('use_link', True)
+		if ST3 and use_link:
 			resfr_wa = self.view.settings().get('resfr_wa', False)
 			if not resfr_wa:
 				self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
@@ -490,16 +491,19 @@ class LogHighlightThread(threading.Thread):
 		global is_working
 		is_working = True
 		log_name   = self.view.file_name()
+		use_link   = get_settings().get('use_link', True)
+
 		# to support unsaved file (like Tail)
 		if not log_name:
 			log_name   = self.view.settings().get('filepath')
 		if not log_name or not os.path.isfile(log_name):
 			self.view.settings().set('floating', True)
-			sublime.status_message("Log Highlight : This is a floating (or unsaved) view. Can't use the relative link.")
+			if use_link:
+				sublime.status_message("Log Highlight : This is a floating (or unsaved) view. Can't use the relative link.")
 		else:
 			self.view.settings().set('floating', False)
 			# workaround for ST3 result_file_regex bug
-			if ST3:
+			if ST3 and use_link:
 				save = self.view.settings().get('need_to_save', False)
 				if save:
 					self.view.run_command('save')
@@ -529,28 +533,30 @@ class LogHighlightThread(threading.Thread):
 			logh_lastv = self.view.id()
 			self.view.settings().set('logh_lastv', True)
 		else:
-			get_base_dir = self.view.settings().get('result_base_dir')
-			if get_base_dir == None or get_base_dir == "":
-				self.try_search_base = True
-				self.search_base(log_name)
-				if self.base_dir != "":
-					self.view.settings().set('result_base_dir', self.base_dir)
-			else:
-				self.base_dir = get_base_dir
+			if use_link:
+				get_base_dir = self.view.settings().get('result_base_dir')
+				if get_base_dir == None or get_base_dir == "":
+					self.try_search_base = True
+					self.search_base(log_name)
+					if self.base_dir != "":
+						self.view.settings().set('result_base_dir', self.base_dir)
+				else:
+					self.base_dir = get_base_dir
 
 			# bookmark & summary
 			self.do_next()
 			is_working = False
 			return
 
-		# to set base directory
-		self.try_search_base = True
-		self.search_base(log_name)
+		if use_link:
+			# to set base directory
+			self.try_search_base = True
+			self.search_base(log_name)
 
-		# set base dir & apply 'result_file_regex'
-		if self.base_dir != "":
-			self.view.settings().set('result_base_dir', self.base_dir)
-		self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
+			# set base dir & apply 'result_file_regex'
+			if self.base_dir != "":
+				self.view.settings().set('result_base_dir', self.base_dir)
+			self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
 
 		# bookmark & summary
 		self.do_next()
@@ -635,7 +641,7 @@ class LogHighlightThread(threading.Thread):
 		srch_opt  = self.view.settings().get('search_base', True)
 		floating  = self.view.settings().get('floating', True)
 
-		if floating or (not srch_opt) :
+		if floating or (not srch_opt):
 			self.search_base_success = True
 			self.base_dir = "."
 			sublime.status_message("Log Highlight : Skipped to search base directory")
@@ -796,9 +802,10 @@ class LogHighlightThread(threading.Thread):
 		g_summary_view.settings().set('line_numbers', False);
 		g_summary_view.set_read_only(False)
 		view.window().run_command("show_panel", {"panel": "output.loghighlight"})
-		g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
-		if self.base_dir != "":
-			g_summary_view.settings().set('result_base_dir', self.base_dir)
+		if lhs.get('use_link', True):
+			g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
+			if self.base_dir != "":
+				g_summary_view.settings().set('result_base_dir', self.base_dir)
 		self.set_syntax_theme(g_summary_view)
 		if ST3:
 			g_summary_view.run_command("append", {"characters": summary})
