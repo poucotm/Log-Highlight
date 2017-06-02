@@ -68,19 +68,20 @@ Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTh
 
 #### Pattern Regular Expression in Settings :
 
-usage :  `[ "begin regex", "end regex" ] or [ "match regex", "" ]`
+usage   : `[ "begin regex", "end regex" ] or [ "match regex", "" ]`  
+caution : Avoid OR '|' and separate them, it can make an unexpected result.
 
 example)
 ```java
 Error-[SE] Syntax error :
    ./src/macros/uvm_object_defines.svh line: 764: token is 'for'
---> [ "^Error-\\[", "^\\s*[\\n]" ], // Error-[ ~ next empty line (multi-line)
+--> [ "^Error-\\[", "^\\s*[\\n]" ] // Error-[ ~ next empty line (multi-line)
 
 error ../src/foo.cpp:40
---> [ "^(?i)error", "[\\r\\n]" ]
+--> [ "^(?i)error", "[\\r\\n]" ] // single line
 
 ../src/foo.cpp:40 error:
---> [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ]
+--> [ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ] // single line
 ```
 
 #### Settings :

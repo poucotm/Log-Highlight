@@ -11,6 +11,7 @@ import sublime, sublime_plugin
 import re
 import threading, time
 import os
+import traceback
 
 ############################################################################
 # for settings
@@ -373,6 +374,12 @@ class LogHighlightEvent(sublime_plugin.EventListener):
 			return
 		self.auto_highlight(view)
 
+	def on_activated(self, view): # for open directly
+		if ST3:
+			return
+		if not view.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+			self.auto_highlight(view)
+
 	def on_modified(self, view):
 		if ST3:
 			return
@@ -389,6 +396,10 @@ class LogHighlightEvent(sublime_plugin.EventListener):
 	# for ST3
 	def on_load_async(self, view):
 		self.auto_highlight(view)
+
+	def on_activated_async(self, view): # for open directly
+		if not view.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+			self.auto_highlight(view)
 
 	def on_modified_async(self, view):
 		global logh_view
@@ -488,6 +499,14 @@ class LogHighlightThread(threading.Thread):
 		self.is_first = is_first;
 
 	def run(self):
+		try:
+			self.run_imp()
+		except:
+			is_working = False
+			traceback.print_exc()
+			sublime.status_message("Log Highlight : There is an unexpected error.")
+
+	def run_imp(self):
 		global is_working
 		is_working = True
 		log_name   = self.view.file_name()
@@ -711,12 +730,9 @@ class LogHighlightThread(threading.Thread):
 			for i, _pat in enumerate(pat):
 				_pat[0]  = self.conv_for_regx(_pat[0])
 				_pat[1]  = self.conv_for_regx(_pat[1])
-				if i == len(pat) - 1:
-					head += _pat[0] + '.*'
-					msg  += _pat[0] + '.*?' + _pat[1]
-				else:
-					head += _pat[0] + '.*|'
-					msg  += _pat[0] + '.*?' + _pat[1] + '|'
+				_tail    = '' if i == len(pat) - 1 else '|'
+				head    += '(' + _pat[0] + ')' + _tail if _pat[1] == '' else '(' + _pat[0] + '.*?[\\r\\n])' + _tail
+				msg     += '(' + _pat[0] + ')' + _tail if _pat[1] == '' else '(' + _pat[0] + '.*?' + _pat[1] + ')' + _tail
 			region = view.find_all(head)
 			self.messages[k] = msg
 			self.regions[k]  = region
@@ -791,9 +807,16 @@ class LogHighlightThread(threading.Thread):
 		text      = text + '\n' # workaround when there is no '\n' at last
 		ewtext_l  = re.compile(filt_msg, re.MULTILINE|re.DOTALL).findall(text)
 
-		for _str in ewtext_l:
-			_str    = re.sub(re.compile(r'[\r\n]+$'), '', _str);
-			summary = summary + _str + '\n\n'
+		for txt in ewtext_l:
+			if isinstance(txt, tuple):
+				for _str in txt:
+					if _str != '':
+						_str    = re.sub(re.compile(r'[\r\n]+$'), '', _str);
+						summary = summary + _str + '\n\n'
+			elif isinstance(txt, str):
+				if txt != '':
+					_str    = re.sub(re.compile(r'[\r\n]+$'), '', txt);
+					summary = summary + _str + '\n\n'
 
 		global g_summary_view
 		g_summary_view = view.window().get_output_panel('loghighlight')
