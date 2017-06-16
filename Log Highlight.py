@@ -4,7 +4,7 @@
 # Author : yongchan jeon (Kris) poucotm@gmail.com
 # File   : Log Highlight.py
 # Create : 2016-06-06 19:41:37
-# Editor : sublime text3, tab size (3)
+# Editor : sublime text3, tab size (4)
 # -----------------------------------------------------------------------------
 
 import sublime
@@ -34,7 +34,7 @@ def plugin_loaded():
     view_l = sublime.active_window().views()
     global logh_view
     for v in view_l:
-        if v.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+        if v.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
             logh_view.append([v.id(), 0])
         if v.settings().get('logh_lastv') is True:
             global logh_lastv
@@ -386,7 +386,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
     def on_activated(self, view):  # for open directly
         if ST3:
             return
-        if not view.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+        if not view.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
             self.auto_highlight(view)
 
     def on_modified(self, view):
@@ -407,7 +407,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
         self.auto_highlight(view)
 
     def on_activated_async(self, view):  # for open directly
-        if not view.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+        if not view.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
             self.auto_highlight(view)
 
     def on_modified_async(self, view):
@@ -429,7 +429,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             if not aut_h:
                 return
             bwin = view.get_output_panel('exec')
-            if not bwin.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+            if not bwin.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
                 bwin.run_command("log_highlight")
         return
 
@@ -525,7 +525,7 @@ class LogHighlightThread(threading.Thread):
 
         # to support unsaved file (like Tail)
         if not log_name:
-            log_name   = self.view.settings().get('filepath')
+            log_name   = self.view.settings().get('filepath', '')
         if not log_name or not os.path.isfile(log_name):
             self.view.settings().set('floating', True)
             if use_link:
@@ -556,7 +556,7 @@ class LogHighlightThread(threading.Thread):
 
             view_l = sublime.active_window().views()
             for v in view_l:
-                if v.settings().get('syntax').endswith('Log Highlight.tmLanguage'):
+                if v.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
                     v.settings().set('logh_lastv', False)
 
             global logh_lastv
@@ -564,7 +564,7 @@ class LogHighlightThread(threading.Thread):
             self.view.settings().set('logh_lastv', True)
         else:
             if use_link:
-                get_base_dir = self.view.settings().get('result_base_dir')
+                get_base_dir = self.view.settings().get('result_base_dir', '')
                 if get_base_dir is None or get_base_dir == "":
                     self.try_search_base = True
                     self.search_base(log_name)
@@ -647,7 +647,7 @@ class LogHighlightThread(threading.Thread):
         if logn:
             text = self.view.substr(sublime.Region(0, self.view.size()))
         else:
-            logn = self.view.settings().get('filepath')
+            logn = self.view.settings().get('filepath', '')
             f = open(logn, 'r')
             text = str(f.read())
             f.close()
