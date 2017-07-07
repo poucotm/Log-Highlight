@@ -1,6 +1,6 @@
 # Log Highlight for Sublime Text
 
-[![Package Control](https://packagecontrol.herokuapp.com/downloads/Log%20Highlight.svg?style=flat-square)](https://packagecontrol.io/packages/Log%20Highlight)
+[![Package Control](https://packagecontrol.herokuapp.com/downloads/Log%20Highlight.svg?style=round-square)](https://packagecontrol.io/packages/Log%20Highlight)
 
 Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme & extensible severity levels.
 Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight : Highlight Error/Warning` in the command palette.

@@ -34,7 +34,7 @@ def plugin_loaded():
     view_l = sublime.active_window().views()
     global logh_view
     for v in view_l:
-        if v.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
+        if check_syntax(v):
             logh_view.append([v.id(), 0])
         if v.settings().get('logh_lastv') is True:
             global logh_lastv
@@ -60,6 +60,17 @@ def list_severity():
     for i, k in enumerate(list(s.keys())):
         if (s.get(k)).get('enable', False):
             severity_list.append(k)
+
+
+def check_syntax(view):
+    syn = view.settings().get('syntax', '')
+    if isinstance(syn, str):
+        if syn.endswith('Log Highlight.tmLanguage'):
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 ############################################################################
@@ -556,7 +567,7 @@ class LogHighlightThread(threading.Thread):
 
             view_l = sublime.active_window().views()
             for v in view_l:
-                if v.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
+                if check_syntax(v):
                     v.settings().set('logh_lastv', False)
 
             global logh_lastv
