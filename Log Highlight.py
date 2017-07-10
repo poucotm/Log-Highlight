@@ -397,7 +397,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
     def on_activated(self, view):  # for open directly
         if ST3:
             return
-        if not view.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
+        if not check_syntax(view):
             self.auto_highlight(view)
 
     def on_modified(self, view):
@@ -418,7 +418,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
         self.auto_highlight(view)
 
     def on_activated_async(self, view):  # for open directly
-        if not view.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
+        if not check_syntax(view):
             self.auto_highlight(view)
 
     def on_modified_async(self, view):
@@ -440,7 +440,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             if not aut_h:
                 return
             bwin = view.get_output_panel('exec')
-            if not bwin.settings().get('syntax', '').endswith('Log Highlight.tmLanguage'):
+            if not check_syntax(bwin):
                 bwin.run_command("log_highlight")
         return
 
