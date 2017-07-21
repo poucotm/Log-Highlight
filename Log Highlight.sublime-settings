@@ -79,7 +79,7 @@
 	// theme color set
 	"theme_color": {
 		"background"      : "#13181F",
-		"foreground"      : "#D7D7D7",
+		"foreground"      : "#161c23",
 		"caret"           : "#F29718",
 		"selection"       : "#3A5166",
 		"selectionBorder" : "#181E26",

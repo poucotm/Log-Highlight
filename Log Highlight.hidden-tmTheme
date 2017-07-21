@@ -9,7 +9,7 @@
 		<dict>
 			<key>settings</key>
 			<dict>
-				<key>background</key><string>#13181F</string>
+				<key>background</key><string>#161c23</string>
 				<key>foreground</key><string>#D7D7D7</string>
 				<key>caret</key><string>#F29718</string>
 				<key>selection</key><string>#3A5166</string>
