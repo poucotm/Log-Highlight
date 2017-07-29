@@ -6,5 +6,9 @@
     {
         "caption": "Log Hightlight: Generate Custom Syntax & Theme",
         "command": "log_highlight_gen_custom_syntax_theme"
+    },
+    {
+        "caption": "Log Hightlight: Erase Custom Syntax & Theme",
+        "command": "log_highlight_erase_custom_syntax_theme"
     }
 ]

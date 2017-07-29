@@ -64,6 +64,7 @@ Log Highlight can be used for Build Window or Unsaved View. But relative path li
 
 #### Restore Settings :
 
+Use `Log Hightlight: Erase Custom Syntax & Theme` in the command palette Or  
 Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTheme`
 
 #### Pattern Regular Expression in Settings :

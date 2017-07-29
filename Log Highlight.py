@@ -31,14 +31,16 @@ def plugin_loaded():
     list_severity()
     lh_settings.clear_on_change('reload')
     lh_settings.add_on_change('reload', plugin_loaded)
-    view_l = sublime.active_window().views()
+    wins_l = sublime.windows()
     global logh_view
-    for v in view_l:
-        if check_syntax(v):
-            logh_view.append([v.id(), 0])
-        if v.settings().get('logh_lastv') is True:
-            global logh_lastv
-            logh_lastv = v.id()
+    for w in wins_l:
+        view_l = w.views()
+        for v in view_l:
+            if check_syntax(v):
+                logh_view.append([v.id(), 0])
+            if v.settings().get('logh_lastv') is True:
+                global logh_lastv
+                logh_lastv = v.id()
 
 # def plugin_unloaded():
     # print ("unloaded : Log Highlight.py")
@@ -319,6 +321,38 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 
 
 ############################################################################
+# LogHighlightEraseCustomSyntaxThemeCommand
+
+class LogHighlightEraseCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        ret = sublime.ok_cancel_dialog('Erase Customized Log Highlight Syntax & Theme ?')
+        if ret:
+            try:
+                wins_l = sublime.windows()
+                for w in wins_l:
+                    s_view = w.get_output_panel('loghighlight')
+                    if s_view:
+                        w.run_command("hide_panel", {"panel": "output.loghighlight"})
+                        s_view.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
+                        s_view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+                    view_l = w.views()
+                    for v in view_l:
+                        if check_syntax(v):
+                            v.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
+                            v.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+                usr_syntax = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmLanguage')
+                if os.path.exists(usr_syntax):
+                    os.remove(usr_syntax)
+                usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.hidden-tmTheme')
+                if os.path.exists(usr_theme):
+                    os.remove(usr_theme)
+            except Exception as e:
+                print (e)
+                pass
+        pass
+
+
+############################################################################
 # LogHighlightCommand
 
 is_working  = False
@@ -564,11 +598,12 @@ class LogHighlightThread(threading.Thread):
             global logh_view
             if not any(self.view.id() == vid[0] for vid in logh_view):
                 logh_view.append([self.view.id(), 0])
-
-            view_l = sublime.active_window().views()
-            for v in view_l:
-                if check_syntax(v):
-                    v.settings().set('logh_lastv', False)
+            wins_l = sublime.windows()
+            for w in wins_l:
+                view_l = w.views()
+                for v in view_l:
+                    if check_syntax(v):
+                        v.settings().set('logh_lastv', False)
 
             global logh_lastv
             logh_lastv = self.view.id()
