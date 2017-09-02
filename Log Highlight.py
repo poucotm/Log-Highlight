@@ -1,9 +1,8 @@
 # -*- coding: utf8 -*-
-
 # -----------------------------------------------------------------------------
 # Author : yongchan jeon (Kris) poucotm@gmail.com
 # File   : Log Highlight.py
-# Create : 2016-06-06 19:41:37
+# Create : 2017-09-02 09:05:28
 # Editor : sublime text3, tab size (4)
 # -----------------------------------------------------------------------------
 
@@ -14,23 +13,46 @@ import threading
 import os
 import traceback
 
-############################################################################
-# for settings
 
+##  import Guna  ______________________________________________
+
+try:
+    from Guna.core.api import GunaApi
+    guna_installed = True
+except Exception as e:
+    guna_installed = False
+
+
+##  global constants / variables  _____________________________
+
+# Sublime text version
 ST3 = int(sublime.version()) >= 3000
+
+# Relative path searching
 MAX_SCAN_PATH     = 1000
 MAX_STAIR_UP_PATH = 10
-REFRESH_WAIT      = 500  # 0.5s
 
-lh_settings = {}
+# Refresh delay
+REFRESH_WAIT = 500  # 0.5s
 
+# Extended severity list
+severity_list = []
+
+
+##  global functions  _________________________________________
 
 def plugin_loaded():
-    global lh_settings
-    lh_settings = sublime.load_settings('Log Highlight.sublime-settings')
-    list_severity()
-    lh_settings.clear_on_change('reload')
-    lh_settings.add_on_change('reload', plugin_loaded)
+    """ plugin_loaded """
+
+    # from default/user settings
+    get_severity_list()
+
+    # register callback
+    lhs = get_prefs()
+    lhs.clear_on_change('lh-prefs')
+    lhs.add_on_change('lh-prefs', plugin_loaded)
+
+    # check all log-highlited views
     wins_l = sublime.windows()
     global logh_view
     for w in wins_l:
@@ -42,25 +64,20 @@ def plugin_loaded():
                 global logh_lastv
                 logh_lastv = v.id()
 
-# def plugin_unloaded():
-    # print ("unloaded : Log Highlight.py")
+
+def get_prefs():
+    return sublime.load_settings('Log Highlight.sublime-settings')
 
 
-def get_settings():
-    global lh_settings
-    if lh_settings == {}:
-        lh_settings = sublime.load_settings('Log Highlight.sublime-settings')
-        list_severity()
-    return lh_settings
+def get_severity_list():
+    """ Getting severity list from settings """
 
-
-def list_severity():
-    lhs = get_settings()
-    s   = lhs.get('severity')
+    lhs = get_prefs()
+    svt = lhs.get('severity')
     global severity_list
     severity_list = []
-    for i, k in enumerate(list(s.keys())):
-        if (s.get(k)).get('enable', False):
+    for i, k in enumerate(list(svt.keys())):
+        if (svt.get(k)).get('enable', False):
             severity_list.append(k)
 
 
@@ -75,8 +92,30 @@ def check_syntax(view):
         return False
 
 
-############################################################################
-# LogHighlightGenCustomSyntaxThemeCommand
+def disp_msg(msg):
+    if guna_installed:
+        GunaApi.alert_message(2, ' Log Highlight : ' + msg, 5, 0)
+    else:
+        sublime.status_message(' Log Highlight : ' + msg)
+
+
+def disp_error(msg):
+    if guna_installed:
+        GunaApi.alert_message(3, ' Log Highlight : ' + msg, 15, 1)
+    else:
+        sublime.status_message(' Log Highlight : ' + msg)
+
+
+def disp_exept():
+    print ('LOG HIGHLIGHT : ERROR _______________________________________')
+    traceback.print_exc()
+    print ('=============================================================')
+    disp_error("Error is occured. Please, see the trace-back information in Python console.")
+
+
+##  class LogHighlightGenCustomSyntaxThemeCommand  ____________
+
+# Regular expresson constants
 
 LINK_REGX_PLIST    = r"""["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?"""
 LINK_REGX_SETTING  = r"""(["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)"""
@@ -90,13 +129,18 @@ QUOTE_REGX_SUMMARY = r"""(?:["'].+?["'])"""
 
 
 class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         self.gen_syntax()
         self.gen_theme()
-        sublime.status_message("Log Highlight : Custom syntax & theme files are generated")
-        return
+
+        disp_msg("Custom syntax & theme files are generated")
 
     def gen_syntax(self):
+        """
+        generate custom syntax file : Log Highlight.tmLanguage
+        """
+
         sub_pattern     = ""
         sub_link_quote  = ""
         global severity_list
@@ -152,9 +196,8 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         return
 
     def gen_syntax_sub_pattern(self, severity):
-        lhs = get_settings()
-        s   = lhs.get('severity')
-        pat = (s.get(severity)).get('pattern')
+        svt = get_prefs().get('severity')
+        pat = (svt.get(severity)).get('pattern')
 
         pat_tmlang = ""
         for _str in pat:
@@ -250,12 +293,16 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         return _str
 
     def gen_theme(self):
-        lhs = get_settings()
-        s   = lhs.get('severity')
+        """
+        generate custom theme file : Log Highlight.hidden-tmTheme
+        """
+
+        lhs = get_prefs()
+        svt = lhs.get('severity')
         sub_theme   = ""
         global severity_list
         for i, k in enumerate(severity_list):
-            for j, c in enumerate(list((s.get(k)).get('color'))):
+            for j, c in enumerate(list((svt.get(k)).get('color'))):
                 p = "" if c == 'base' else "." + c
                 sub_theme += """
         <dict>
@@ -263,7 +310,7 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
             <string>msg.""" + k + p + """</string>
             <key>settings</key>
             <dict>
-                <key>foreground</key><string>""" + ((s.get(k)).get('color')).get(c) + """</string>
+                <key>foreground</key><string>""" + ((svt.get(k)).get('color')).get(c) + """</string>
                 <!-- <key>fontStyle</key> -->
                 <!-- <string>bold</string> -->
             </dict>
@@ -320,10 +367,10 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         return
 
 
-############################################################################
-# LogHighlightEraseCustomSyntaxThemeCommand
+##  class LogHighlightEraseCustomSyntaxThemeCommand  __________
 
 class LogHighlightEraseCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         ret = sublime.ok_cancel_dialog('Erase Customized Log Highlight Syntax & Theme ?')
         if ret:
@@ -340,32 +387,38 @@ class LogHighlightEraseCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
                         if check_syntax(v):
                             v.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
                             v.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+
                 usr_syntax = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmLanguage')
                 if os.path.exists(usr_syntax):
                     os.remove(usr_syntax)
+
                 usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.hidden-tmTheme')
                 if os.path.exists(usr_theme):
                     os.remove(usr_theme)
+
             except Exception as e:
-                print (e)
-                pass
-        pass
+                disp_exept()
 
 
-############################################################################
-# LogHighlightCommand
+##  class LogHighlightCommand  ________________________________
 
+# to prevent re-run in short time
 is_working  = False
+
+# for refresh
 is_waiting  = False
 req_refresh = []
+
+# managin vies
 logh_view   = []
 logh_lastv  = -1
 
 
 class LogHighlightCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         # workaround for ST3 result_file_regex bug
-        use_link = get_settings().get('use_link', True)
+        use_link = get_prefs().get('use_link', True)
         if ST3 and use_link:
             resfr_wa = self.view.settings().get('resfr_wa', False)
             if not resfr_wa:
@@ -379,19 +432,17 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
         global is_working
         if is_working:
             return
-        lh_thread = LogHighlightThread(self.view, True)
-        if ST3:
-            lh_thread.start()
-        else:
-            lh_thread.run()
 
-    # for context menu
+        lhthread = LogHighlightThread(self.view, True)
+        if ST3:
+            lhthread.start()
+        else:
+            lhthread.run()
 
     def is_visible(self):
-        return self.log_check_visible(self.view.file_name(), self.view.name())
+        """ context menu visible """
 
-    def log_check_visible(self, file_name, view_name):
-        lhs = get_settings()
+        lhs = get_prefs()
         if not lhs.get("context_menu", True):
             return False
 
@@ -405,10 +456,10 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
                 return True
 
             # unknow view also passed (like output window)
-            if file_name is None:
+            if self.view.file_name() is None:
                 return True
 
-            _name = file_name if view_name == "" else view_name
+            _name = self.view.file_name() if self.view.name() == "" else self.view.name()
             ext   = os.path.splitext(_name)[1]
             ext   = ext.lower()
 
@@ -419,6 +470,8 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
         except:
             return False
 
+
+##  class LogHighlightEvent  __________________________________
 
 class LogHighlightEvent(sublime_plugin.EventListener):
 
@@ -469,7 +522,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
 
     def on_post_window_command(self, view, command_name, args):
         if command_name == 'show_panel' and 'panel' in args.keys() and args['panel'] == 'output.exec':
-            lhs = get_settings()
+            lhs = get_prefs()
             aut_h = lhs.get("auto_highlight", False)
             if not aut_h:
                 return
@@ -492,7 +545,7 @@ class LogHighlightEvent(sublime_plugin.EventListener):
         return
 
     def auto_highlight(self, view):
-        lhs = get_settings()
+        lhs = get_prefs()
         aut_h = lhs.get("auto_highlight", False)
         if not aut_h:
             return
@@ -506,7 +559,10 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             view.run_command("log_highlight")
 
 
+##  class LogHighlightRefreshThread  __________________________
+
 class LogHighlightRefreshThread(threading.Thread):
+
     def __init__(self, view):
         threading.Thread.__init__(self)
         self.view = view
@@ -547,7 +603,10 @@ class LogHighlightRefreshThread(threading.Thread):
         return
 
 
+##  class LogHighlightThread  _________________________________
+
 class LogHighlightThread(threading.Thread):
+
     def __init__(self, view, is_first):
         threading.Thread.__init__(self)
         self.view     = view
@@ -559,14 +618,17 @@ class LogHighlightThread(threading.Thread):
         except:
             global is_working
             is_working = False
-            traceback.print_exc()
-            sublime.status_message("Log Highlight : There is an unexpected error.")
+            disp_exept()
 
     def run_imp(self):
+        """
+        Log Highligh Main Process
+        """
+
         global is_working
         is_working = True
         log_name   = self.view.file_name()
-        use_link   = get_settings().get('use_link', True)
+        use_link   = get_prefs().get('use_link', True)
 
         # to support unsaved file (like Tail)
         if not log_name:
@@ -662,7 +724,7 @@ class LogHighlightThread(threading.Thread):
             else:
                 sublime.status_message("Log Highlight : Unable to Find Base Directory !")
 
-        lhs = get_settings()
+        lhs = get_prefs()
         goto_error = lhs.get('bookmark_goto_error', True)
         if goto_error:
             sublime.set_timeout(self.go_to_line, 50)
@@ -697,6 +759,7 @@ class LogHighlightThread(threading.Thread):
             f = open(logn, 'r')
             text = str(f.read())
             f.close()
+
         files_l  = re.compile(LINK_REGX_RELPATH).findall(text)
         rel_path = False
         if len(files_l) > 0:
@@ -714,8 +777,8 @@ class LogHighlightThread(threading.Thread):
             return ""
 
     def search_base(self, log_name):
-        srch_opt  = self.view.settings().get('search_base', True)
-        floating  = self.view.settings().get('floating', True)
+        srch_opt = self.view.settings().get('search_base', True)
+        floating = self.view.settings().get('floating', True)
 
         if floating or (not srch_opt):
             self.search_base_success = True
@@ -762,7 +825,7 @@ class LogHighlightThread(threading.Thread):
                     else:
                         new_path = [_path, _depth]
         except PermissionError:
-            pass
+            disp_exept()
 
         if found:
             sublime.status_message("Log Highlight : Found base directory (" + str(scan_path) + ") - " + self.base_dir)
@@ -773,17 +836,19 @@ class LogHighlightThread(threading.Thread):
         return
 
     def enum_severity(self, view):
-        lhs = get_settings()
-        s   = lhs.get('severity')
+        lhs = get_prefs()
+        svt = lhs.get('severity')
+
         self.messages = {}
         self.regions  = {}
         self.n_errors = 0
         self.n_warns  = 0
+
         global severity_list
         for i, k in enumerate(severity_list):
             head = ""
             msg  = ""
-            pat  = (s.get(k)).get('pattern')
+            pat  = (svt.get(k)).get('pattern')
             for i, _pat in enumerate(pat):
                 _pat[0]  = self.conv_for_regx(_pat[0])
                 _pat[1]  = self.conv_for_regx(_pat[1])
@@ -797,11 +862,12 @@ class LogHighlightThread(threading.Thread):
                 self.n_errors   = str(len(region))
             elif k == 'warning':
                 self.n_warns    = str(len(region))
+
         return
 
     def add_bookmarks(self, view):
-        lhs = get_settings()
-        s   = lhs.get('severity')
+        lhs = get_prefs()
+        svt = lhs.get('severity')
         bmark_enable = lhs.get('bookmark_enable', True)
         if not bmark_enable:
             return
@@ -814,7 +880,7 @@ class LogHighlightThread(threading.Thread):
         # bookmark icon
         if ST3:
             for i, k in enumerate(severity_list):
-                icon = (s.get(k)).get('icon')
+                icon = (svt.get(k)).get('icon')
                 if icon:
                     if icon == 'dot' or icon == 'circle' or icon == 'bookmark':
                         icon = icon
@@ -823,16 +889,17 @@ class LogHighlightThread(threading.Thread):
                     view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
         else:
             for i, k in enumerate(severity_list):
-                icon = (s.get(k)).get('icon')
+                icon = (svt.get(k)).get('icon')
                 if icon:
                     if icon == 'dot' or icon == 'circle' or icon == 'bookmark':
                         view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
                     else:
                         view.add_regions(k, self.regions[k], "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+
         return
 
     def do_summary(self, view):
-        lhs = get_settings()
+        lhs = get_prefs()
         summary_panel = lhs.get("summary_panel", True)
         if not summary_panel:
             return
@@ -847,10 +914,10 @@ class LogHighlightThread(threading.Thread):
         # summary title
         filt_msg  = ""
         global severity_list
-        s   = lhs.get('severity')
+        svt = lhs.get('severity')
         sml = []
         for i, k in enumerate(severity_list):
-            if (s.get(k)).get('summary', False):
+            if (svt.get(k)).get('summary', False):
                 sml.append(k)
         for i, k in enumerate(sml):
             if i == len(sml) - 1:
@@ -860,9 +927,9 @@ class LogHighlightThread(threading.Thread):
         summary   = "\n" + "Log Highlight Summary ( " + str(self.n_errors) + " ) errors, ( " + str(self.n_warns) + " ) warnings   ( " + log_name + " )\n" + "-" * 100 + "\n"
 
         # summary
-        text      = view.substr(sublime.Region(0, view.size()))
-        text      = text + '\n'  # workaround when there is no '\n' at last
-        ewtext_l  = re.compile(filt_msg, re.MULTILINE | re.DOTALL).findall(text)
+        text     = view.substr(sublime.Region(0, view.size()))
+        text     = text + '\n'  # workaround when there is no '\n' at last
+        ewtext_l = re.compile(filt_msg, re.MULTILINE | re.DOTALL).findall(text)
 
         for txt in ewtext_l:
             if isinstance(txt, tuple):
@@ -875,26 +942,26 @@ class LogHighlightThread(threading.Thread):
                     _str    = re.sub(re.compile(r'[\r\n]+$'), '', txt)
                     summary = summary + _str + '\n\n'
 
-        global g_summary_view
-        g_summary_view = view.window().get_output_panel('loghighlight')
-        g_summary_view.settings().set('loghighlight_summary', True)
-        g_summary_view.settings().set('gutter', True)
-        g_summary_view.settings().set('line_numbers', False)
-        g_summary_view.set_read_only(False)
+        global smry_view
+        smry_view = view.window().get_output_panel('loghighlight')
+        smry_view.settings().set('loghighlight_summary', True)
+        smry_view.settings().set('gutter', True)
+        smry_view.settings().set('line_numbers', False)
+        smry_view.set_read_only(False)
         view.window().run_command("show_panel", {"panel": "output.loghighlight"})
         if lhs.get('use_link', True):
-            g_summary_view.settings().set('result_file_regex', LINK_REGX_RESULT)
+            smry_view.settings().set('result_file_regex', LINK_REGX_RESULT)
             if self.base_dir != "":
-                g_summary_view.settings().set('result_base_dir', self.base_dir)
-        self.set_syntax_theme(g_summary_view)
+                smry_view.settings().set('result_base_dir', self.base_dir)
+        self.set_syntax_theme(smry_view)
         if ST3:
-            g_summary_view.run_command("append", {"characters": summary})
+            smry_view.run_command("append", {"characters": summary})
         else:
-            edit = g_summary_view.begin_edit()
-            g_summary_view.erase(edit, sublime.Region(0, g_summary_view.size()))
-            g_summary_view.insert(edit, g_summary_view.size(), summary)
-            g_summary_view.end_edit(edit)
-        g_summary_view.set_read_only(True)
+            edit = smry_view.begin_edit()
+            smry_view.erase(edit, sublime.Region(0, smry_view.size()))
+            smry_view.insert(edit, smry_view.size(), summary)
+            smry_view.end_edit(edit)
+        smry_view.set_read_only(True)
 
         return
 
@@ -904,13 +971,15 @@ class LogHighlightThread(threading.Thread):
         return _str
 
 
+##  class LogHighlightPanelCommand  ___________________________
+
 class LogHighlightPanelCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         try:
-            if g_summary_view:
-                if bool(g_summary_view.window()):
+            if smry_view:
+                if bool(smry_view.window()):
                     self.view.window().run_command("hide_panel", {"panel": "output.loghighlight"})
                 else:
                     self.view.window().run_command("show_panel", {"panel": "output.loghighlight"})
         except:
-            pass
+            disp_exept()
