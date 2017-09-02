@@ -92,6 +92,34 @@ def check_syntax(view):
         return False
 
 
+def fwrite(fname, text):
+    try:
+        if ST3:
+            with open(fname, "w", newline="") as f:
+                f.write(text)
+        else:
+            f = open(fname, "w")
+            f.write(text)
+            f.close()
+    except Exception as e:
+        disp_exept()
+
+
+def fread(fname):
+    text = ""
+    try:
+        if ST3:
+            with open(fname, "r") as f:
+                text = str(f.read())
+        else:
+            f = open(fname, "r")
+            f.write(text)
+            f.close()
+    except Exception as e:
+        disp_exept()
+        return text
+
+
 def disp_msg(msg):
     if guna_installed:
         GunaApi.alert_message(2, ' Log Highlight : ' + msg, 5, 0)
@@ -187,12 +215,9 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         if not os.path.exists(_user_path):
             os.makedirs(_user_path)
         _tmlang_path = os.path.join(_user_path, 'Log Highlight.tmLanguage')
-        if ST3:
-            f = open(_tmlang_path, "w", newline="")
-        else:
-            f = open(_tmlang_path, "w")
-        f.write(_tmlang)
-        f.close()
+
+        fwrite(_tmlang_path, _tmlang)
+
         return
 
     def gen_syntax_sub_pattern(self, severity):
@@ -358,12 +383,9 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         if not os.path.exists(_user_path):
             os.makedirs(_user_path)
         _tmtheme_path = os.path.join(_user_path, 'Log Highlight.hidden-tmTheme')
-        if ST3:
-            f = open(_tmtheme_path, "w", newline="")
-        else:
-            f = open(_tmtheme_path, "w")
-        f.write(_tmtheme)
-        f.close()
+
+        fwrite(_tmtheme_path, _tmtheme)
+
         return
 
 
@@ -399,8 +421,7 @@ class LogHighlightEraseCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
             except Exception as e:
                 disp_exept()
 
-
-##  class LogHighlightCommand  ________________________________
+##  Log Highlight  ____________________________________________
 
 # to prevent re-run in short time
 is_working  = False
@@ -413,10 +434,15 @@ req_refresh = []
 logh_view   = []
 logh_lastv  = -1
 
+# summary view
+smry_view  = None
+
+##  class LogHighlightCommand  ________________________________
 
 class LogHighlightCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
+
         # workaround for ST3 result_file_regex bug
         use_link = get_prefs().get('use_link', True)
         if ST3 and use_link:
@@ -756,9 +782,7 @@ class LogHighlightThread(threading.Thread):
             text = self.view.substr(sublime.Region(0, self.view.size()))
         else:
             logn = self.view.settings().get('filepath', '')
-            f = open(logn, 'r')
-            text = str(f.read())
-            f.close()
+            text = fread(logn)
 
         files_l  = re.compile(LINK_REGX_RELPATH).findall(text)
         rel_path = False
@@ -976,6 +1000,7 @@ class LogHighlightThread(threading.Thread):
 class LogHighlightPanelCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         try:
+            global smry_view
             if smry_view:
                 if bool(smry_view.window()):
                     self.view.window().run_command("hide_panel", {"panel": "output.loghighlight"})
