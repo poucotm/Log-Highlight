@@ -20,71 +20,6 @@
         </dict>
         <dict>
             <key>begin</key>
-            <string>^Error-\[</string>
-            <key>end</key>
-            <string>^\s*[\n]</string>
-            <key>name</key>
-            <string>msg.error</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#error_link</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#error_quote</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^(["']?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)error</string>
-            <key>beginCaptures</key>
-            <dict>
-                <key>1</key>
-                <dict>
-                    <key>name</key>
-                    <string>msg.error.link</string>
-                </dict>
-            </dict>
-            <key>end</key>
-            <string>[\r\n]</string>
-            <key>name</key>
-            <string>msg.error</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#error_link</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#error_quote</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^\w+:\s*\*E</string>
-            <key>end</key>
-            <string>[\r\n]</string>
-            <key>name</key>
-            <string>msg.error</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#error_link</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#error_quote</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>begin</key>
             <string>^Warning-\[</string>
             <key>end</key>
             <string>^\s*[\n]</string>
@@ -104,7 +39,7 @@
         </dict>
         <dict>
             <key>begin</key>
-            <string>^(["']?[\w\d\:\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)warning</string>
+            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)warning</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
@@ -148,23 +83,74 @@
                 </dict>
             </array>
         </dict>
+        <dict>
+            <key>begin</key>
+            <string>^Error-\[</string>
+            <key>end</key>
+            <string>^\s*[\n]</string>
+            <key>name</key>
+            <string>msg.error</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#error_link</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#error_quote</string>
+                </dict>
+            </array>
+        </dict>
+        <dict>
+            <key>begin</key>
+            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)error</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>msg.error.link</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>[\r\n]</string>
+            <key>name</key>
+            <string>msg.error</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#error_link</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#error_quote</string>
+                </dict>
+            </array>
+        </dict>
+        <dict>
+            <key>begin</key>
+            <string>^\w+:\s*\*E</string>
+            <key>end</key>
+            <string>[\r\n]</string>
+            <key>name</key>
+            <string>msg.error</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#error_link</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#error_quote</string>
+                </dict>
+            </array>
+        </dict>
     </array>
     <key>repository</key>
     <dict>
-        <key>error_link</key>
-        <dict>
-            <key>match</key>
-            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
-            <key>name</key>
-            <string>msg.error.link</string>
-        </dict>
-        <key>error_quote</key>
-        <dict>
-            <key>match</key>
-            <string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-            <key>name</key>
-            <string>msg.error.quote</string>
-        </dict>
         <key>warning_link</key>
         <dict>
             <key>match</key>
@@ -178,6 +164,20 @@
             <string>(["'])(?:(?=(\\?))\2.)*?\1</string>
             <key>name</key>
             <string>msg.warning.quote</string>
+        </dict>
+        <key>error_link</key>
+        <dict>
+            <key>match</key>
+            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
+            <key>name</key>
+            <string>msg.error.link</string>
+        </dict>
+        <key>error_quote</key>
+        <dict>
+            <key>match</key>
+            <string>(["'])(?:(?=(\\?))\2.)*?\1</string>
+            <key>name</key>
+            <string>msg.error.quote</string>
         </dict>
     </dict>
     <key>scopeName</key>

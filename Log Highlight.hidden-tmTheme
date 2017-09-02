@@ -19,27 +19,7 @@
         </dict>
         <dict>
             <key>scope</key>
-            <string>msg.error.link</string>
-            <key>settings</key>
-            <dict>
-                <key>foreground</key><string>#E6DB74</string>
-                <!-- <key>fontStyle</key> -->
-                <!-- <string>bold</string> -->
-            </dict>
-        </dict>
-        <dict>
-            <key>scope</key>
-            <string>msg.error</string>
-            <key>settings</key>
-            <dict>
-                <key>foreground</key><string>#F92672</string>
-                <!-- <key>fontStyle</key> -->
-                <!-- <string>bold</string> -->
-            </dict>
-        </dict>
-        <dict>
-            <key>scope</key>
-            <string>msg.error.quote</string>
+            <string>msg.warning.quote</string>
             <key>settings</key>
             <dict>
                 <key>foreground</key><string>#4F99D3</string>
@@ -69,10 +49,30 @@
         </dict>
         <dict>
             <key>scope</key>
-            <string>msg.warning.quote</string>
+            <string>msg.error.quote</string>
             <key>settings</key>
             <dict>
                 <key>foreground</key><string>#4F99D3</string>
+                <!-- <key>fontStyle</key> -->
+                <!-- <string>bold</string> -->
+            </dict>
+        </dict>
+        <dict>
+            <key>scope</key>
+            <string>msg.error.link</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key><string>#E6DB74</string>
+                <!-- <key>fontStyle</key> -->
+                <!-- <string>bold</string> -->
+            </dict>
+        </dict>
+        <dict>
+            <key>scope</key>
+            <string>msg.error</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key><string>#F92672</string>
                 <!-- <key>fontStyle</key> -->
                 <!-- <string>bold</string> -->
             </dict>
