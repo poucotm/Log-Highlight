@@ -3,15 +3,13 @@
 [![Package Control](https://packagecontrol.herokuapp.com/downloads/Log%20Highlight.svg?style=round-square)](https://packagecontrol.io/packages/Log%20Highlight)
 
 Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme & extensible severity levels.
-Open `.log` file and run `Log Highlight` in the context menu or `Log Highlight : Highlight Error/Warning` in the command palette.
+Open a log file (like .log) and run __Log Highlight__ in the context menu or __Log Highlight : Highlight Error/Warning__ in the command palette.
 
-(Build Window)
-
-![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-build.png)
-
-(Log File)
-
+(Log File - autohighlight off)  
 ![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-log.gif)
+
+(Build Window - autohighlight off)  
+![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/lh-build.gif)
 
 ## Features
 ***********
@@ -32,7 +30,7 @@ After changing syntax and color scheme in **settings**, run `Log Hightlight: Gen
 
 #### Extensible Severity Levels
 
-You can add, remove, change severity levels like debug/notice/emergency in **settings**, run `Log Hightlight: Generate Custom Syntax & Theme` command. You may have to restart sublime text once.
+You can add, remove, change severity levels like debug/notice/emergency in **settings**, run __Log Hightlight: Generate Custom Syntax & Theme__ command. You may have to restart sublime text once.
 
 #### Bookmarks
 
@@ -64,8 +62,8 @@ Log Highlight can be used for Build Window or Unsaved View. But relative path li
 
 #### Restore Settings :
 
-Use `Log Hightlight: Erase Custom Syntax & Theme` in the command palette Or  
-Just remove `Packages/User/Log Highlight.tmLanguage`, `Log Highlight.hidden-tmTheme`
+Use __Log Hightlight: Erase Custom Syntax & Theme__ in the command palette Or  
+Just remove __Packages/User/Log Highlight.tmLanguage__, __Log Highlight.hidden-tmTheme__
 
 #### Pattern Regular Expression in Settings :
 
