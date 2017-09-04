@@ -1,4 +1,8 @@
 {
+
+	/*  Configuration  ____________________________________________
+	*/
+
 	// enable context menu
 	"context_menu": true,
 
@@ -8,11 +12,27 @@
 	// log file extension
 	"log_ext": [ ".log" ], // use ".*" for all file extensions - but can not use `Auto Highlight`
 
+	// "compile" - link, summary, bookmark are usable, "system" - only for highlight
+	"log_type": "compile",
+
+	/*  Options for `compile` type log  ___________________________
+	*/
+
 	// use clickable link or not
 	"use_link": true,
 
 	// search base directory automatically for relative path
 	"search_base": true,
+
+	// summary panel
+	"summary_panel": true,         // show summary panel
+
+	// bookmark
+	"bookmark_enable": true,       // enable/disable bookmarks
+	"bookmark_goto_error": true,   // automatically go to 1st error line
+
+	/*  Log Syntax, Color scheme  _________________________________
+	*/
 
 	// severity level
 	"severity" : {
@@ -85,12 +105,6 @@
 		"selectionBorder" : "#181E26",
 		"lineHighlight"   : "#283240",
 		"summary_title"   : "#D7D7D7"
-	},
+	}
 
-	// summary panel
-	"summary_panel": true,         // show summary panel
-
-	// bookmark
-	"bookmark_enable": true,       // enable/disable bookmarks
-	"bookmark_goto_error": true    // automatically go to 1st error line
 }

@@ -92,6 +92,28 @@ def check_syntax(view):
         return False
 
 
+def is_compile_type():
+    ltype = get_prefs().get('log_type', 'compile')
+    if isinstance(ltype, str) and ltype.lower() == 'system':
+        return False
+    else:
+        return True
+
+
+def set_syntax_theme(view):
+    usr_syntax = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmLanguage')
+    if os.path.exists(usr_syntax):
+        view.set_syntax_file('Packages/User/Log Highlight.tmLanguage')
+    else:
+        view.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
+
+    usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.hidden-tmTheme')
+    if os.path.exists(usr_theme):
+        view.settings().set('color_scheme', 'Packages/User/Log Highlight.hidden-tmTheme')
+    else:
+        view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+
+
 def fwrite(fname, text):
     try:
         if ST3:
@@ -443,6 +465,12 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
 
+        # check log type
+        ltype = get_prefs().get('log_type', 'compile')
+        if isinstance(ltype, str) and ltype.lower() == 'system':
+            set_syntax_theme(self.view)
+            return
+
         # workaround for ST3 result_file_regex bug
         use_link = get_prefs().get('use_link', True)
         if ST3 and use_link:
@@ -514,6 +542,9 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             self.auto_highlight(view)
 
     def on_modified(self, view):
+        if is_compile_type():  # nothing to do
+            return
+
         if ST3:
             return
         global logh_view
@@ -535,6 +566,9 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             self.auto_highlight(view)
 
     def on_modified_async(self, view):
+        if is_compile_type():  # nothing to do
+            return
+
         global logh_view
         for i, vid in enumerate(logh_view):
             if view.id() == vid[0] or view.is_loading():
@@ -678,7 +712,7 @@ class LogHighlightThread(threading.Thread):
         # workaround for output panel
         if self.is_first or self.view.file_name() is None:
             # set syntax for coloring / set read only
-            self.set_syntax_theme(self.view)
+            set_syntax_theme(self.view)
             # self.view.set_read_only(True) # cannot call on_modified
             self.view.settings().set("always_prompt_for_file_reload", False)
 
@@ -760,20 +794,6 @@ class LogHighlightThread(threading.Thread):
         # go to 1st error line
         if self.goto_line is not None:
             self.view.show(self.goto_line)
-
-    def set_syntax_theme(self, view):
-        usr_syntax = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmLanguage')
-        if os.path.exists(usr_syntax):
-            view.set_syntax_file('Packages/User/Log Highlight.tmLanguage')
-        else:
-            view.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
-
-        usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.hidden-tmTheme')
-        if os.path.exists(usr_theme):
-            view.settings().set('color_scheme', 'Packages/User/Log Highlight.hidden-tmTheme')
-        else:
-            view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
-        return
 
     def get_rel_path_file(self):
         # to support unsaved file (like Tail)
@@ -977,7 +997,7 @@ class LogHighlightThread(threading.Thread):
             smry_view.settings().set('result_file_regex', LINK_REGX_RESULT)
             if self.base_dir != "":
                 smry_view.settings().set('result_base_dir', self.base_dir)
-        self.set_syntax_theme(smry_view)
+        set_syntax_theme(smry_view)
         if ST3:
             smry_view.run_command("append", {"characters": summary})
         else:
