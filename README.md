@@ -1,6 +1,7 @@
 # Log Highlight for Sublime Text
 
 [![Package Control](https://packagecontrol.herokuapp.com/downloads/Log%20Highlight.svg?style=round-square)](https://packagecontrol.io/packages/Log%20Highlight)
+[![PayPal](https://img.shields.io/badge/paypal-donate-blue.svg)][PM]
 
 Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme & extensible severity levels.
 Open a log file (like .log) and run __*Log Highlight*__ in the context menu or __*Log Highlight : Highlight Error/Warning*__ in the command palette.
@@ -72,7 +73,7 @@ Log Highlight can be used for Build Window or Unsaved View. But relative path li
 
 ### Settings
 
-Please, refer to [__Log Highlight.sublime-settings__](https://github.com/poucotm/Log-Highlight/blob/master/Log%20Highlight.sublime-settings), Usable Icons : [__Icon List__](https://github.com/poucotm/Log-Highlight/tree/master/icons)
+Please, refer to [__Log Highlight.sublime-settings__](https://github.com/poucotm/Log-Highlight/blob/master/Log%20Highlight.sublime-settings), Available Icons : [__Icon List__](https://github.com/poucotm/Log-Highlight/tree/master/icons)
 
 - __Regular Expression Pattern in Settings__
 
@@ -99,9 +100,12 @@ Just remove __*Packages/User/Log Highlight.tmLanguage*__, __*Log Highlight.hidde
 
 ### Donate
 
-[![Doate Image](https://raw.githubusercontent.com/poucotm/Links/master/image/PayPal/donate-paypal.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=89YVNDSC7DZHQ "PayPal")  
+[![Doate Image](https://raw.githubusercontent.com/poucotm/Links/master/image/PayPal/donate-paypal.png)][PM]  
 Thank you for donating. It is helpful to continue to improve the plug-in.
 
 ### Issues
 
 When you have an issue, tell me through [https://github.com/poucotm/Log-Highlight/issues](https://github.com/poucotm/Log-Highlight/issues), or send me an e-mail poucotm@gmail.com
+
+[PP]:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=89YVNDSC7DZHQ "PayPal"
+[PM]:https://www.paypal.me/poucotm/2.5 "PayPal"

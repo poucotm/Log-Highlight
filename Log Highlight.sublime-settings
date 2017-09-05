@@ -22,7 +22,13 @@
 	"use_link": true,
 
 	// search base directory automatically for relative path
-	"search_base": true,
+	"search_base": {
+		"enable" : true,
+		// hidden folders are ignored as default, like .git, .svn
+		"ignore_dir" : [""],
+		// adjust when using network like samba
+		"max_scan_path" : 1000
+	},
 
 	// summary panel
 	"summary_panel": true,         // show summary panel

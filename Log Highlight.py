@@ -19,7 +19,7 @@ import traceback
 try:
     from Guna.core.api import GunaApi
     guna_installed = True
-except Exception as e:
+except Exception:
     guna_installed = False
 
 
@@ -123,7 +123,7 @@ def fwrite(fname, text):
             f = open(fname, "w")
             f.write(text)
             f.close()
-    except Exception as e:
+    except Exception:
         disp_exept()
 
 
@@ -137,7 +137,7 @@ def fread(fname):
             f = open(fname, "r")
             f.write(text)
             f.close()
-    except Exception as e:
+    except Exception:
         disp_exept()
         return text
 
@@ -151,7 +151,7 @@ def disp_msg(msg):
 
 def disp_error(msg):
     if guna_installed:
-        GunaApi.alert_message(3, ' Log Highlight : ' + msg, 15, 1)
+        GunaApi.alert_message(3, ' Log Highlight : ' + msg, 10, 1)
     else:
         sublime.status_message(' Log Highlight : ' + msg)
 
@@ -440,7 +440,7 @@ class LogHighlightEraseCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
                 if os.path.exists(usr_theme):
                     os.remove(usr_theme)
 
-            except Exception as e:
+            except Exception:
                 disp_exept()
 
 ##  Log Highlight  ____________________________________________
@@ -521,7 +521,7 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
                 return True
             else:
                 return False
-        except:
+        except Exception:
             return False
 
 
@@ -675,7 +675,7 @@ class LogHighlightThread(threading.Thread):
     def run(self):
         try:
             self.run_imp()
-        except:
+        except Exception:
             global is_working
             is_working = False
             disp_exept()
@@ -776,8 +776,9 @@ class LogHighlightThread(threading.Thread):
         if self.try_search_base:
             if self.search_base_success:
                 floating  = self.view.settings().get('floating', True)
-                srch_opt  = self.view.settings().get('search_base', True)
-                if (not floating) and srch_opt:
+                srch_opt  = get_prefs().get('search_base', [])
+                srcn_en   = srch_opt.get('enable', True)
+                if (not floating) and srcn_en:
                     sublime.status_message("Log Highlight : Found Base Directory - " + self.base_dir)
                 else:
                     sublime.status_message("Log Highlight : Skipped to search base directory")
@@ -821,10 +822,11 @@ class LogHighlightThread(threading.Thread):
             return ""
 
     def search_base(self, log_name):
-        srch_opt = self.view.settings().get('search_base', True)
+        srch_opt = get_prefs().get('search_base', [])
+        srcn_en  = srch_opt.get('enable', True)
         floating = self.view.settings().get('floating', True)
 
-        if floating or (not srch_opt):
+        if floating or (not srcn_en):
             self.search_base_success = True
             self.base_dir = "."
             sublime.status_message("Log Highlight : Skipped to search base directory")
@@ -836,7 +838,8 @@ class LogHighlightThread(threading.Thread):
         if file_name == "":
             return
 
-        sublime.status_message("Log Highlight : Searching base directory ...")
+        excludes  = srch_opt.get('ignore_dir', [])
+        max_scan  = srch_opt.get('max_scan_path', MAX_SCAN_PATH)
         old_path  = ["", 0]
         _path     = os.path.dirname(log_name)
         _depth    = _path.count(os.path.sep)
@@ -844,31 +847,43 @@ class LogHighlightThread(threading.Thread):
         scan_path = 0
         found     = False
         try:
-            for i in range(MAX_STAIR_UP_PATH):
-                for _dir in os.walk(new_path[0]):
-                    if i == 0 or not _dir[0].startswith(old_path[0]):
-                        sublime.status_message("Log Highlight : Searching - " + _dir[0])
-                        # print (_dir[0])
-                        if os.path.isfile(os.path.join(_dir[0], file_name)):
-                            self.base_dir = _dir[0]
-                            found = True
-                            break
-                        else:
-                            scan_path = scan_path + 1
-                            if scan_path > MAX_SCAN_PATH - 1:
-                                break
-                if found or scan_path > MAX_SCAN_PATH - 1:
+            # check open folder first
+            for root in sublime.active_window().folders():
+                if os.path.isfile(os.path.join(root, file_name)):
+                    self.base_dir = root
+                    found = True
                     break
-                else:
-                    # print ("Searching Uppder Directory")
-                    old_path = [new_path[0], new_path[0].count(os.path.sep)]
-                    _path    = os.path.dirname(old_path[0])
-                    _depth   = _path.count(os.path.sep)
-                    if old_path[1] == _depth or _depth < 1:  # to stop level 1 (old_path[1] == _depth == 1)
+
+            if not found:
+                # scanning near the log
+                for i in range(MAX_STAIR_UP_PATH):
+                    for root, dirs, files in os.walk(new_path[0]):
+                        dirs[:] = [d for d in dirs if (d not in excludes) and d[0] != '.']
+                        if i == 0 or not root.startswith(old_path[0]):
+                            sublime.status_message("Log Highlight : Searching - " + root)
+                            # print (root)
+                            if os.path.isfile(os.path.join(root, file_name)):
+                                self.base_dir = root
+                                found = True
+                                break
+                            else:
+                                scan_path = scan_path + 1
+                                if scan_path > max_scan - 1:
+                                    break
+                    if found or scan_path > max_scan - 1:
                         break
                     else:
-                        new_path = [_path, _depth]
-        except PermissionError:
+                        # print ("Searching Uppder Directory")
+                        old_path = [new_path[0], new_path[0].count(os.path.sep)]
+                        _path    = os.path.dirname(old_path[0])
+                        _depth   = _path.count(os.path.sep)
+                        if old_path[1] == _depth or _depth < 1:  # to stop level 1 (old_path[1] == _depth == 1)
+                            break
+                        else:
+                            new_path = [_path, _depth]
+            pass
+
+        except Exception:
             disp_exept()
 
         if found:
@@ -1018,6 +1033,7 @@ class LogHighlightThread(threading.Thread):
 ##  class LogHighlightPanelCommand  ___________________________
 
 class LogHighlightPanelCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         try:
             global smry_view
@@ -1026,5 +1042,28 @@ class LogHighlightPanelCommand(sublime_plugin.TextCommand):
                     self.view.window().run_command("hide_panel", {"panel": "output.loghighlight"})
                 else:
                     self.view.window().run_command("show_panel", {"panel": "output.loghighlight"})
-        except:
+        except Exception:
+            disp_exept()
+
+
+##  class LogHighlightSetAsBaseCommand  _______________________
+
+class LogHighlightSetAsBaseCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit, **args):
+        try:
+            path = args.get('paths', [])[0]
+            if os.path.isfile(path):
+                path = os.path.dirname(path)
+
+            view = sublime.active_window().active_view()
+            if check_syntax(view):
+                disp_msg('base directory of current log is set as : ' + path)
+                self.view.settings().set('result_base_dir', path)
+                global smry_view
+                if smry_view is not None:
+                    smry_view.settings().set('result_base_dir', path)
+            pass
+
+        except Exception:
             disp_exept()
