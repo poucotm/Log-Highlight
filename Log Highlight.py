@@ -542,9 +542,6 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             self.auto_highlight(view)
 
     def on_modified(self, view):
-        if is_compile_type():  # nothing to do
-            return
-
         if ST3:
             return
         global logh_view
@@ -566,9 +563,6 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             self.auto_highlight(view)
 
     def on_modified_async(self, view):
-        if is_compile_type():  # nothing to do
-            return
-
         global logh_view
         for i, vid in enumerate(logh_view):
             if view.id() == vid[0] or view.is_loading():
@@ -936,7 +930,8 @@ class LogHighlightThread(threading.Thread):
         if len(region) > 0:
             self.goto_line = region[0]
 
-        # bookmark icon
+        # bookmark icon / navigation
+        regions_all = []
         if ST3:
             for i, k in enumerate(severity_list):
                 icon = (svt.get(k)).get('icon')
@@ -946,6 +941,8 @@ class LogHighlightThread(threading.Thread):
                     else:
                         icon = "Packages/Log Highlight/icons/" + icon
                     view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
+                for r in self.regions[k]:
+                    regions_all.append(r)
         else:
             for i, k in enumerate(severity_list):
                 icon = (svt.get(k)).get('icon')
@@ -954,8 +951,14 @@ class LogHighlightThread(threading.Thread):
                         view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
                     else:
                         view.add_regions(k, self.regions[k], "bookmarks", "dot", sublime.HIDDEN | sublime.PERSISTENT)
+                for r in self.regions[k]:
+                    regions_all.append(r)
+
+        # for navigation
+        view.add_regions("bookmarks", regions_all, "bookmarks", '', sublime.HIDDEN | sublime.PERSISTENT)
 
         return
+
 
     def do_summary(self, view):
         lhs = get_prefs()

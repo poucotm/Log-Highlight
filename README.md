@@ -31,11 +31,11 @@ Open a log file (like .log) and run __*Log Highlight*__ in the context menu or _
 
 #### Customizable Syntax & Color Scheme
 
-After changing syntax and color scheme in __*Log Highlight.sublime-settings*__, run __*Log Hightlight: Generate Custom Syntax & Theme*__ command. You may have to restart sublime text once.
+After changing syntax and color scheme in __*Log Highlight.sublime-settings*__, run __*Log Highlight: Generate Custom Syntax & Theme*__ command. You may have to restart sublime text once.
 
 #### Extensible Severity Levels
 
-You can add, remove, change severity levels like debug/notice/emergency in __*Log Highlight.sublime-settings*__, run __*Log Hightlight: Generate Custom Syntax & Theme*__ command. You may have to restart sublime text once.
+You can add, remove, change severity levels like debug/notice/emergency in __*Log Highlight.sublime-settings*__, run __*Log Highlight: Generate Custom Syntax & Theme*__ command. You may have to restart sublime text once.
 
 #### Separate Log Types
 
@@ -45,7 +45,7 @@ You can set the log type in settings
 
 #### Bookmarks
 
-When errors/warnings found, it will add bookmarks for them for each icon.
+When errors/warnings found, it will add bookmarks for them for each icon. Bookmark navigation is enabled(restored) from v1.8.0. You can use bookmark keys like __*F2*__.
 
 #### Go To Position
 
@@ -95,7 +95,7 @@ error ../src/foo.cpp:40
 
 - __Restore Settings__
 
-Use __*Log Hightlight: Erase Custom Syntax & Theme*__ in the command palette Or  
+Use __*Log Highlight: Erase Custom Syntax & Theme*__ in the command palette Or  
 Just remove __*Packages/User/Log Highlight.tmLanguage*__, __*Log Highlight.hidden-tmTheme*__
 
 ### Donate
