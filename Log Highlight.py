@@ -167,11 +167,11 @@ def disp_exept():
 
 # Regular expresson constants
 
-LINK_REGX_PLIST    = r"""["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?"""
-LINK_REGX_SETTING  = r"""(["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)"""
-LINK_REGX_RESULT   = r"""["']?([\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line\(]{1,5}\s*(\d+)\)?"""
-LINK_REGX_RELPATH  = r"""["']?([\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:line\(]{1,5}\s*\d+\)?"""
-LINK_REGX_SUMMARY  = r"""(?:["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)"""
+LINK_REGX_PLIST    = r"""["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?"""
+LINK_REGX_SETTING  = r"""(["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?)"""
+LINK_REGX_RESULT   = r"""["']?([\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:on line\(]{1,9}\s*(\d+)\)?"""
+LINK_REGX_RELPATH  = r"""["']?([\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*)["']?\s*[,:on line\(]{1,9}\s*\d+\)?"""
+LINK_REGX_SUMMARY  = r"""(?:["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?)"""
 
 QUOTE_REGX_PLIST   = r"""(["'])(?:(?=(\\?))\2.)*?\1"""
 QUOTE_REGX_SETTING = r"""(["'].+?["'])"""
@@ -802,7 +802,9 @@ class LogHighlightThread(threading.Thread):
         files_l  = re.compile(LINK_REGX_RELPATH).findall(text)
         rel_path = False
         if len(files_l) > 0:
+            print (files_l)
             for file_name in files_l:
+                print (file_name)
                 if not os.path.isabs(file_name):  # use the first in relative path list
                     rel_path = True
                     break

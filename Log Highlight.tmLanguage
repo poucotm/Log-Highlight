@@ -20,71 +20,6 @@
         </dict>
         <dict>
             <key>begin</key>
-            <string>^Warning-\[</string>
-            <key>end</key>
-            <string>^\s*[\n]</string>
-            <key>name</key>
-            <string>msg.warning</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#warning_link</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#warning_quote</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)warning</string>
-            <key>beginCaptures</key>
-            <dict>
-                <key>1</key>
-                <dict>
-                    <key>name</key>
-                    <string>msg.warning.link</string>
-                </dict>
-            </dict>
-            <key>end</key>
-            <string>[\r\n]</string>
-            <key>name</key>
-            <string>msg.warning</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#warning_link</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#warning_quote</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>begin</key>
-            <string>^\w+:\s*\*W</string>
-            <key>end</key>
-            <string>[\r\n]</string>
-            <key>name</key>
-            <string>msg.warning</string>
-            <key>patterns</key>
-            <array>
-                <dict>
-                    <key>include</key>
-                    <string>#warning_link</string>
-                </dict>
-                <dict>
-                    <key>include</key>
-                    <string>#warning_quote</string>
-                </dict>
-            </array>
-        </dict>
-        <dict>
-            <key>begin</key>
             <string>^Error-\[</string>
             <key>end</key>
             <string>^\s*[\n]</string>
@@ -104,7 +39,7 @@
         </dict>
         <dict>
             <key>begin</key>
-            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?)?[^\r\n]*?(?i)error</string>
+            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?)?[^\r\n]*?(?i)error</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
@@ -148,27 +83,78 @@
                 </dict>
             </array>
         </dict>
+        <dict>
+            <key>begin</key>
+            <string>^Warning-\[</string>
+            <key>end</key>
+            <string>^\s*[\n]</string>
+            <key>name</key>
+            <string>msg.warning</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#warning_link</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#warning_quote</string>
+                </dict>
+            </array>
+        </dict>
+        <dict>
+            <key>begin</key>
+            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?)?[^\r\n]*?(?i)warning</string>
+            <key>beginCaptures</key>
+            <dict>
+                <key>1</key>
+                <dict>
+                    <key>name</key>
+                    <string>msg.warning.link</string>
+                </dict>
+            </dict>
+            <key>end</key>
+            <string>[\r\n]</string>
+            <key>name</key>
+            <string>msg.warning</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#warning_link</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#warning_quote</string>
+                </dict>
+            </array>
+        </dict>
+        <dict>
+            <key>begin</key>
+            <string>^\w+:\s*\*W</string>
+            <key>end</key>
+            <string>[\r\n]</string>
+            <key>name</key>
+            <string>msg.warning</string>
+            <key>patterns</key>
+            <array>
+                <dict>
+                    <key>include</key>
+                    <string>#warning_link</string>
+                </dict>
+                <dict>
+                    <key>include</key>
+                    <string>#warning_quote</string>
+                </dict>
+            </array>
+        </dict>
     </array>
     <key>repository</key>
     <dict>
-        <key>warning_link</key>
-        <dict>
-            <key>match</key>
-            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
-            <key>name</key>
-            <string>msg.warning.link</string>
-        </dict>
-        <key>warning_quote</key>
-        <dict>
-            <key>match</key>
-            <string>(["'])(?:(?=(\\?))\2.)*?\1</string>
-            <key>name</key>
-            <string>msg.warning.quote</string>
-        </dict>
         <key>error_link</key>
         <dict>
             <key>match</key>
-            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:line\(]{1,5}\s*\d+\)?</string>
+            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?</string>
             <key>name</key>
             <string>msg.error.link</string>
         </dict>
@@ -178,6 +164,20 @@
             <string>(["'])(?:(?=(\\?))\2.)*?\1</string>
             <key>name</key>
             <string>msg.error.quote</string>
+        </dict>
+        <key>warning_link</key>
+        <dict>
+            <key>match</key>
+            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?</string>
+            <key>name</key>
+            <string>msg.warning.link</string>
+        </dict>
+        <key>warning_quote</key>
+        <dict>
+            <key>match</key>
+            <string>(["'])(?:(?=(\\?))\2.)*?\1</string>
+            <key>name</key>
+            <string>msg.warning.quote</string>
         </dict>
     </dict>
     <key>scopeName</key>
