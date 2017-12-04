@@ -843,12 +843,22 @@ class LogHighlightThread(threading.Thread):
         scan_path = 0
         found     = False
         try:
-            # check open folder first
-            for root in sublime.active_window().folders():
+            # check projct file
+            prjf = self.view.window().project_file_name()
+            if prjf != "":
+                pdat = self.view.window().project_data()
+                root = pdat.get('base_dir')
                 if os.path.isfile(os.path.join(root, file_name)):
                     self.base_dir = root
                     found = True
-                    break
+
+            # check open folder first
+            if not found:
+                for root in sublime.active_window().folders():
+                    if os.path.isfile(os.path.join(root, file_name)):
+                        self.base_dir = root
+                        found = True
+                        break
 
             if not found:
                 # scanning near the log
@@ -1068,6 +1078,12 @@ class LogHighlightSetAsBaseCommand(sublime_plugin.TextCommand):
                 global smry_view
                 if smry_view is not None:
                     smry_view.settings().set('result_base_dir', path)
+                # save to project
+                prj = view.window().project_file_name()
+                if prj != "":
+                    pdata = view.window().project_data()
+                    pdata['base_dir'] = path
+                    view.window().set_project_data(pdata)
             pass
 
         except Exception:
