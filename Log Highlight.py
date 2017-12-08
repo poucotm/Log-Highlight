@@ -802,9 +802,7 @@ class LogHighlightThread(threading.Thread):
         files_l  = re.compile(LINK_REGX_RELPATH).findall(text)
         rel_path = False
         if len(files_l) > 0:
-            print (files_l)
             for file_name in files_l:
-                print (file_name)
                 if not os.path.isabs(file_name):  # use the first in relative path list
                     rel_path = True
                     break
@@ -845,12 +843,13 @@ class LogHighlightThread(threading.Thread):
         try:
             # check projct file
             prjf = self.view.window().project_file_name()
-            if prjf != "":
-                pdat = self.view.window().project_data()
-                root = pdat.get('base_dir')
-                if os.path.isfile(os.path.join(root, file_name)):
-                    self.base_dir = root
-                    found = True
+            if isinstance(prjf, str):
+                if prjf != "":
+                    pdat = self.view.window().project_data()
+                    root = pdat.get('base_dir')
+                    if os.path.isfile(os.path.join(root, file_name)):
+                        self.base_dir = root
+                        found = True
 
             # check open folder first
             if not found:
