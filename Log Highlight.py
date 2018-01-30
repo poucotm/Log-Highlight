@@ -841,12 +841,14 @@ class LogHighlightThread(threading.Thread):
         scan_path = 0
         found     = False
         try:
-            # check projct file
+            # check project file
             prjf = self.view.window().project_file_name()
             if isinstance(prjf, str) and prjf != "":
                 pdat = self.view.window().project_data()
+                pdir = os.path.dirname(prjf)
                 root = pdat.get('base_dir')
-                if isinstance(root, str) and os.path.isfile(os.path.join(root, file_name)):
+                cpth = os.path.join(pdir, root)
+                if isinstance(root, str) and os.path.isfile(os.path.join(cpth, file_name)):
                     self.base_dir = root
                     found = True
 
@@ -1077,10 +1079,13 @@ class LogHighlightSetAsBaseCommand(sublime_plugin.TextCommand):
                 if smry_view is not None:
                     smry_view.settings().set('result_base_dir', path)
                 # save to project
-                prj = view.window().project_file_name()
-                if prj != "":
+                proj = view.window().project_file_name()
+                pdir = os.path.dirname(proj)
+                rpth = os.path.relpath(path, pdir)
+
+                if proj != "":
                     pdata = view.window().project_data()
-                    pdata['base_dir'] = path
+                    pdata['base_dir'] = rpth
                     view.window().set_project_data(pdata)
             pass
 
