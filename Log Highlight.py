@@ -950,9 +950,11 @@ class LogHighlightThread(threading.Thread):
                 if icon:
                     if icon == 'dot' or icon == 'circle' or icon == 'bookmark':
                         icon = icon
+                        scpe = 'msg.' + k
                     else:
                         icon = "Packages/Log Highlight/icons/" + icon
-                    view.add_regions(k, self.regions[k], "bookmarks", icon, sublime.HIDDEN | sublime.PERSISTENT)
+                        scpe = 'bookmark'
+                    view.add_regions(k, self.regions[k], scpe, icon, sublime.HIDDEN | sublime.PERSISTENT)
                 for r in self.regions[k]:
                     regions_all.append(r)
         else:
