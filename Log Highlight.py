@@ -847,10 +847,11 @@ class LogHighlightThread(threading.Thread):
                 pdat = self.view.window().project_data()
                 pdir = os.path.dirname(prjf)
                 root = pdat.get('base_dir')
-                cpth = os.path.join(pdir, root)
-                if isinstance(root, str) and os.path.isfile(os.path.join(cpth, file_name)):
-                    self.base_dir = root
-                    found = True
+                if isinstance(root, str) and root != "":
+                    cpth = os.path.join(pdir, root)
+                    if os.path.isfile(os.path.join(cpth, file_name)):
+                        self.base_dir = root
+                        found = True
 
             # check open folder first
             if not found:
