@@ -1068,6 +1068,10 @@ class LogHighlightPanelCommand(sublime_plugin.TextCommand):
 
 class LogHighlightSetAsBaseCommand(sublime_plugin.TextCommand):
 
+    def is_visible(self):
+        srch_opt = get_prefs().get('search_base', [])
+        return srch_opt.get('sidebar_enable', True)
+
     def run(self, edit, **args):
         try:
             path = args.get('paths', [])[0]
