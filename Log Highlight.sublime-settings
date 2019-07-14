@@ -9,6 +9,9 @@
 	// Auto Highlight for a log file, build window
 	"auto_highlight" : true,
 
+	// Output panel list for Auto Highlight
+	"auto_highlight_output_panel": ["exec"],
+
 	// log file extension
 	"log_ext": [ ".log" ], // use ".*" for all file extensions - but can not use `Auto Highlight`
 

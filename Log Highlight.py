@@ -144,7 +144,7 @@ def fread(fname):
 
 def disp_msg(msg):
     if guna_installed:
-        GunaApi.alert_message(2, ' Log Highlight : ' + msg, 5, 0)
+        GunaApi.info_message(24, ' Log Highlight : ' + msg, 5, 1)
     else:
         sublime.status_message(' Log Highlight : ' + msg)
 
@@ -575,14 +575,17 @@ class LogHighlightEvent(sublime_plugin.EventListener):
         return
 
     def on_post_window_command(self, view, command_name, args):
-        if command_name == 'show_panel' and 'panel' in args.keys() and args['panel'] == 'output.exec':
+        if command_name == 'show_panel' and 'panel' in args.keys():
             lhs = get_prefs()
             aut_h = lhs.get("auto_highlight", False)
             if not aut_h:
                 return
-            bwin = view.get_output_panel('exec')
-            if not check_syntax(bwin):
-                bwin.run_command("log_highlight")
+            out_l = lhs.get("auto_highlight_output_panel", None)
+            out_p = [e for e in out_l if 'output.'+e == args['panel']]
+            if len(out_p) > 0:
+                bwin = view.find_output_panel(out_p[0])
+                if not check_syntax(bwin):
+                    bwin.run_command("log_highlight")
         return
 
     def on_close(self, view):
@@ -939,9 +942,10 @@ class LogHighlightThread(threading.Thread):
             return
 
         # goto 1st error line
-        region = self.regions['error']
-        if len(region) > 0:
-            self.goto_line = region[0]
+        if 'error' in self.regions:
+            region = self.regions['error']
+            if len(region) > 0:
+                self.goto_line = region[0]
 
         # bookmark icon / navigation
         regions_all = []
