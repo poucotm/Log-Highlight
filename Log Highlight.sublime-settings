@@ -57,12 +57,12 @@
 				[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
 				// <-- Remove, Change, Add More Patterns Here -->
 			],
-			"color" : {
-				"base"  : "#F92672", // error message
-				"link"  : "#E6DB74", // link in error message
-				"quote" : "#4F99D3"  // quote in error message
+			"color" : { // ["foreground", "background"]
+				"base"  : ["#F92672", "#0000ff"], // error message
+				"link"  : ["#E6DB74", ""], // link in error message
+				"quote" : ["#4F99D3", ""], // quote in error message
 			},
-			"icon"  : "Danish Royalty/error.png"   // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+			"icon"  : "Danish Royalty/error.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
 		},
 
 		// warning ________________________________________________
@@ -76,12 +76,12 @@
 				[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
 				// <-- Remove, Change, Add More Patterns Here -->
 			],
-			"color" : {
-				"base"  : "#A1B347", // warning message
-				"link"  : "#FD971F", // link in warning message
-				"quote" : "#4F99D3"  // quote in warning message
+			"color" : { // ["foreground", "background"]
+				"base"  : ["#A1B347", ""], // warning message
+				"link"  : ["#FD971F", ""], // link in warning message
+				"quote" : ["#4F99D3", ""], // quote in warning message
 			},
-			"icon"  : "Danish Royalty/warning.png" // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+			"icon"  : "Danish Royalty/warning.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
 		},
 
 		// info ___________________________________________________
@@ -94,20 +94,19 @@
 				[ "^\\[INFO\\]", "[\\r\\n]" ]                        // [INFO] ... (single line)
 				// <-- Remove, Change, Add More Patterns Here -->
 			],
-			"color" : {
-				"base"  : "#70991f", // info message
-				"link"  : "#b36915", // link in info message
-				"quote" : "#428a99"  // quote in info message
+			"color" : { // "foreground" or ["foreground", "background"]
+				"base"  : ["#70991f", ""], // info message
+				"link"  : ["#b36915", ""], // link in info message
+				"quote" : ["#428a99", ""], // quote in info message
 			},
-			"icon"  : "Danish Royalty/info.png"    // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
-		}
+			"icon"  : "Danish Royalty/info.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+		},
 
 		// <-- Remove, Change, Add More Severity Level Here -->
 	},
 
 	// theme color set
 	"theme_color": {
-		"background"      : "#161C23",
 		"foreground"      : "#D7D7D7",
 		"caret"           : "#F29718",
 		"selection"       : "#3A5166",

@@ -12,6 +12,7 @@ import re
 import threading
 import os
 import traceback
+import plistlib
 
 
 ##  import Guna  ______________________________________________
@@ -27,6 +28,7 @@ except Exception:
 
 # Sublime text version
 ST3 = int(sublime.version()) >= 3000
+STVER = int(sublime.version())
 
 # Relative path searching
 MAX_SCAN_PATH     = 1000
@@ -69,6 +71,14 @@ def get_prefs():
     return sublime.load_settings('Log Highlight.sublime-settings')
 
 
+def get_style():
+    tempv = sublime.active_window().new_file()
+    style = tempv.style()
+    sublime.active_window().focus_view(tempv)
+    sublime.active_window().run_command('close_file')
+    return style
+
+
 def get_severity_list():
     """ Getting severity list from settings """
 
@@ -107,11 +117,27 @@ def set_syntax_theme(view):
     else:
         view.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
 
-    usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.hidden-tmTheme')
-    if os.path.exists(usr_theme):
-        view.settings().set('color_scheme', 'Packages/User/Log Highlight.hidden-tmTheme')
+    global STVER
+    if STVER >= 3150:
+        style = get_style()
+        bgclr = style.get('background')
     else:
-        view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+        cschm = prefs.get('color_scheme')
+        cstxt = str(sublime.load_resource(cschm))
+        treep = plistlib.readPlistFromBytes(cstxt.encode())
+        bgclr = treep['settings'][0]['settings']['background']
+
+    org_theme = os.path.join(sublime.packages_path(), 'Log Highlight/Log Highlight.tmTheme')
+    usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmTheme')
+    if os.path.exists(usr_theme):
+        view.settings().set('color_scheme', 'Packages/User/Log Highlight.tmTheme')
+        cur_theme = usr_theme
+    else:
+        view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.tmTheme')
+        cur_theme = org_theme
+    tree = plistlib.readPlist(cur_theme)
+    tree['settings'][0]['settings']['background'] = bgclr
+    plistlib.writePlist(tree, cur_theme)
 
 
 def fwrite(fname, text):
@@ -184,7 +210,7 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         self.gen_syntax()
         self.gen_theme()
 
-        disp_msg("Custom syntax & theme files are generated")
+        disp_msg("Custom syntax file is generated")
 
     def gen_syntax(self):
         """
@@ -341,8 +367,18 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
 
     def gen_theme(self):
         """
-        generate custom theme file : Log Highlight.hidden-tmTheme
+        generate custom theme file : Log Highlight.tmTheme
         """
+
+        global STVER
+        if STVER >= 3150:
+            style = get_style()
+            bgclr = style.get('background')
+        else:
+            cschm = prefs.get('color_scheme')
+            cstxt = str(sublime.load_resource(cschm))
+            treep = plistlib.readPlistFromBytes(cstxt.encode())
+            bgclr = treep['settings'][0]['settings']['background']
 
         lhs = get_prefs()
         svt = lhs.get('severity')
@@ -351,15 +387,25 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         for i, k in enumerate(severity_list):
             for j, c in enumerate(list((svt.get(k)).get('color'))):
                 p = "" if c == 'base' else "." + c
+                v = ((svt.get(k)).get('color')).get(c)
+                if isinstance(v, list):
+                    fgclr = '<key>foreground</key><string>' + v[0] + '</string>'
+                    if v[1] != "":
+                        bgclr = '\n                <key>background</key><string>' + v[1] + '</string>\n'
+                    else:
+                        bgclr = ''
+                else:
+                    fgclr = '<key>foreground</key><string>' + v[0] + '</string>'
+                    bgclr = ''
                 sub_theme += """
         <dict>
             <key>scope</key>
             <string>msg.""" + k + p + """</string>
             <key>settings</key>
             <dict>
-                <key>foreground</key><string>""" + ((svt.get(k)).get('color')).get(c) + """</string>
+                """ + fgclr + """
                 <!-- <key>fontStyle</key> -->
-                <!-- <string>bold</string> -->
+                <!-- <string>bold</string> -->""" + bgclr + """
             </dict>
         </dict>"""
 
@@ -375,7 +421,7 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         <dict>
             <key>settings</key>
             <dict>
-                <key>background</key><string>""" + theme_color.get('background') + """</string>
+                <key>background</key><string>""" + bgclr + """</string>
                 <key>foreground</key><string>""" + theme_color.get('foreground') + """</string>
                 <key>caret</key><string>""" + theme_color.get('caret') + """</string>
                 <key>selection</key><string>""" + theme_color.get('selection') + """</string>
@@ -404,7 +450,7 @@ class LogHighlightGenCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
         _user_path   = os.path.join(sublime.packages_path(), 'User')
         if not os.path.exists(_user_path):
             os.makedirs(_user_path)
-        _tmtheme_path = os.path.join(_user_path, 'Log Highlight.hidden-tmTheme')
+        _tmtheme_path = os.path.join(_user_path, 'Log Highlight.tmTheme')
 
         fwrite(_tmtheme_path, _tmtheme)
 
@@ -425,18 +471,18 @@ class LogHighlightEraseCustomSyntaxThemeCommand(sublime_plugin.TextCommand):
                     if s_view:
                         w.run_command("hide_panel", {"panel": "output.loghighlight"})
                         s_view.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
-                        s_view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+                        s_view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.tmTheme')
                     view_l = w.views()
                     for v in view_l:
                         if check_syntax(v):
                             v.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
-                            v.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.hidden-tmTheme')
+                            v.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.tmTheme')
 
                 usr_syntax = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmLanguage')
                 if os.path.exists(usr_syntax):
                     os.remove(usr_syntax)
 
-                usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.hidden-tmTheme')
+                usr_theme = os.path.join(sublime.packages_path(), 'User/Log Highlight.tmTheme')
                 if os.path.exists(usr_theme):
                     os.remove(usr_theme)
 
