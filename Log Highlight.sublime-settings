@@ -30,7 +30,8 @@
 		// hidden folders are ignored as default, like .git, .svn
 		"ignore_dir" : [""],
 		// adjust when using network like samba
-		"max_scan_path" : 1000
+		"max_scan_path" : 1000,
+		"sidebar_enable": true
 	},
 
 	// summary panel
