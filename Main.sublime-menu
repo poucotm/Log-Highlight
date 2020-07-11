@@ -25,7 +25,8 @@
 								"caption": "Settings",
 								"command": "edit_settings",
 								"args": {
-									"base_file": "${packages}/Log Highlight/Log Highlight.sublime-settings"
+									"base_file": "${packages}/Log Highlight/Log Highlight.sublime-settings",
+									"default": "{\n\n}\n",
 								}
 							}
 						]

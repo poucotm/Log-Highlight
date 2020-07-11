@@ -10,109 +10,68 @@
 	"auto_highlight" : true,
 
 	// Output panel list for Auto Highlight
-	"auto_highlight_output_panel": ["exec"],
+	"auto_highlight_output_panel": ["exec"], // exec = build
 
-	// log file extension
-	"log_ext": [ ".log" ], // use ".*" for all file extensions - but can not use `Auto Highlight`
-
-	// "compile" - link, summary, bookmark are usable, "system" - only for highlight
-	"log_type": "compile",
-
-	/*  Options for `compile` type log  ___________________________
+	/*  log list  _________________________________________________
 	*/
 
-	// use clickable link or not
-	"use_link": true,
+	"log_list" : {
 
-	// search base directory automatically for relative path
-	"search_base": {
-		"enable" : true,
-		// hidden folders are ignored as default, like .git, .svn
-		"ignore_dir" : [""],
-		// adjust when using network like samba
-		"max_scan_path" : 1000
+		"example" : // specify name as yours
+		{
+			"type"         : "compile", // "compile" - link, bookmark (icon) are usable, "system" - only for highlight
+			"extension"    : [ ".log", ".vcs.log", ".cpp.log" ],
+			"output.panel" : [ "exec" ], // exec - to apply to build results
+			"use_link"     : true,
+			"search_base": {
+				"enable"        : true, // false : when using absolute path
+				"ignore_dir"    : [""], // hidden folders are ignored as default, like .git, .svn
+				"max_scan_path" : 1000,
+			},
+			"bookmark" : {
+				"enable"     : true, // false : do not display icons too
+				"goto_error" : true, // automatically goto 1st error line
+			},
+			"severity" :
+			{
+				"error" : { // specify name as yours
+					"enable"  : true,
+					"pattern" : [ // [ "begin regex", "end regex" ] or [ "match regex", "" ]
+						[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
+						[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
+						[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
+						// <-- remove, change, add more patterns here -->
+					],
+					"color" : { // ["foreground", "background"]
+						"base"  : ["#F92672", ""], // error message
+						"link"  : ["#E6DB74", ""], // link in error message
+						"quote" : ["#4F99D3", ""], // quote in error message
+					},
+					"icon"  : "Danish Royalty/error.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
+				},
+				"warning" : { // specify name as yours
+					"enable"  : true,
+					"pattern" : [
+						[ "^Warning-\\[", "^\\s*[\\n]" ],
+						[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],
+						[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]
+					],
+					"color" : {
+						"base"  : ["#A1B347", ""],
+						"link"  : ["#FD971F", ""],
+						"quote" : ["#4F99D3", ""],
+					},
+					"icon"  : "Danish Royalty/warning.png",
+				},
+			},
+			"theme": {
+				"foreground"      : "#D7D7D7",
+				"caret"           : "#F29718",
+				"selection"       : "#3A5166",
+				"selectionBorder" : "#181E26",
+				"lineHighlight"   : "#283240",
+			}
+		},
+		// <-- remove, change, add more log list here -->
 	},
-
-	// summary panel
-	"summary_panel": true,         // show summary panel
-
-	// bookmark
-	"bookmark_enable": true,       // enable/disable bookmarks
-	"bookmark_goto_error": true,   // automatically go to 1st error line
-
-	/*  Log Syntax, Color scheme  _________________________________
-	*/
-
-	// severity level
-	"severity" : {
-
-		// error __________________________________________________
-		"error" : {
-			"enable"  : true,
-			"summary" : true,
-			"pattern" : [
-				// [ "begin regex", "end regex" ] or [ "match regex", "" ]
-				[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
-				[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
-				[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
-				// <-- Remove, Change, Add More Patterns Here -->
-			],
-			"color" : { // ["foreground", "background"]
-				"base"  : ["#F92672", "#0000ff"], // error message
-				"link"  : ["#E6DB74", ""], // link in error message
-				"quote" : ["#4F99D3", ""], // quote in error message
-			},
-			"icon"  : "Danish Royalty/error.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
-		},
-
-		// warning ________________________________________________
-		"warning" : {
-			"enable"  : true,
-			"summary" : true,
-			"pattern" : [
-				// [ "begin regex", "end regex" ] or [ "match regex", "" ]
-				[ "^Warning-\\[", "^\\s*[\\n]" ],                    // Warning-[ ~ next empty line (multi-line)
-				[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],// a line including case-insensitive 'warning' with or without a link in front of 'warning'
-				[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]                     // ...: *W ... (single line)
-				// <-- Remove, Change, Add More Patterns Here -->
-			],
-			"color" : { // ["foreground", "background"]
-				"base"  : ["#A1B347", ""], // warning message
-				"link"  : ["#FD971F", ""], // link in warning message
-				"quote" : ["#4F99D3", ""], // quote in warning message
-			},
-			"icon"  : "Danish Royalty/warning.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
-		},
-
-		// info ___________________________________________________
-		"info" : {
-			"enable"  : false,
-			"summary" : false,
-			"pattern" : [
-				// [ "begin regex", "end regex" ] or [ "match regex", "" ]
-				[ "^Information-\\[", "^\\s*[\\n]" ],                // Information-[ ~ next empty line (multi-line)
-				[ "^\\[INFO\\]", "[\\r\\n]" ]                        // [INFO] ... (single line)
-				// <-- Remove, Change, Add More Patterns Here -->
-			],
-			"color" : { // "foreground" or ["foreground", "background"]
-				"base"  : ["#70991f", ""], // info message
-				"link"  : ["#b36915", ""], // link in info message
-				"quote" : ["#428a99", ""], // quote in info message
-			},
-			"icon"  : "Danish Royalty/info.png", // remove "icon" not to use icon, "dot", "circle" "bookmark" are possible
-		},
-
-		// <-- Remove, Change, Add More Severity Level Here -->
-	},
-
-	// theme color set
-	"theme_color": {
-		"foreground"      : "#D7D7D7",
-		"caret"           : "#F29718",
-		"selection"       : "#3A5166",
-		"selectionBorder" : "#181E26",
-		"lineHighlight"   : "#283240",
-		"summary_title"   : "#D7D7D7"
-	}
-
 }

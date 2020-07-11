@@ -1,4 +1,4 @@
 [
 	{ "caption": "-", "id" : "logh" },
-	{ "caption": "Log Highlight - Set as Base ...", "command": "log_highlight_set_as_base", "args": {"paths": []} }
+	{ "caption": "Log Highlight - Set as Base", "command": "log_highlight_set_as_base", "args": {"paths": []} }
 ]

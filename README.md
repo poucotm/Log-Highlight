@@ -6,7 +6,7 @@
 Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme & extensible severity levels.
 Open a log file (like .log) and run __*Log Highlight*__ in the context menu or __*Log Highlight : Highlight Error/Warning*__ in the command palette.
 
-(Compile Log - auto-highlight off)  
+(Compile Log - auto-highlight off (summary panel is deprecated))  
 ![Image of Log Highlight](https://raw.githubusercontent.com/poucotm/Links/master/image/Log-Highlight/lh-log.gif)
 
 (Build Window - auto-highlight on)  
@@ -21,10 +21,10 @@ Open a log file (like .log) and run __*Log Highlight*__ in the context menu or _
  * Customizable Syntax & Color Scheme
  * Extensible Severity Levels
  * Separate log types : "compile", "system"
+ * Support multiple kinds of logs with different options, severity levels, theme colors
  * Add Bookmarks Automatically for Navigating Errors/Warnings with customizable icons
  * Support Go To Position in a Log by `result_file_regex`
  * Search a Base Directory Automatically for Relative Path Link
- * Summary Output Panel
  * Auto Refresh for Multiple Logs
  * Continuous Tracking for Multiple Logs
  * Enable Build Window (Output Panel)
@@ -40,8 +40,12 @@ You can add, remove, change severity levels like debug/notice/emergency in __*Lo
 #### Separate Log Types
 
 You can set the log type in settings  
-. "compile" type : link / summary / bookmark can be activated  
+. "compile" type : link / bookmark can be activated  
 . "system" type  : color-highlight only (fast)
+
+#### Support multiple kinds of logs
+
+You can set multiple kinds of logs with different log extension.
 
 #### Bookmarks
 
@@ -50,10 +54,6 @@ When errors/warnings found, it will add bookmarks for them for each icon. Bookma
 #### Go To Position
 
 By double-click, you can go to positions of links like `"../../abc.cpp", 32` or `./abc.v line 234` in a log. For relative path, it may automatically search a base directory near the log file
-
-#### Summary Output Panel
-
-By default, it summarizes error/warning list in a new output panel at the bottom of window. It is useful to debug without monitoring the log file directly. But do not close the log file, it is needed to get the event. (default keymap - toggle : alt+f12, hide : ESC)
 
 #### More Flexible Style Syntax
 
@@ -95,8 +95,8 @@ error ../src/foo.cpp:40
 
 - __Restore Settings__
 
-Use __*Log Highlight: Erase Custom Syntax & Theme*__ in the command palette Or  
-Just remove __*Packages/User/Log Highlight.tmLanguage*__, __*Log Highlight.hidden-tmTheme*__
+Use __*Log Highlight: Erase Syntax & Theme*__ in the command palette Or  
+Just remove __*Packages/User/Log Highlight*__
 
 ### Donate
 
