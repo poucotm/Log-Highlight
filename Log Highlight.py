@@ -559,11 +559,11 @@ class LogHighlightEvent(sublime_plugin.EventListener):
             if len(outp) > 0:
                 logn = OUT_DIC[outp[0]]
                 if logn:
-                    pwin = view.find_output_panel(outp[0])
-                    if not check_syntax(pwin):
-                        view.settings().set('panel', outp[0])
-                        view.settings().set('log_name', logn)
-                        pwin.run_command("log_highlight")
+                    pview = view.find_output_panel(outp[0])
+                    if not check_syntax(pview):
+                        pview.settings().set('panel', outp[0])
+                        pview.settings().set('log_name', logn)
+                        pview.run_command("log_highlight")
         return
 
     def on_close(self, view):
@@ -824,7 +824,7 @@ class LogHighlightThread(threading.Thread):
                         dirs[:] = [d for d in dirs if (d not in excludes) and d[0] != '.']
                         if i == 0 or not root.startswith(old_path[0]):
                             sublime.status_message("Log Highlight : Searching - " + root)
-                            print (root)
+                            # print (root)
                             if os.path.isfile(os.path.join(root, file_name)):
                                 self.base_dir = root
                                 found = True
