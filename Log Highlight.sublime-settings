@@ -20,7 +20,7 @@
 		"example" : // specify name as yours
 		{
 			"type"         : "compile", // "compile" - link, bookmark (icon) are usable, "system" - only for highlight
-			"extension"    : [ ".log", ".vcs.log", ".cpp.log" ],
+			"extension"    : [ "*.log", ".vcs.log", ".cpp.log", "log*" ],
 			"output.panel" : [ "exec" ], // exec - to apply to build results
 			"use_link"     : true,
 			"search_base": {

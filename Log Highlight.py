@@ -94,7 +94,11 @@ def get_log_name(view):
     basen = os.path.basename(_name).lower()
     exdic = list(EXT_DIC.keys())
     for ext in exdic:
-        if basen.endswith(ext):
+        if ext[-1] == '*' and basen.startswith(ext[0:-1]):
+            return EXT_DIC[ext]
+        elif ext[0] == '*' and basen.endswith(ext[1:len(ext)]):
+            return EXT_DIC[ext]
+        elif basen.endswith(ext):
             return EXT_DIC[ext]
     return None
 
@@ -104,8 +108,12 @@ def check_view_log(view):
     if not _name:
         return True
     basen = os.path.basename(_name).lower()
-    for e in EXT_ALL:
-        if basen.endswith(e):
+    for ext in EXT_ALL:
+        if ext[-1] == '*' and basen.startswith(ext[0:-1]):
+            return True
+        elif ext[0] == '*' and basen.endswith(ext[1:len(ext)]):
+            return True
+        elif basen.endswith(ext):
             return True
     return False
 
@@ -532,21 +540,21 @@ class LogHighlightEvent(sublime_plugin.EventListener):
     def on_load_async(self, view):
         self.auto_highlight(view)
 
-    def on_activated_async(self, view):
-        if view.settings().get('is_widget'):
-            self.auto_highlight(view)
+    # def on_activated_async(self, view):
+    #     if view.settings().get('is_widget'):
+    #         self.auto_highlight(view)
 
-    def on_modified_async(self, view):
-        global LOGH_VIEW
-        for i, vid in enumerate(LOGH_VIEW):
-            if view.id() == vid[0] or view.is_loading():
-                LOGH_VIEW[i][1] = LOGH_VIEW[i][1] + 1
-                global IS_WAITING
-                if not IS_WAITING:
-                    thread = LogHighlightRefreshThread(view)
-                    thread.start()
-                break
-        return
+    # def on_modified_async(self, view):
+    #     global LOGH_VIEW
+    #     for i, vid in enumerate(LOGH_VIEW):
+    #         if view.id() == vid[0] or view.is_loading():
+    #             LOGH_VIEW[i][1] = LOGH_VIEW[i][1] + 1
+    #             global IS_WAITING
+    #             if not IS_WAITING:
+    #                 thread = LogHighlightRefreshThread(view)
+    #                 thread.start()
+    #             break
+    #     return
 
     def on_post_window_command(self, view, command_name, args):
         if command_name == 'show_panel' and 'panel' in args.keys():
