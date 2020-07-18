@@ -407,7 +407,7 @@ class LogHighlightGenSyntaxThemeCommand(sublime_plugin.TextCommand):
                     else:
                         bgclr = ''
                 else:
-                    fgclr = '<key>foreground</key><string>' + v[0] + '</string>'
+                    fgclr = '<key>foreground</key><string>' + v + '</string>'
                     bgclr = ''
                 sub_theme += """
         <dict>

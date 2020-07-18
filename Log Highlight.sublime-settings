@@ -20,7 +20,7 @@
 		"example" : // specify name as yours
 		{
 			"type"         : "compile", // "compile" - link, bookmark (icon) are usable, "system" - only for highlight
-			"extension"    : [ "*.log", ".vcs.log", ".cpp.log", "log*" ],
+			"extension"    : [ "*.log", ".vcs.log", ".cpp.log", "message*" ],
 			"output.panel" : [ "exec" ], // exec - to apply to build results
 			"use_link"     : true,
 			"search_base": {
@@ -37,6 +37,7 @@
 				"error" : { // specify name as yours
 					"enable"  : true,
 					"pattern" : [ // [ "begin regex", "end regex" ] or [ "match regex", "" ]
+						// examples
 						[ "^Error-\\[", "^\\s*[\\n]" ],                      // Error-[ ~ next empty line (multi-line)
 						[ "^{{{LINK}}}?[^\\r\\n]*?(?i)error", "[\\r\\n]" ],  // a line including case-insensitive 'error' with or without a link in front of 'error'
 						[ "^\\w+:\\s*\\*E", "[\\r\\n]" ]                     // ...: *E ... (single line)
@@ -52,6 +53,7 @@
 				"warning" : { // specify name as yours
 					"enable"  : true,
 					"pattern" : [
+						// examples
 						[ "^Warning-\\[", "^\\s*[\\n]" ],
 						[ "^{{{LINK}}}?[^\\r\\n]*?(?i)warning", "[\\r\\n]" ],
 						[ "^\\w+:\\s*\\*W", "[\\r\\n]" ]
