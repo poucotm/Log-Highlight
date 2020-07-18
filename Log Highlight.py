@@ -544,17 +544,17 @@ class LogHighlightEvent(sublime_plugin.EventListener):
     #     if view.settings().get('is_widget'):
     #         self.auto_highlight(view)
 
-    # def on_modified_async(self, view):
-    #     global LOGH_VIEW
-    #     for i, vid in enumerate(LOGH_VIEW):
-    #         if view.id() == vid[0] or view.is_loading():
-    #             LOGH_VIEW[i][1] = LOGH_VIEW[i][1] + 1
-    #             global IS_WAITING
-    #             if not IS_WAITING:
-    #                 thread = LogHighlightRefreshThread(view)
-    #                 thread.start()
-    #             break
-    #     return
+    def on_modified_async(self, view):
+        global LOGH_VIEW
+        for i, vid in enumerate(LOGH_VIEW):
+            if view.id() == vid[0] or view.is_loading():
+                LOGH_VIEW[i][1] = LOGH_VIEW[i][1] + 1
+                global IS_WAITING
+                if not IS_WAITING:
+                    thread = LogHighlightRefreshThread(view)
+                    thread.start()
+                break
+        return
 
     def on_post_window_command(self, view, command_name, args):
         if command_name == 'show_panel' and 'panel' in args.keys():
