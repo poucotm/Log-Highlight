@@ -39,7 +39,7 @@
         </dict>
         <dict>
             <key>begin</key>
-            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?)?[^\r\n]*?(?i)error</string>
+            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?\:?(\d+)?)?[^\r\n]*?(?i)error</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
@@ -104,7 +104,7 @@
         </dict>
         <dict>
             <key>begin</key>
-            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?)?[^\r\n]*?(?i)warning</string>
+            <string>^(["']?[\w\d\:\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?\:?(\d+)?)?[^\r\n]*?(?i)warning</string>
             <key>beginCaptures</key>
             <dict>
                 <key>1</key>
@@ -154,7 +154,7 @@
         <key>error_link</key>
         <dict>
             <key>match</key>
-            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?</string>
+            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?\:?(\d+)?</string>
             <key>name</key>
             <string>msg.error.link</string>
         </dict>
@@ -168,7 +168,7 @@
         <key>warning_link</key>
         <dict>
             <key>match</key>
-            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?</string>
+            <string>["']?[\w\d\:\\\/\.\-\=]+\.\w+[\w\d]*["']?\s*[,:on line\(]{1,9}\s*\d+\)?\:?(\d+)?</string>
             <key>name</key>
             <string>msg.warning.link</string>
         </dict>
