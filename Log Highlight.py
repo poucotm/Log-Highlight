@@ -133,11 +133,15 @@ def check_logh_views():
 
 
 def get_style():
-    tempv = sublime.active_window().new_file()
-    style = tempv.style()
-    sublime.active_window().focus_view(tempv)
-    sublime.active_window().run_command('close_file')
-    return style
+    view = sublime.active_window().active_view()
+    if view:
+        return view.style()
+    else:
+        view = sublime.active_window().new_file()
+        style = view.style()
+        sublime.active_window().focus_view(view)
+        sublime.active_window().run_command('close_file')
+        return style
 
 
 def get_background():
