@@ -710,7 +710,7 @@ class LogHighlightThread(threading.Thread):
                 get_base_dir = self.view.settings().get('result_base_dir', '')
                 if get_base_dir is None or get_base_dir == "":
                     self.try_search_base = True
-                    self.search_base(vname)
+                    self.search_base(lname, vname)
                     if self.base_dir != "":
                         self.view.settings().set('result_base_dir', self.base_dir)
                 else:
