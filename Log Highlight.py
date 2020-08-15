@@ -23,6 +23,12 @@ try:
 except Exception:
     guna_installed = False
 
+# package control
+try:
+    from package_control import events
+    package_control_installed = True
+except Exception:
+    package_control_installed = False
 
 ##  global constants / variables  _____________________________
 
@@ -45,13 +51,33 @@ OUT_DIC = {}
 
 def plugin_loaded():
 
+    if package_control_installed and (events.install('Log Highlight') or events.post_upgrade('Log Highlight')):
+        sublime.set_timeout_async(loaded, 5000)
+    else:
+        loaded()
+    return
+
+
+def plugin_unloaded():
+    if package_control_installed:
+        if events.remove('Log Highlight') or events.pre_upgrade('Log Highlight'):
+            lhs = get_prefs()
+            lhs.clear_on_change('lh-prefs')
+    return
+
+
+def loaded():
+
+    # default tmTheme
+    gen_tmtheme()
+
     # update log extension/panel list
     get_log_extension()
 
     # register callback
     lhs = get_prefs()
     lhs.clear_on_change('lh-prefs')
-    lhs.add_on_change('lh-prefs', plugin_loaded)
+    lhs.add_on_change('lh-prefs', get_log_extension)
 
     # check all log-highlited views
     check_logh_views()
@@ -133,15 +159,11 @@ def check_logh_views():
 
 
 def get_style():
-    view = sublime.active_window().active_view()
-    if view:
-        return view.style()
-    else:
-        view = sublime.active_window().new_file()
-        style = view.style()
-        sublime.active_window().focus_view(view)
-        sublime.active_window().run_command('close_file')
-        return style
+    view = sublime.active_window().new_file()
+    style = view.style()
+    sublime.active_window().focus_view(view)
+    sublime.active_window().run_command('close_file')
+    return style
 
 
 def get_background():
@@ -179,6 +201,27 @@ def check_syntax(view):
         return False
 
 
+def gen_tmtheme():
+    etheme = os.path.join(sublime.packages_path(), 'User', 'Log Highlight', 'default.tmTheme')
+    if not os.path.exists(etheme):
+        uspath = os.path.join(sublime.packages_path(), 'User', 'Log Highlight')
+        if not os.path.exists(uspath):
+            os.makedirs(uspath)
+        otheme = sublime.load_resource('Packages/Log Highlight/Log Highlight.tmTheme')
+        uspath = os.path.join(sublime.packages_path(), 'User', 'Log Highlight', 'default.tmTheme')
+        fwrite(uspath, otheme)
+
+
+def change_bgcolor(tmTheme, bgcolor):
+    tree = plistlib.readPlist(tmTheme)
+    tree['settings'][0]['settings']['background'] = bgcolor
+    plistlib.writePlist(tree, tmTheme)
+
+
+def set_as_default_theme(view):
+    view.settings().set('color_scheme', 'Packages/User/Log Highlight/default.tmTheme')
+
+
 def set_syntax_theme(view, log_name):
     ltitle = log_name + '-log'
     lsyntx = os.path.join(sublime.packages_path(), 'User', 'Log Highlight', ltitle + '.tmLanguage')
@@ -187,17 +230,19 @@ def set_syntax_theme(view, log_name):
     else:
         view.set_syntax_file('Packages/Log Highlight/Log Highlight.tmLanguage')
     bgclr  = get_background()
-    otheme = os.path.join(sublime.packages_path(), 'Log Highlight/Log Highlight.tmTheme')
+    etheme = os.path.join(sublime.packages_path(), 'User', 'Log Highlight', 'default.tmTheme')
     ltheme = os.path.join(sublime.packages_path(), 'User', 'Log Highlight', ltitle + '.tmTheme')
     if os.path.exists(ltheme):
+        change_bgcolor(ltheme, bgclr)
         view.settings().set('color_scheme', 'Packages/User/Log Highlight/' + ltitle + '.tmTheme')
-        ctheme = ltheme
     else:
-        view.settings().set('color_scheme', 'Packages/Log Highlight/Log Highlight.tmTheme')
-        ctheme = otheme
-    tree = plistlib.readPlist(ctheme)
-    tree['settings'][0]['settings']['background'] = bgclr
-    plistlib.writePlist(tree, ctheme)
+        if not os.path.exists(etheme):
+            gen_tmtheme()
+            change_bgcolor(etheme, bgclr)
+            sublime.set_timeout_async(lambda: set_as_default_theme(view), 0)
+        else:
+            change_bgcolor(etheme, bgclr)
+            set_as_default_theme(view)
 
 
 def fwrite(fname, text):
