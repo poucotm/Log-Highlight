@@ -52,7 +52,7 @@ OUT_DIC = {}
 def plugin_loaded():
 
     if package_control_installed and (events.install('Log Highlight') or events.post_upgrade('Log Highlight')):
-        sublime.set_timeout_async(loaded, 5000)
+        sublime.set_timeout_async(loaded, 1000)
     else:
         loaded()
     return
@@ -450,9 +450,13 @@ class LogHighlightGenSyntaxThemeCommand(sublime_plugin.TextCommand):
                 p = '' if c == 'base' else '.' + c
                 v = ((severity_dict.get(k)).get('color')).get(c)
                 if isinstance(v, list):
-                    fgclr = '<key>foreground</key><string>' + v[0] + '</string>'
+                    fgclr = """
+                <key>foreground</key>
+                <string>""" + v[0] + """</string>"""
                     if v[1] != "":
-                        bgclr = '\n                <key>background</key><string>' + v[1] + '</string>\n'
+                        bgclr = """
+                <key>background</key>
+                <string>""" + v[1] + """</string>"""
                     else:
                         bgclr = ''
                 else:
@@ -463,17 +467,14 @@ class LogHighlightGenSyntaxThemeCommand(sublime_plugin.TextCommand):
             <key>scope</key>
             <string>msg.""" + k + p + """</string>
             <key>settings</key>
-            <dict>
-                """ + fgclr + """
-                <!-- <key>fontStyle</key> -->
-                <!-- <string>bold</string> -->""" + bgclr + """
+            <dict>""" + fgclr + bgclr + """
             </dict>
         </dict>"""
 
         bgclr = get_background()
         theme_color = get_prefs().get('log_list').get(log_name).get('theme')
         _tmtheme = """<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple //DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>name</key>
@@ -483,12 +484,18 @@ class LogHighlightGenSyntaxThemeCommand(sublime_plugin.TextCommand):
         <dict>
             <key>settings</key>
             <dict>
-                <key>background</key><string>""" + bgclr + """</string>
-                <key>foreground</key><string>""" + theme_color.get('foreground') + """</string>
-                <key>caret</key><string>""" + theme_color.get('caret') + """</string>
-                <key>selection</key><string>""" + theme_color.get('selection') + """</string>
-                <key>selectionBorder</key><string>""" + theme_color.get('selectionBorder') + """</string>
-                <key>lineHighlight</key><string>""" + theme_color.get('lineHighlight') + """</string>
+                <key>background</key>
+                <string>""" + bgclr + """</string>
+                <key>caret</key>
+                <string>""" + theme_color.get('caret') + """</string>
+                <key>foreground</key>
+                <string>""" + theme_color.get('foreground') + """</string>
+                <key>lineHighlight</key>
+                <string>""" + theme_color.get('lineHighlight') + """</string>
+                <key>selection</key>
+                <string>""" + theme_color.get('selection') + """</string>
+                <key>selectionBorder</key>
+                <string>""" + theme_color.get('selectionBorder') + """</string>
             </dict>
         </dict>"""
         _tmtheme = _tmtheme + sub_theme
