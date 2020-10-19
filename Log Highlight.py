@@ -114,10 +114,15 @@ def get_log_extension():
 
 
 def get_log_name(view):
-    _name = view.file_name() if view.name() == "" else view.name()
+    if view.name() == "":
+        isfile = True
+        _name  = view.file_name()
+    else:
+        isfile = False
+        _name  = view.name()
     if not _name:
         return None
-    basen = os.path.basename(_name).lower()
+    basen = os.path.basename(_name).lower() if isfile else _name
     exdic = list(EXT_DIC.keys())
     for ext in exdic:
         if ext[-1] == '*' and basen.startswith(ext[0:-1]):
@@ -130,10 +135,15 @@ def get_log_name(view):
 
 
 def check_view_log(view):
-    _name = view.file_name() if view.name() == "" else view.name()
+    if view.name() == "":
+        isfile = True
+        _name  = view.file_name()
+    else:
+        isfile = False
+        _name  = view.name()
     if not _name:
-        return True
-    basen = os.path.basename(_name).lower()
+        return None
+    basen = os.path.basename(_name).lower() if isfile else _name
     for ext in EXT_ALL:
         if ext[-1] == '*' and basen.startswith(ext[0:-1]):
             return True
