@@ -603,6 +603,9 @@ class LogHighlightCommand(sublime_plugin.TextCommand):
 
 class LogHighlightEvent(sublime_plugin.EventListener):
 
+    def on_new_async(self, view):
+        self.auto_highlight(view)
+
     def on_load_async(self, view):
         self.auto_highlight(view)
 
