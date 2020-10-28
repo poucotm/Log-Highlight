@@ -169,11 +169,18 @@ def check_logh_views():
 
 
 def get_style():
-    view = sublime.active_window().new_file()
-    style = view.style()
-    sublime.active_window().focus_view(view)
-    sublime.active_window().run_command('close_file')
-    return style
+    aview = sublime.active_window().active_view()
+    prefs = sublime.load_settings("Preferences.sublime-settings")
+    cschm = prefs.get('color_scheme')
+    viewc = '' if aview is None else aview.settings().get('color_scheme')
+    if aview is None or cschm != viewc:
+        view = sublime.active_window().new_file()
+        style = view.style()
+        sublime.active_window().focus_view(view)
+        sublime.active_window().run_command('close_file')
+        return style
+    else:
+        return aview.style()
 
 
 def get_background():
