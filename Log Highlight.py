@@ -190,6 +190,7 @@ def get_background():
         style = get_style()
         bgclr = style.get('background')
     else:
+        prefs = sublime.load_settings("Preferences.sublime-settings")
         cschm = prefs.get('color_scheme')
         cstxt = str(sublime.load_resource(cschm))
         treep = plistlib.readPlistFromBytes(cstxt.encode())
