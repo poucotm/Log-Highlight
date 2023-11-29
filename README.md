@@ -1,6 +1,6 @@
 # Log Highlight for Sublime Text
 
-[![Package Control](https://packagecontrol.herokuapp.com/downloads/Log%20Highlight.svg?style=round-square)](https://packagecontrol.io/packages/Log%20Highlight)
+[![Package Control](https://img.shields.io/packagecontrol/dt/Log%20Highlight?logo=github&color=FF1919)][PKG]
 [![PayPal](https://img.shields.io/badge/paypal-donate-blue.svg)][PM]
 
 Log Highlight helps to view a log (any type) with customizable error/warning syntax & color scheme & extensible severity levels.
@@ -109,3 +109,4 @@ When you have an issue, tell me through [https://github.com/poucotm/Log-Highligh
 
 [PP]:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=89YVNDSC7DZHQ "PayPal"
 [PM]:https://www.paypal.me/poucotm/1.0 "PayPal"
+[PKG]:https://packagecontrol.io/packages/Log%20Highlight "Log Highlight"
