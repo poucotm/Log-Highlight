@@ -193,7 +193,7 @@ def get_background():
         prefs = sublime.load_settings("Preferences.sublime-settings")
         cschm = prefs.get('color_scheme')
         cstxt = str(sublime.load_resource(cschm))
-        treep = plistlib.readPlistFromBytes(cstxt.encode())
+        treep = plist_loads(cstxt.encode())
         bgclr = treep['settings'][0]['settings']['background']
     return bgclr
 
@@ -231,9 +231,9 @@ def gen_tmtheme():
 
 
 def change_bgcolor(tmTheme, bgcolor):
-    tree = plistlib.readPlist(tmTheme)
+    tree = plist_load(tmTheme)
     tree['settings'][0]['settings']['background'] = bgcolor
-    plistlib.writePlist(tree, tmTheme)
+    plist_dump(tree, tmTheme)
 
 
 def set_as_default_theme(view):
@@ -301,6 +301,25 @@ def disp_exept():
     print ('=============================================================')
     disp_error("Error is occured. Please, see the trace-back information in Python console.")
 
+##  plist  ———————————————————————————————————————————————
+
+def plist_loads(data):
+    if hasattr(plistlib, 'loads'):
+        return plistlib.loads(data if isinstance(data, bytes) else data.encode())
+    return plistlib.readPlistFromBytes(data if isinstance(data, bytes) else data.encode())
+
+def plist_load(filepath):
+    if hasattr(plistlib, 'load'):
+        with open(filepath, 'rb') as f:
+            return plistlib.load(f)
+    return plistlib.readPlist(filepath)
+
+def plist_dump(value, filepath):
+    if hasattr(plistlib, 'dump'):
+        with open(filepath, 'wb') as f:
+            plistlib.dump(value, f)
+    else:
+        plistlib.writePlist(value, filepath)
 
 ##  class LogHighlightGenSyntaxThemeCommand  __________________
 
@@ -452,8 +471,8 @@ class LogHighlightGenSyntaxThemeCommand(sublime_plugin.TextCommand):
         return lq_tmlang
 
     def conv_for_plist(self, _str):
-        _str = re.sub('\<', '&lt;', _str)
-        _str = re.sub('\>', '&gt;', _str)
+        _str = re.sub('\\<', '&lt;', _str)
+        _str = re.sub('\\>', '&gt;', _str)
         return _str
 
     def conv_for_regx(self, _str):
