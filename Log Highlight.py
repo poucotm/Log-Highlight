@@ -193,7 +193,7 @@ def get_background():
         prefs = sublime.load_settings("Preferences.sublime-settings")
         cschm = prefs.get('color_scheme')
         cstxt = str(sublime.load_resource(cschm))
-        treep = plistlib.readPlistFromBytes(cstxt.encode())
+        treep = plistlib.loads(cstxt.encode())
         bgclr = treep['settings'][0]['settings']['background']
     return bgclr
 
@@ -231,9 +231,9 @@ def gen_tmtheme():
 
 
 def change_bgcolor(tmTheme, bgcolor):
-    tree = plistlib.readPlist(tmTheme)
+    tree = plistlib.load(open(tmTheme, 'rb'))
     tree['settings'][0]['settings']['background'] = bgcolor
-    plistlib.writePlist(tree, tmTheme)
+    plistlib.dump(tree, open(tmTheme, 'wb'))
 
 
 def set_as_default_theme(view):
